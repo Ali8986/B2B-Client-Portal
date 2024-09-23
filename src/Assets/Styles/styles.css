@@ -1,0 +1,113 @@
+/* Global CSS */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    min-height: 100vh;
+    /* Ensure it doesn’t shrink vertically */
+}
+
+/* Card-like form style */
+.login-form {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    max-width: 450px;
+    /* Increase the max width */
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 1.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+    /* Ensure it doesn’t shrink vertically */
+}
+
+
+/* Heading Styling */
+.heading-text h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Subtle underline for headings */
+.underline {
+    width: 80px;
+    height: 4px;
+    background-color: #7396CC;
+    margin: 0 auto 20px auto;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+/* Stylish input fields */
+.MuiOutlinedInput-root {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.MuiButton-contained {
+    background: #7396CC !important;
+    color: white;
+    font-size: 16px;
+    padding: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+    transition: all 0.3s ease-in-out;
+}
+
+.MuiButton-contained:hover {
+    background: #7c97c1 !important;
+    box-shadow: 0 6px 16px rgba(255, 87, 34, 0.5);
+}
+
+.MuiSvgIcon-root {
+    color: #7396CC !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .login-form {
+        padding: 20px;
+        max-width: 95%;
+        /* Allow it to adjust to smaller screen widths */
+        min-height: auto;
+        /* Remove the fixed height for small screens */
+    }
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.icon {
+    margin: 10px 0px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    background-color: #7396CC;
+    color: white;
+}
+
+.Logo {
+    color: white !important;
+}
+
+.css-1lzspe0-MuiSvgIcon-root {
+    color: white !important;
+}
