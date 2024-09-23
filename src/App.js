@@ -1,9 +1,9 @@
-import LoginPage from "./Pages/LoginPage";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Router from "./Routes";
 function App() {
   return (
     <div className="App">
-      <LoginPage />
+      <Router />
     </div>
   );
 }

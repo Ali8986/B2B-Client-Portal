@@ -4,30 +4,20 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LoginIcon from "@mui/icons-material/Login";
 import LockResetIcon from "@mui/icons-material/LockReset";
-import { useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import SucessSnackBar from "../SnackBars/SuccessSnackBar";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = ({ Forget, formData, onChange, handleSnackbarClose }) => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+const LoginForm = ({ Forget, formData, onChange }) => {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     if (event.target.checkValidity()) {
-      setSnackbarOpen(true);
-    } else {
-      setSnackbarOpen(false);
+      navigate("/HomePage");
     }
   };
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center p-3 text-center login-form">
-      <SucessSnackBar
-        open={snackbarOpen}
-        handleClose={(handleSnackbarClose = () => setSnackbarOpen(false))}
-        message="Login is successful"
-        severity="success"
-        duration={2000}
-      />
       <div className="icon">
         <LockOpenIcon className="Logo" />
       </div>
