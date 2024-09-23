@@ -18,6 +18,7 @@ const OTP = ({ Confirm }) => {
           TextFieldsProps={() => ({ size: "small" })}
           onChange={handleChange}
           className="my-3 otp-input"
+          length={5}
         />
       </div>
       <div className="w-100 my-4">

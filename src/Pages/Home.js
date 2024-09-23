@@ -1,8 +1,16 @@
 import { useState } from "react";
 import SucessSnackBar from "../Components/SnackBars/SuccessSnackBar";
-
 const HomePage = ({ handleSnackbarClose }) => {
-  const [snackbarOpen, setSnackbarOpen] = useState(true);
+  const page = JSON.parse(localStorage.getItem("SnackBarOpeningCount"));
+  const [snackbarOpen, setSnackbarOpen] = useState(page);
+
+  setTimeout(() => {
+    if (page === true) {
+      setSnackbarOpen(false);
+      localStorage.setItem("SnackBarOpeningCount", JSON.stringify(false));
+    }
+  }, 1000);
+
   return (
     <div>
       <h2>Hello World</h2>

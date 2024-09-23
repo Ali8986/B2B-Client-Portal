@@ -4,8 +4,8 @@ import HomePage from "./Pages/Home";
 
 const Router = () => {
   const router = createBrowserRouter([
-    { path: "/", exact: true, element: <LoginPage /> },
-    { path: "/HomePage", exact: true, element: <HomePage /> },
+    { path: "/login", exact: true, element: <LoginPage /> },
+    { path: "/home", exact: true, element: <HomePage /> },
   ]);
   return <RouterProvider router={router} />;
 };

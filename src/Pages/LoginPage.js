@@ -4,8 +4,8 @@ import ComponentState from "../Components/Login/switching";
 const LoginPage = () => {
   return (
     <div className="container-Fluid overflow-hidden">
-      <div className="row hv-100">
-        <div className="col-12 col-md-6 col-lg-4 d-flex flex-column justify-content-center p-5">
+      <div className="row hv-100 align-content-center">
+        <div className="col-12 col-md-6 col-lg-4 d-flex flex-column justify-content-center p-5 mx-auto">
           <ComponentState />
         </div>
         <div className="col-12 col-md-6 col-lg-8 p-0">

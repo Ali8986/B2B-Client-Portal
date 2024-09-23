@@ -12,12 +12,13 @@ const LoginForm = ({ Forget, formData, onChange }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (event.target.checkValidity()) {
-      navigate("/HomePage");
+      localStorage.setItem("SnackBarOpeningCount", JSON.stringify(true));
+      navigate("/home");
     }
   };
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center p-3 text-center login-form">
+    <div className="d-flex flex-column justify-content-center align-items-center p-3 text-center login-form mx-auto">
       <div className="icon">
         <LockOpenIcon className="Logo" />
       </div>
@@ -42,7 +43,7 @@ const LoginForm = ({ Forget, formData, onChange }) => {
         <TextField
           className="my-2"
           autoComplete="current-password"
-          label="Enter Password"
+          label="Password"
           type="password"
           fullWidth
           value={formData.password}
