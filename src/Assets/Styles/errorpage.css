@@ -1,0 +1,47 @@
+.error-page-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    /* Primary background */
+    text-align: center;
+    padding: 20px;
+}
+
+.error-content {
+    max-width: 600px;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+    font-size: 100px;
+    color: #7396CC;
+    /* Theme's primary color */
+}
+
+h1 {
+    font-size: 80px;
+    color: #333;
+    /* Darker grey for emphasis */
+}
+
+h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+p {
+    font-size: 18px;
+    color: grey;
+    margin-bottom: 30px;
+}
+
+.back-home-btn {
+    font-size: 16px;
+    padding: 10px 30px;
+    border-radius: 10px;
+}

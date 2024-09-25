@@ -4,13 +4,15 @@ import ComponentState from "../Components/Login/switching";
 const LoginPage = () => {
   return (
     <div className="container-Fluid overflow-hidden">
-      <div className="row hv-100 align-content-center">
-        <div className="col-12 col-md-6 col-lg-4 d-flex flex-column justify-content-center p-5 mx-auto">
-          <ComponentState />
+      <div className="row g-0">
+        <div className="col-12 col-md-12 col-lg-4">
+          <div className="p-3 p-md-5 d-flex flex-column hv-100 justify-content-center">
+            <ComponentState />
+          </div>
         </div>
-        <div className="col-12 col-md-6 col-lg-8 p-0">
+        <div className="col-12 col-md-12 col-lg-8">
           <div
-            className="d-none d-md-block"
+            className="d-none d-lg-block"
             style={{
               backgroundImage: `url(${AdminImage})`,
               backgroundSize: "cover",

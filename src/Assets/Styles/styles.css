@@ -1,89 +1,80 @@
 /* Global CSS */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     margin: 0;
     padding: 0;
     height: 100vh;
     min-height: 100vh;
-    /* Ensure it doesn’t shrink vertically */
 }
 
-/* Card-like form style */
 .login-form {
-    background: #ffffff;
-    padding: 40px;
+    margin: 0px auto;
     border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     max-width: 450px;
-    /* Increase the max width */
     width: 100%;
     text-align: center;
     animation: fadeIn 1.2s ease-in-out;
     position: relative;
     overflow: hidden;
     min-height: 400px;
-    /* Ensure it doesn’t shrink vertically */
 }
 
-
-/* Heading Styling */
 .heading-text h2 {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 29px;
+    font-weight: 400;
     color: #333;
+    /* Changed to theme's text primary color */
     margin-bottom: 10px;
     position: relative;
     z-index: 1;
 }
 
-/* Subtle underline for headings */
 .underline {
+    display: none;
     width: 80px;
     height: 4px;
-    background-color: #7396CC;
+    background-color: #556cd6;
+    /* Changed to theme's primary dark */
     margin: 0 auto 20px auto;
     border-radius: 4px;
     z-index: 1;
 }
 
-/* Stylish input fields */
 .MuiOutlinedInput-root {
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .MuiButton-contained {
     background: #7396CC !important;
+    /* Theme's primary main */
     color: white;
     font-size: 16px;
     padding: 10px 0;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+    /* Maintained original shadow */
     transition: all 0.3s ease-in-out;
 }
 
 .MuiButton-contained:hover {
     background: #7c97c1 !important;
+    /* Theme's primary light */
     box-shadow: 0 6px 16px rgba(255, 87, 34, 0.5);
+    /* Kept hover shadow */
 }
 
 .MuiSvgIcon-root {
     color: #7396CC !important;
+    /* Theme's primary main */
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .login-form {
-        padding: 20px;
         max-width: 95%;
-        /* Allow it to adjust to smaller screen widths */
         min-height: auto;
-        /* Remove the fixed height for small screens */
     }
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -97,25 +88,130 @@ body {
 }
 
 .icon {
-    margin: 10px 0px;
-    padding: 10px 10px;
-    border-radius: 10px;
-    background-color: #7396CC;
-    color: white;
-}
-
-.Logo {
-    color: white !important;
+    width: 200px;
+    height: 100px;
 }
 
 .css-1lzspe0-MuiSvgIcon-root {
     color: white !important;
+    /* Kept white for special icons */
+}
+
+.Forget-Email {
+    width: 100%;
+}
+
+.Back-To-Login {
+    color: grey;
+}
+
+.Dashboard-layout-container {
+    display: flex;
+    justify-content: end;
+}
+
+.App-bar {
+    padding: 20px;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white !important;
+}
+
+.App-header-icon-menu {
+    width: 25px;
+    border-radius: 3px;
+    background-color: #7c97c1a6;
+    /* Theme's primary light with transparency */
+}
+
+@media (max-width: 768px) {
+    .Dashboard-layout-container {
+        display: block;
+    }
+
+    .Dashboard-layout-main {
+        width: 100% !important;
+    }
+
+    .drawer-container {
+        display: none;
+    }
+
+    .App-bar {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .App-header-icon-menu {
+        visibility: hidden !important;
+    }
+}
+
+.App-header-icon-menu svg {
+    text-align: center;
+    color: white !important;
+}
+
+.active-tab {
+    background-color: #7c96c15b !important;
+    /* Transparent version of primary light */
+    color: black !important;
+}
+
+.active-tab svg {
+    color: black !important;
+}
+
+.Search-Bar {
+    margin: 5px auto;
+}
+
+.InputSearch {
+    max-width: 100%;
+    width: 270px;
+    border-radius: 20px;
+    border: 1px solid #00000033;
+    /* Kept subtle border */
+}
+
+.Main-Search-bar {
+    margin: 0px !important;
+    padding: 0px 0px;
+}
+
+.list-item {
+    padding: 50px !important;
+}
+
+.side-bar-btn {
+    padding: 10px 40px !important;
 }
 
 .hv-100 {
     height: 100vh;
 }
 
-.css-1gulhci-MuiButton-endIcon>*:nth-of-type(1) {
-    color: white !important;
+.delete-modal-close {
+    cursor: pointer;
+    color: white;
+    top: 5px;
+    position: absolute;
+    background-color: #7396CC;
+    width: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    left: 5px;
+    transition: all 0.2s;
+}
+
+.delete-modal-close:hover {
+    background-color: #49505740;
+    color: black;
+}
+
+.main-modal {
+    position: relative;
 }

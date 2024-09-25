@@ -32,6 +32,7 @@ const ComponentState = () => {
       return (
         <ForgetForm
           handleOtp={handleOtp}
+          Default={Default}
           formData={formData}
           onChange={handleInputChange}
         />
@@ -40,6 +41,7 @@ const ComponentState = () => {
       return (
         <OTP
           Confirm={Confirm}
+          Default={Default}
           formData={formData}
           onChange={handleInputChange}
         />

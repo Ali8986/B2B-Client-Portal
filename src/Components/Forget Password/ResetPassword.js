@@ -1,7 +1,9 @@
 import { Button } from "@mui/material";
-import FormInput from "./FormInput";
+import FormInput from "../GeneralComponents/FormInput";
 import { useState } from "react";
+import FormBox from "../GeneralComponents/Form-Box";
 import SucessSnackBar from "../SnackBars/SuccessSnackBar";
+import LogoBox from "../GeneralComponents/Logo-Box";
 
 const ResetPassword = ({
   size,
@@ -23,7 +25,8 @@ const ResetPassword = ({
     }
   };
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center p-3 text-center login-form">
+    <FormBox>
+      <LogoBox />
       <SucessSnackBar
         open={snackbarOpen}
         handleClose={(handleSnackbarClose = () => setSnackbarOpen(false))}
@@ -59,7 +62,7 @@ const ResetPassword = ({
           Confirm
         </Button>
       </form>
-    </div>
+    </FormBox>
   );
 };
 
