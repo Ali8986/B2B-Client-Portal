@@ -65,6 +65,7 @@ const DashboardLayout = ({ handleSnackbarClose }) => {
       <div
         className={"Dashboard-layout-main"}
         style={{
+          height: "100%",
           width: `calc(100% - ${drawerWidth}px)`,
         }}
       >

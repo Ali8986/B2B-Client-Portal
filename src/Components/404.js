@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import "./Assets/Styles/errorpage.css"; // Assuming you'll place styles here
+import "../Assets/Styles/errorpage.css"; // Assuming you'll place styles here
 
 const ErrorPage = () => {
   return (
@@ -23,7 +23,7 @@ const ErrorPage = () => {
               backgroundColor: "#7396CC",
               "&:hover": {
                 backgroundColor: "#7c97c1",
-                boxShadow: "0 6px 16px rgba(255, 87, 34, 0.5)",
+                boxShadow: "grey",
               },
             }}
           >

@@ -12,28 +12,43 @@ const AppSidebar = ({
   mobileOpen,
   handleDrawerClose,
 }) => {
-  const [searchInput, setSearchInput] = React.useState(""); // Search input state
-  const [filteredResults, setFilteredResults] = React.useState([]); // Filtered results state
-
-  // Function to handle search input change
+  const [inboxOpen, setInboxopen] = React.useState(true);
+  const [searchInput, setSearchInput] = React.useState("");
+  const [filteredResults, setFilteredResults] = React.useState([]);
   const handleSearchChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchInput(query);
-
-    // Filter data based on search input
-    const results = options.filter((item) =>
-      item.title.toLowerCase().includes(query)
-    );
+    const results = options
+      .map((item) => {
+        if (item.title.toLowerCase().includes(query)) {
+          return item;
+        }
+        const filteredChildren = item.children?.filter((child) =>
+          child.title.toLowerCase().includes(query)
+        );
+        if (filteredChildren && filteredChildren.length > 0) {
+          if (filteredResults) {
+            setInboxopen(true);
+          } else {
+            setInboxopen(false);
+          }
+          return { ...item, children: filteredChildren };
+        }
+        return null;
+      })
+      .filter(Boolean);
     setFilteredResults(results);
   };
-
-  const [inboxOpen, setInboxopen] = React.useState(false);
-  const handleInboxOpen = () => setInboxopen(!inboxOpen);
-
+  const handleInboxOpen = () => {
+    if (inboxOpen === true) {
+      setInboxopen(false);
+    } else {
+      setInboxopen(true);
+    }
+  };
   const handleMobileViewChange = () => {
     if (mobileOpen) handleDrawerClose();
   };
-
   const drawerContent = (
     <>
       <Logo />
@@ -53,7 +68,7 @@ const AppSidebar = ({
                 <SidebarSubMenu
                   key={option.title}
                   option={option}
-                  inboxOpen={inboxOpen}
+                  inboxOpen={!inboxOpen}
                   handleInboxOpen={handleInboxOpen}
                   handleMobileViewChange={handleMobileViewChange}
                 />
@@ -68,13 +83,23 @@ const AppSidebar = ({
           </List>
         ) : (
           <List className="Main-Menu-list">
-            {filteredResults.map((option) => (
-              <SidebarOption
-                key={option.title}
-                option={option}
-                handleMobileViewChange={handleMobileViewChange}
-              />
-            ))}
+            {filteredResults.map((option) =>
+              option.children && option.children.length > 0 ? (
+                <SidebarSubMenu
+                  key={option.title}
+                  option={option}
+                  inboxOpen={inboxOpen}
+                  handleInboxOpen={handleInboxOpen}
+                  handleMobileViewChange={handleMobileViewChange}
+                />
+              ) : (
+                <SidebarOption
+                  key={option.title}
+                  option={option}
+                  handleMobileViewChange={handleMobileViewChange}
+                />
+              )
+            )}
           </List>
         )}
       </>

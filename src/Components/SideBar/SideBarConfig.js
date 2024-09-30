@@ -10,18 +10,18 @@ import {
 export const options = [
   {
     title: "Dashboard",
-    path: "Dashboard",
+    path: "dashboard",
 
     icon: <DashboardCustomizeOutlined />,
   },
   {
     title: "Exhibitors",
-    path: "Exhibitors",
+    path: "exhibitors",
     icon: <PersonOutlineOutlinedIcon />,
   },
   {
     title: "Speakers",
-    path: "Speaker",
+    path: "speaker",
     icon: <InterpreterModeOutlinedIcon />,
     children: [
       {
@@ -38,7 +38,7 @@ export const options = [
   },
   {
     title: "Events",
-    path: "Events",
+    path: "events",
     icon: <CalendarMonthOutlinedIcon />,
   },
 ];

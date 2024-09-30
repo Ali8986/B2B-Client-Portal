@@ -21,11 +21,19 @@ const SidebarSubMenu = ({
 
   return (
     <>
-      <ListItem disablePadding>
+      <ListItem
+        disablePadding
+        className={location.pathname.includes(option.path) ? "active-tab" : ""}
+      >
         <ListItemButton className="side-bar-btn" onClick={handleInboxOpen}>
           <ListItemIcon>{option.icon}</ListItemIcon>
           <ListItemText primary={option.title} />
-          <ExpandMoreIcon />
+          {inboxOpen ? (
+            <ExpandMoreIcon />
+          ) : (
+            <ExpandMoreIcon style={{ transform: "rotate(180deg)" }} />
+          )}
+          {/* <ExpandMoreIcon /> */}
         </ListItemButton>
       </ListItem>
       <Collapse in={inboxOpen} timeout="auto" unmountOnExit>

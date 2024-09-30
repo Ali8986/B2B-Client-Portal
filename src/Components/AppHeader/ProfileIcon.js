@@ -7,46 +7,55 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import KeyIcon from "@mui/icons-material/Key";
 import Logout from "@mui/icons-material/Logout";
-import profile from "../../Assets/Images/profile.jpg";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../GeneralComponents/CustomModal";
-import ResetPassword from "../Forget Password/ResetPassword";
-// import ChangePassword from "./ChangePassword";
-// import CustomModal from "../GeneralComponents/CustomModal";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
+import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
 
 export default function ProfileIcon() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showChangePassword, setShowChangePassword] = React.useState(false);
+  const { profileImage } = React.useContext(ProfileImageContext); // Use context for image
+
+  const handleEditProfile = () => {
+    navigate("/update-profile");
+  };
+
   const open = Boolean(anchorEl);
-  const navigate = useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleSignOut = () => {
     localStorage.removeItem("token");
-    navigate("/Login");
+    navigate("/");
   };
+
   const handleCloseChangePassword = () => {
     setShowChangePassword(false);
   };
 
+  // Safely parsing UserData
+  const UserData = JSON.parse(localStorage.getItem("User Data")) || {};
+
   return (
-    <>
+    <div className="Profile-DropDown">
       <div className="profile-icon">
         <Tooltip title="Account settings">
           <div
             onClick={handleClick}
-            className="profile-icon-button"
+            className="profile-icon-button me-3"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 40, height: 40 }} src={profile}>
+            <Avatar sx={{ width: 45, height: 45 }} src={profileImage || ""}>
               A
             </Avatar>
           </div>
@@ -63,7 +72,7 @@ export default function ProfileIcon() {
             elevation: 0,
             sx: {
               overflow: "visible",
-              filter: "drop-shadow(0px 5px 8px rgba(0,0,0,0.32))",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
               mt: 1.5,
               "& .MuiAvatar-root": {
                 width: 32,
@@ -89,14 +98,9 @@ export default function ProfileIcon() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem
-          onClick={handleClose}
-          sx={{
-            fontWeight: "600",
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          Ali Osama
+        <MenuItem onClick={handleClose} sx={{ fontWeight: "600" }}>
+          {UserData.name || "Guest"}{" "}
+          {/* Default to "Guest" if name is not available */}
         </MenuItem>
         <MenuItem
           onClick={handleClose}
@@ -104,14 +108,20 @@ export default function ProfileIcon() {
             fontStyle: "italic",
             fontWeight: "200",
             color: "#a3a3a3",
-            marginTop: "-16px",
             fontSize: "14px",
-            "&:hover": { backgroundColor: "transparent" },
+            marginTop: "-10px",
           }}
         >
-          aliosama8986@gmail.com
+          {UserData.email || "No Email Provided"}{" "}
+          {/* Default message for email */}
         </MenuItem>
-        <Divider className="divider" />
+        <Divider />
+        <MenuItem onClick={handleEditProfile}>
+          <ListItemIcon>
+            <EditNoteIcon color="primary" />
+          </ListItemIcon>
+          Edit Profile
+        </MenuItem>
         <MenuItem
           onClick={() => {
             handleClose();
@@ -135,6 +145,6 @@ export default function ProfileIcon() {
         handleClose={handleCloseChangePassword}
         component={<ChangePassword handleClose={handleCloseChangePassword} />}
       />
-    </>
+    </div>
   );
 }
