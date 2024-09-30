@@ -1,39 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Avatar, Button } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormInput from "../../Components/GeneralComponents/FormInput";
-import BackButton from "../GeneralComponents/backButton";
+import BackButton from "../../Components/GeneralComponents/backButton";
 
-function EditUser({ users, updateUser }) {
+function EditUser() {
+  const { id } = useParams();
   const { state } = useLocation();
   const { user } = state || {};
-  const { id } = useParams();
   const navigate = useNavigate();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState(null);
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phoneNumber: "",
-    address: "",
     jobTitle: "",
     company: "",
-    bio: "",
+    phoneNumber: "",
     profileImage: "",
   });
 
   useEffect(() => {
     if (user) {
       setFormData({
+        id: user.id,
         name: user.name,
         email: user.email,
-        phoneNumber: user.phoneNumber,
-        address: user.address,
         jobTitle: user.jobTitle,
         company: user.company,
-        bio: user.bio,
+        phoneNumber: user.phoneNumber,
         profileImage: user.profileImage,
       });
     }
@@ -45,16 +41,39 @@ function EditUser({ users, updateUser }) {
   };
 
   const handleSubmit = (e) => {
+    console.log("ID being sent to PUT:", id);
     e.preventDefault();
-    updateUser({ ...user, ...formData });
-    navigate("/exhibitors");
-  };
+    e.preventDefault();
+    console.log("ID being sent to PUT:", id); // Log the id
+    const url = `http://localhost:8000/members/${id}`;
+    console.log("URL:", url);
 
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: user.id,
+        ...formData,
+        profileImage: image || formData.profileImage, // Update image or keep original
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to update: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        navigate("/speaker"); // Redirect after success
+      })
+      .catch((error) => console.error("Error updating user:", error));
+  };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const newImageURL = URL.createObjectURL(file);
-      console.log("Image uploaded successfully:", image);
       setImageName(file);
       setImage(newImageURL);
       setFormData((prevData) => {
@@ -75,12 +94,11 @@ function EditUser({ users, updateUser }) {
           <h2
             style={{
               color: "#7396cc",
-              marginBottom: "5px",
+              marginBottom: "10px",
             }}
           >
-            Edit User
+            Edit Speaker
           </h2>
-
           <div className="col-6 col-lg-6">
             <FormInput
               label="Name"
@@ -109,45 +127,27 @@ function EditUser({ users, updateUser }) {
               type="tel"
             />
           </div>
-
-          <div className="col-6">
+          <div className="col-6 col-lg-6">
             <FormInput
               label="Job Title"
               name="jobTitle"
               value={formData.jobTitle}
               onChange={handleChange}
+              type="text"
             />
           </div>
-
-          <div className="col-12 col-lg-6">
+          <div className="col-6 col-lg-6">
             <FormInput
-              label="Address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-12 col-lg-6">
-            <FormInput
-              label="Company"
+              label="Conpany Name"
               name="company"
               value={formData.company}
               onChange={handleChange}
-            />
-          </div>
-
-          <div className="col-12 col-lg-12 pb-4">
-            <FormInput
-              label="Bio"
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
+              type="text"
             />
           </div>
 
           {/* Image Upload Section */}
-          <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3">
+          <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 mt-5">
             <div className="col-12 col-lg-4 pb-3 pb-lg-0">
               <h4 className="h5">Upload Image</h4>
               <p className="h6">

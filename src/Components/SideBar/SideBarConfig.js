@@ -23,18 +23,18 @@ export const options = [
     title: "Speakers",
     path: "speaker",
     icon: <InterpreterModeOutlinedIcon />,
-    children: [
-      {
-        title: "Remove Speakers",
-        path: "allspeakerspage",
-        icon: <PersonRemoveIcon />,
-      },
-      {
-        title: "Add Speaker",
-        path: "add-speakers",
-        icon: <PersonAddAlt1Icon />,
-      },
-    ],
+    // children: [
+    //   {
+    //     title: "Remove Speakers",
+    //     path: "allspeakerspage",
+    //     icon: <PersonRemoveIcon />,
+    //   },
+    //   {
+    //     title: "Add Speaker",
+    //     path: "add-speakers",
+    //     icon: <PersonAddAlt1Icon />,
+    //   },
+    // ],
   },
   {
     title: "Events",

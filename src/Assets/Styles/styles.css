@@ -264,16 +264,18 @@ body {
 }
 
 .table-container-pro {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     border-radius: 15px !important;
-    border: 2px solid #7396cc !important;
+    border: 1px solid #dadada !important;
 }
 
-.table-container-pro thead, tr {
-    border-bottom: 1px solid #7396cc !important;
+.table-container-pro thead, .table-container-pro tr {
+    border-collapse: collapse;
+    border-bottom: 1px solid #dadada !important;
 }
 
 .table-container-pro th {
-    border-bottom: 2px solid #7396cc !important;
+    border-bottom: 1px solid #dadada !important;
     padding: 20px 10px !important;
 }
 
@@ -288,7 +290,6 @@ body {
 }
 
 .table-container-pro tr:hover {
-    background-color: #7397cc21 !important;
     transition: background-color 0.3s ease-in-out;
 
 }
@@ -316,4 +317,18 @@ body {
 
 .Upload-input-field {
     min-width: 30px;
+}
+
+.responsive-table-pro .history-tr {
+    border-bottom: 0px !important;
+}
+
+@media (max-width: 320px) {
+    .Layout-heading {
+        font-size: 20px !important;
+    }
+
+    .Data-Adding-Btn {
+        font-size: 10px !important;
+    }
 }

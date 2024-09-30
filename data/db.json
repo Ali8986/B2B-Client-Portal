@@ -1,0 +1,103 @@
+{
+  "members": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "jobTitle": "Freelancer",
+      "phoneNumber": "123-456-7890",
+      "company": "W3School",
+      "profileImage": "https://images.unsplash.com/photo-1599566150163-29194dcaad36"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "company": "TechCorp",
+      "phoneNumber": "234-567-8901",
+      "profileImage": "blob:http://localhost:3000/a344d4dc-e0f0-4001-ab08-95b204146c4f",
+      "jobTitle": "Software Engineer"
+    },
+    {
+      "id": "3",
+      "name": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "company": "BizSolutions",
+      "phoneNumber": "345-678-9012",
+      "profileImage": "blob:http://localhost:3000/be25b6c8-fca0-4267-b1d4-718ee50d7aec",
+      "jobTitle": "Front End Developer"
+    },
+    {
+      "id": "4",
+      "name": "Bob Brown",
+      "email": "bob.brown@example.com",
+      "company": "DataInc",
+      "phoneNumber": "456-789-0123",
+      "profileImage": "blob:http://localhost:3000/427b5d8b-cdbb-4331-ba75-39bfb115ba26",
+      "jobTitle": "Software Engineer"
+    },
+    {
+      "id": "5",
+      "name": "Charlie Davis",
+      "email": "charlie.davis@example.com",
+      "company": "DesignWorks",
+      "phoneNumber": "567-890-1234",
+      "profileImage": "blob:http://localhost:3000/e58b0d06-1533-4941-a0bd-429631c641e8",
+      "jobTitle": "Product Manager"
+    },
+    {
+      "id": "6",
+      "name": "David Wilson",
+      "email": "david.wilson@example.com",
+      "jobTitle": "Marketing Specialist",
+      "company": "MarketPros",
+      "phoneNumber": "678-901-2345",
+      "profileImage": "blob:http://localhost:3000/c8bd1c49-08a5-4a84-be43-18f335de548b"
+    },
+    {
+      "id": "7",
+      "name": "Emma Thompson",
+      "email": "emma.thompson@example.com",
+      "jobTitle": "Content Writer",
+      "company": "ContentCreations",
+      "phoneNumber": "789-012-3456",
+      "profileImage": "blob:http://localhost:3000/6b096252-15da-4ddb-ac3c-b1f0b31269e0"
+    },
+    {
+      "id": "8",
+      "name": "Frank Miller",
+      "email": "frank.miller@example.com",
+      "jobTitle": "Systems Analyst",
+      "company": "TechSolutions",
+      "phoneNumber": "890-123-4567",
+      "profileImage": "blob:http://localhost:3000/e87582cd-af1c-4aa3-82ba-b4a570f386a1"
+    },
+    {
+      "id": "9",
+      "name": "Grace Lee",
+      "email": "grace.lee@example.com",
+      "jobTitle": "Network Administrator",
+      "company": "NetWorks",
+      "phoneNumber": "901-234-5678",
+      "profileImage": "blob:http://localhost:3000/c17e0553-2eab-48f8-96d6-412b667cb7a6"
+    },
+    {
+      "id": "10",
+      "name": "Henry King",
+      "email": "henry.king@example.com",
+      "jobTitle": "Database Administrator",
+      "company": "DBExperts",
+      "phoneNumber": "012-345-6789",
+      "profileImage": "blob:http://localhost:3000/98e3f757-a9b7-455c-897d-a0e35dc90aa0"
+    },
+    {
+      "id": "a67b",
+      "name": "Ali Usama",
+      "email": "aliusama.vectorcoder@gmail.com",
+      "jobTitle": "Front End Developer",
+      "company": "something",
+      "phoneNumber": "03081042663",
+      "profileImage": "blob:http://localhost:3000/19d9e4d9-5f5d-4401-8bd9-a7beeb55e06d"
+    }
+  ]
+}
