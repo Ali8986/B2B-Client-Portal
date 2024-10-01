@@ -49,7 +49,7 @@ const Router = () => {
       phoneNumber: "+1 555 123 4567",
       status: true,
       profileImage:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "https://images.pexels.com/photos/11000150/pexels-photo-11000150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       address: "456 Oak Ave New York 10001 USA",
       jobTitle: "Product Manager",
       company: "Dynamite Lifestyle",
@@ -62,7 +62,7 @@ const Router = () => {
       phoneNumber: "+1 555 123 4567",
       status: false,
       profileImage:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "https://images.unsplash.com/photo-1715838854648-ea200803934a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       address: "456 Oak Ave New York 10001 USA",
       jobTitle: "Product Manager",
       company: "Dynamite Lifestyle",
@@ -102,14 +102,14 @@ const Router = () => {
           exact: true,
           element: <Exhibitors members={members} updateUser={updateUser} />,
         },
-        { path: "/speaker", exact: true, element: <Speaker /> },
+        { path: "/speakers", exact: true, element: <Speaker /> },
         {
-          path: "/speaker/editspeaker/:id",
+          path: "/speakers/editspeaker/:id",
           exact: true,
           element: <EditSpeaker />,
         },
         {
-          path: "/speaker/addspeaker",
+          path: "/speakers/addspeaker",
           exact: true,
           element: <AddSpeaker />,
         },
@@ -118,12 +118,12 @@ const Router = () => {
         { path: "/events/editevent/:id", exact: true, element: <EditEvent /> },
         { path: "/update-profile", exact: true, element: <EditProfile /> },
         {
-          path: "/exhibitors/edituser/:id",
+          path: "/exhibitors/editexhibitor/:id",
           exact: true,
           element: <EditUser members={members} updateUser={updateUser} />,
         },
         {
-          path: "/exhibitors/adduser",
+          path: "/exhibitors/addexhibitor/",
           element: <AddUser members={members} updateUser={updateUser} />,
         },
       ],

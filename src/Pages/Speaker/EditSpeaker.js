@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Avatar, Button } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormInput from "../../Components/GeneralComponents/FormInput";
-import BackButton from "../../Components/GeneralComponents/backButton";
+import HeaderWithBackButton from "../../Components/backButton";
 
 function EditUser() {
   const { id } = useParams();
@@ -88,17 +88,7 @@ function EditUser() {
     <div className="px-3 px-md-4 py-1 py-md-3">
       <form onSubmit={handleSubmit}>
         <div className="row p-0 p-lg-3 mt-5 mt-md-2">
-          <div className="col-2 p-0">
-            <BackButton />
-          </div>
-          <h2
-            style={{
-              color: "#7396cc",
-              marginBottom: "10px",
-            }}
-          >
-            Edit Speaker
-          </h2>
+          <HeaderWithBackButton title="Edit Speaker" path="/speakers" />
           <div className="col-6 col-lg-6">
             <FormInput
               label="Name"

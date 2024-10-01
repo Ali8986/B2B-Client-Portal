@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
 import { Button } from "@mui/material";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../Exhibitors/DeletingUser";
-import EditOutlined from "@mui/icons-material/EditOutlined";
-import ProfileImage from "../../Assets/Images/profile.jpg";
+import Loader from "../../Components/GeneralComponents/LoadingIndicator";
 
 function Exhibitors() {
+  const [loading, setLoading] = useState(true); // Set to true initially
   const [events, setEvents] = useState([
     {
       _id: 1,
@@ -141,11 +141,6 @@ function Exhibitors() {
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
-      id: "number",
-      label: "Id",
-      type: "number",
-    },
-    {
       id: "any",
       label: "Title",
       renderData: (row) => {
@@ -171,6 +166,7 @@ function Exhibitors() {
 
   useEffect(() => {
     getData();
+    setLoading(false);
   }, []);
   const handleCloseModal = () => {
     setModelOpen(false);
@@ -204,37 +200,41 @@ function Exhibitors() {
           ADD Event
         </Button>
       </div>
-      <div className="Exhibitors-Table">
-        <ReactTable
-          data={users} // required
-          TABLE_HEAD={TABLE_HEAD} // required
-          MENU_OPTIONS={MENU_OPTIONS} // required
-          // custom_search={
-          //   {
-          //     // searchText: searchText,
-          //     // setSearchText: setSearchText,
-          //     // handleSubmit: searchFunction,
-          //   }
-          // }
-          // custom_pagination={{
-          //   total_count: totalCount,
-          //   rows_per_page: rowsPerPage,
-          //   page: page,
-          //   total_pages: totalPages,
-          //   handleChangePage: handleChangePage,
-          // }}
-          class_name=""
-          theme_config={{
-            background: "white",
-            color: "black",
-            iconColor: "#7396CC",
-          }}
-          is_sticky_header={false}
-          is_hide_footer_pagination={false}
-          is_hide_header_pagination={true}
-          is_hide_search={true}
-        />
-      </div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="Exhibitors-Table">
+          <ReactTable
+            data={users} // required
+            TABLE_HEAD={TABLE_HEAD} // required
+            MENU_OPTIONS={MENU_OPTIONS} // required
+            // custom_search={
+            //   {
+            //     // searchText: searchText,
+            //     // setSearchText: setSearchText,
+            //     // handleSubmit: searchFunction,
+            //   }
+            // }
+            // custom_pagination={{
+            //   total_count: totalCount,
+            //   rows_per_page: rowsPerPage,
+            //   page: page,
+            //   total_pages: totalPages,
+            //   handleChangePage: handleChangePage,
+            // }}
+            class_name=""
+            theme_config={{
+              background: "white",
+              color: "black",
+              iconColor: "#7396CC",
+            }}
+            is_sticky_header={false}
+            is_hide_footer_pagination={false}
+            is_hide_header_pagination={false}
+            is_hide_search={false}
+          />
+        </div>
+      )}
       <DeletingModal
         className="Deleting-modal"
         open={modelOpen}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
-import BackButton from "../../Components/GeneralComponents/backButton";
+import HeaderWithBackButton from "../../Components/backButton";
 
 function EditEvent() {
   const { state } = useLocation();
@@ -43,17 +43,7 @@ function EditEvent() {
     <div className="px-3 px-md-4 py-1 py-md-3">
       <form onSubmit={handleSubmit}>
         <div className="row p-0 p-lg-3 mt-5 mt-md-2">
-          <div className="col-2 p-0">
-            <BackButton />
-          </div>
-          <h2
-            style={{
-              color: "#7396cc",
-              marginBottom: "5px",
-            }}
-          >
-            Edit Event
-          </h2>
+          <HeaderWithBackButton title="Edit Event" path="/events" />
           <div className="col-6 col-lg-6">
             <FormInput
               label="Title"
@@ -99,9 +89,7 @@ function EditEvent() {
               onChange={handleChange}
             />
           </div>
-
-          <hr />
-          <div className="col-12 d-flex flex-wrap justify-content-between mt-3">
+          <div className="col-12 d-flex flex-wrap justify-content-end mt-3">
             <Button
               type="submit"
               variant="contained"
@@ -109,7 +97,7 @@ function EditEvent() {
               sx={{
                 minWidth: "100px",
                 padding: "10px 15px",
-                marginLeft: "10px",
+                marginRight: "20px",
               }}
             >
               Submit

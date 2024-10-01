@@ -21,7 +21,7 @@ export const options = [
   },
   {
     title: "Speakers",
-    path: "speaker",
+    path: "speakers",
     icon: <InterpreterModeOutlinedIcon />,
     // children: [
     //   {

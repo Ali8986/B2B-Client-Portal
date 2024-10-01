@@ -92,7 +92,7 @@ const ChangePassword = ({ handleClose }) => {
               borderRadius: "10px",
             }}
           >
-            confirm
+            Update
           </Button>
         </div>
       </div>

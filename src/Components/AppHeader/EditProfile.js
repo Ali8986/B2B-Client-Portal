@@ -128,7 +128,7 @@ const EditProfile = () => {
               mt: 2,
             }}
           >
-            Save Changes
+            Update
           </Button>
         </div>
       </form>

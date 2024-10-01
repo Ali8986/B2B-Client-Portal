@@ -332,3 +332,19 @@ body {
         font-size: 10px !important;
     }
 }
+
+.responsive-table-pro .menu-popover-pro {
+    z-index: 10000;
+}
+
+.table-container-pro .list-items-button {
+    border-bottom: 1px solid #dadada !important;
+}
+
+.table-container-pro .table-search input {
+    border: 1px solid #dadada !important;
+}
+
+.table-container-pro .table-search input:focus-visible {
+    outline: 1px solid #7396cc !important;
+}
