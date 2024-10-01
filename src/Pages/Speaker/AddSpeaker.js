@@ -4,7 +4,6 @@ import { Avatar, Button } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import profile from "../../Assets/Images/profile.jpg";
-import BackButton from "../../Components/GeneralComponents/backButton";
 import HeaderWithBackButton from "../../Components/backButton";
 
 function AddSpeaker() {
