@@ -138,3 +138,25 @@ export const updateProfile = async (data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const SpeakersList = async () => {
+  const requestObj = {
+    path: `api/speaker/all_list_speaker_with_search`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+export const AddingSpeaker = async (data) => {
+  const requestObj = {
+    path: `api/speaker/add_speaker`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};

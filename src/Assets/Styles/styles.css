@@ -1,6 +1,6 @@
 /* Global CSS */
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: Poppins, sans-serif;
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -355,4 +355,31 @@ body {
 
 .drawer-main-sidebar {
     background-color: #49505740 !important;
+}
+
+.Mui-Alert svg {
+    color: white !important;
+}
+
+.main-modal .Mui-Alert {
+    position: absolute;
+    top: 35px;
+    right: 163px;
+
+}
+
+.main-modal .css-1pxa9xg-MuiAlert-message {
+    width: 300px;
+}
+
+.Password-Change-Container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-color: white;
+    border: 1px solid #000;
+    padding: 20px;
+    margin: 10px;
 }

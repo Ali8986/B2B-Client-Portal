@@ -2,7 +2,6 @@ import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-// Reusable Snackbar component
 const SnackBar = ({
   open,
   handleClose,
@@ -18,6 +17,7 @@ const SnackBar = ({
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
       <MuiAlert
+        className="Mui-Alert"
         onClose={handleClose}
         severity={severity}
         elevation={6}

@@ -25,7 +25,7 @@ const DeletingModal = ({ open, handleClose, component }) => {
     >
       <div
         style={style}
-        className="container bg-white text-center py-md-2 px-0 border-0 rounded-4 confirmation-btn"
+        className="container bg-white text-center py-md-2 px-4 border-0 rounded-4 confirmation-btn"
       >
         <div className=" delete-modal-close" onClick={handleClose}>
           &times;

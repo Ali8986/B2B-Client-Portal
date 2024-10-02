@@ -37,6 +37,7 @@ const ChangePassword = ({ handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
+      setSnackBarOpen(true);
       setSnackbarMessage("Password Do not match");
       return;
     }
@@ -45,6 +46,7 @@ const ChangePassword = ({ handleClose }) => {
       setSuccess(true);
       handleClose(); //
     } else {
+      setSnackBarOpen(true);
       setSnackbarMessage(response.message);
     }
   };
@@ -58,7 +60,7 @@ const ChangePassword = ({ handleClose }) => {
             severity="error"
             message={snackbarMessage}
             handleClose={() => setSnackBarOpen(false)}
-            duration={2000}
+            duration={1000}
           />
           <h5>Change Password</h5>
         </div>
@@ -92,7 +94,7 @@ const ChangePassword = ({ handleClose }) => {
                 onChange={(e) => setOldPassword(e.target.value)}
               />
             </div>
-            <div className="col-6">
+            <div className="col-12 col-md-6 mb-3 my-md-0 ">
               <TextField
                 InputProps={{
                   style: { borderRadius: 20 },
@@ -110,7 +112,7 @@ const ChangePassword = ({ handleClose }) => {
                 onChange={(e) => setNewPassword(e.target.value)}
               />
             </div>
-            <div className="col-6">
+            <div className="col-12 col-md-6">
               <TextField
                 InputProps={{
                   style: { borderRadius: 20 },

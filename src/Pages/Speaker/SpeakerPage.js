@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
 import Loader from "../../Components/GeneralComponents/LoadingIndicator";
+import { SpeakersList } from "../../DAL/Login/Login";
 
 function Speaker() {
   const [loading, setLoading] = useState(true); // Set to true initially
@@ -17,39 +18,29 @@ function Speaker() {
   // Data fetching logic
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/members");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setMembers(data); // Store fetched data
-        setLoading(false); // Stop loading after data is fetched
-        // Map data to users
-        const mappedUsers = data.map((item) => ({
+      const response = await SpeakersList();
+      if (response.code === 200) {
+        setMembers(response.speakers); // Store fetched data
+        // Map data to users, ensuring no fields are undefined
+        const mappedUsers = response.speakers.map((item) => ({
           ...item,
+          name: item.name || "Unknown", // Fallback if name is missing
           is_show_celendar: false,
           link: {
             to: "https://www.google.com/",
             target: "_blank",
             show_text: "Preview",
           },
-          thumbnail: {
-            src: item.profileImage,
-            alt: "Profile Image",
-          },
           html: "<div>Hello </div>",
         }));
         setUsers(mappedUsers); // Set the mapped users
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false); // Stop loading if there's an error
+      } else {
+        console.error("Failed to fetch data");
       }
+      setLoading(false); // Stop loading after data is fetched
     };
-
     fetchData(); // Call the fetch function
   }, []); // Only runs once when the component mounts
-
   const handleEdit = (value) => {
     navigate(`/speakers/editspeaker/${value.id}`, { state: { user: value } });
   };
@@ -72,38 +63,35 @@ function Speaker() {
     navigate("/speakers/addspeaker");
   };
 
+  // Handle filtering, ensuring undefined values are handled
+  const filterDataByName = (searchTerm) => {
+    return users.filter((user) =>
+      (user.name || "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
-      id: "any",
-      label: "Exhibitor",
-      renderData: (row) => (
-        <div className="d-flex align-items-center">
-          <div className="me-2">
-            {row.thumbnail ? (
-              <img
-                className="img-fluid"
-                src={row.thumbnail.src}
-                alt={row.thumbnail.alt}
-                style={{
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  width: "50px",
-                  height: "50px",
-                }}
-              />
-            ) : (
-              <div>No Image</div>
-            )}
-          </div>
-          <div className="ms-3">{row.name}</div>
-        </div>
-      ),
+      id: "name",
+      label: "Name",
+      accessor: (row) => row.name,
     },
-    { id: "jobTitle", label: "Job" },
-    { id: "company", label: "Company" },
-    { id: "email", label: "Email" },
-    { id: "phoneNumber", label: "Phone Number" },
+    {
+      id: "first_name",
+      label: "First Name",
+      accessor: (row) => row.first_name,
+    },
+    {
+      id: "last_name",
+      label: "Last Name",
+      accessor: (row) => row.last_name,
+    },
+    {
+      id: "expertise",
+      label: "Expertise",
+      accessor: (row) => row.expertise.map((row) => row),
+    },
   ];
 
   return (
@@ -136,7 +124,7 @@ function Speaker() {
           <Loader />
         ) : (
           <ReactTable
-            data={users}
+            data={users} // Example usage of filtering
             TABLE_HEAD={TABLE_HEAD}
             MENU_OPTIONS={[
               {

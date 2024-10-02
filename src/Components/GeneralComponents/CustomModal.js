@@ -8,6 +8,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 600,
+  maxWidth: "100%",
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 3,
@@ -26,9 +27,9 @@ const CustomModal = ({ open, handleClose, component }) => {
     >
       <div
         style={style}
-        className="container bg-white text-center p-md-4 border-0 rounded-4"
+        className="Password-Change-Container container bg-white text-center p-md-4 border-0 rounded-4"
       >
-        <div className=" delete-modal-close" onClick={handleClose}>
+        <div className="delete-modal-close" onClick={handleClose}>
           &times;
         </div>
         {component}
