@@ -5,7 +5,6 @@ import AppHeader from "./TopBar";
 import AppSidebar from "./SideBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SucessSnackBar from "../../Components/SnackBars/SuccessSnackBar";
 
 const drawerWidth = 350;
 

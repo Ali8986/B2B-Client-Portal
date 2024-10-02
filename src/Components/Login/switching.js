@@ -1,11 +1,11 @@
+import { useState, useEffect } from "react";
 import LoginForm from "./loginForm";
 import ForgetForm from "../Forget Password/forget";
 import OTP from "../Forget Password/oneTimePasswordField";
 import ResetPassword from "../Forget Password/ResetPassword";
-import { useState } from "react";
 
 const ComponentState = () => {
-  const [state, setState] = useState("LoginForm");
+  const [state, setState] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,6 +14,21 @@ const ComponentState = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    const savedState = localStorage.getItem("formState");
+    if (savedState) {
+      setState(savedState);
+    } else {
+      setState("LoginForm");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (state !== null) {
+      localStorage.setItem("formState", state);
+    }
+  }, [state]);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -26,6 +41,10 @@ const ComponentState = () => {
   const handleOtp = () => setState("OTP");
   const Confirm = () => setState("ResetPassword");
   const Default = () => setState("LoginForm");
+
+  if (state === null) {
+    return null;
+  }
 
   switch (state) {
     case "ForgetForm":

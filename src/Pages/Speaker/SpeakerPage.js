@@ -6,10 +6,8 @@ import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModa
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
 import Loader from "../../Components/GeneralComponents/LoadingIndicator";
 import { SpeakersList } from "../../DAL/Login/Login";
-
 function Speaker() {
-  const [loading, setLoading] = useState(true); // Set to true initially
-  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
@@ -20,11 +18,9 @@ function Speaker() {
     const fetchData = async () => {
       const response = await SpeakersList();
       if (response.code === 200) {
-        setMembers(response.speakers); // Store fetched data
-        // Map data to users, ensuring no fields are undefined
         const mappedUsers = response.speakers.map((item) => ({
           ...item,
-          name: item.name || "Unknown", // Fallback if name is missing
+          name: item.name || "Unknown",
           is_show_celendar: false,
           link: {
             to: "https://www.google.com/",
@@ -33,14 +29,14 @@ function Speaker() {
           },
           html: "<div>Hello </div>",
         }));
-        setUsers(mappedUsers); // Set the mapped users
+        setUsers(mappedUsers);
       } else {
         console.error("Failed to fetch data");
       }
-      setLoading(false); // Stop loading after data is fetched
+      setLoading(false);
     };
-    fetchData(); // Call the fetch function
-  }, []); // Only runs once when the component mounts
+    fetchData();
+  }, []);
   const handleEdit = (value) => {
     navigate(`/speakers/editspeaker/${value.id}`, { state: { user: value } });
   };
@@ -63,12 +59,11 @@ function Speaker() {
     navigate("/speakers/addspeaker");
   };
 
-  // Handle filtering, ensuring undefined values are handled
-  const filterDataByName = (searchTerm) => {
-    return users.filter((user) =>
-      (user.name || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  };
+  // const filterDataByName = (searchTerm) => {
+  //   return users.filter((user) =>
+  //     (user.name || "").toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  // };
 
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },

@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
 import { login } from "../../DAL/Login/Login"; // Import the login API function
-import CircularProgress from "@mui/material/CircularProgress";
 import { useSnackbar } from "notistack";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
 

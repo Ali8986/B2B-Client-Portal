@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Avatar, Button } from "@mui/material";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+// import { useNavigate } from "react-router-dom";
+import { /*Avatar*/ Button } from "@mui/material";
+// import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormInput from "../../Components/GeneralComponents/FormInput";
-import profile from "../../Assets/Images/profile.jpg";
+// import profile from "../../Assets/Images/profile.jpg";
 import HeaderWithBackButton from "../../Components/backButton";
 import { AddingSpeaker } from "../../DAL/Login/Login";
 
 function AddSpeaker() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const [image, setImage] = useState(null);
   // const [imageName, setImageName] = useState(null);
   const [formData, setFormData] = useState({
