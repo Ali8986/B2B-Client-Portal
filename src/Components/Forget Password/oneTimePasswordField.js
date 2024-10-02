@@ -33,9 +33,7 @@ const OTP = ({ Default, Confirm }) => {
       setSnackbarMessage("Success: OTP Verified");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
-      setTimeout(() => {
-        Confirm();
-      }, 1000);
+      Confirm();
     } else {
       setLoading(false);
       setSnackbarMessage("Failed to verify OTP");

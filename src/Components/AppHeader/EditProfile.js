@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TextField,
   Button,
@@ -11,6 +11,8 @@ import { styled } from "@mui/system";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useNavigate } from "react-router-dom";
 import { ProfileImageContext } from "../../Hooks/createContext";
+import { profileDetail, updateProfile } from "../../DAL/Login/Login";
+import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
 
 const ProfileContainer = styled(Box)({
   position: "relative",
@@ -35,31 +37,48 @@ const StyledAvatar = styled(Avatar)({
 });
 
 const EditProfile = () => {
-  const { profileImage, setProfileImage } = useContext(ProfileImageContext);
   const navigate = useNavigate();
-  const UserInfo = JSON.parse(localStorage.getItem("User Data"));
-  const [profileName, setProfileName] = useState(UserInfo?.name || "");
-  const [profileEmail, setProfileEmail] = useState(UserInfo?.email || "");
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const { profileImage, setProfileImage } = useContext(ProfileImageContext);
+  const [profileName, setProfileName] = useState("");
+  const [profileEmail, setProfileEmail] = useState("");
   useEffect(() => {
-    const savedImage = localStorage.getItem("User Image");
-    if (savedImage) {
-      setProfileImage(savedImage);
-    }
+    const fetchProfileData = async () => {
+      const response = await updateProfile();
+      if (response.code === 200) {
+        const profileData = response.admin;
+        setProfileName(profileData.first_name || "");
+        const email = JSON.parse(localStorage.getItem("Email"));
+
+        setProfileEmail(email || "");
+        setProfileImage(profileData.profile_image || "");
+      } else {
+        setSnackbarOpen(true);
+        setSnackbarMessage("Failed to load profile data.");
+      }
+    };
+
+    fetchProfileData();
   }, [setProfileImage]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedProfile = {
-      name: profileName,
-      email: profileEmail,
-      profileImage: profileImage,
-      updated_at: new Date().toISOString(),
+      first_name: profileName,
+      last_name: profileName,
+      profile_image: profileImage,
+      status: true,
     };
-    console.log("Profile Data:", updatedProfile);
-    localStorage.setItem("User Data", JSON.stringify(updatedProfile));
-    localStorage.setItem("User Image", profileImage);
-    navigate("/dashboard");
+    const response = await profileDetail(updatedProfile);
+    if (response.code === 200) {
+      console.log("SuccessMessage", response.message);
+      localStorage.setItem("Email", JSON.stringify(profileEmail));
+      navigate("/dashboard");
+    } else {
+      setSnackbarOpen(true);
+      setSnackbarMessage(response.message);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -72,6 +91,13 @@ const EditProfile = () => {
 
   return (
     <ProfileContainer>
+      <SuccessSnackBar
+        open={snackbarOpen}
+        severity="error"
+        message={snackbarMessage}
+        handleClose={() => setSnackbarOpen(false)}
+        duration={2000}
+      />
       <div className="Position_update">
         <StyledAvatar alt="Profile Image" src={profileImage} />
         <Typography variant="h5" component="h1" gutterBottom>

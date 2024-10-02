@@ -42,6 +42,7 @@ const LoginForm = ({ Forget }) => {
 
       localStorage.setItem("token", response.token);
       localStorage.setItem("SnackBarOpeningCount", JSON.stringify(true));
+      localStorage.setItem("Email", JSON.stringify(email));
       navigate("/dashboard");
     } else {
       setLoading(false);

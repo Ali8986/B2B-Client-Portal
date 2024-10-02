@@ -105,10 +105,10 @@ export const updatePassword = async (data) => {
 
 export const profileDetail = async (data) => {
   const requestObj = {
-    path: `api/user_profile/detail_profile.php`,
-    method: "POST",
+    path: `api/admin/edit_admin`,
+    method: "PUT",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -117,10 +117,10 @@ export const profileDetail = async (data) => {
 
 export const updateAdminPassword = async (data) => {
   const requestObj = {
-    path: `api/update_password/update_password.php`,
-    method: "POST",
+    path: `api/app_api/change_password`,
+    method: "PUT",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -129,10 +129,10 @@ export const updateAdminPassword = async (data) => {
 
 export const updateProfile = async (data) => {
   const requestObj = {
-    path: `api/user_profile/edit_profile.php`,
-    method: "POST",
+    path: `api/admin/detail_admin`,
+    method: "GET",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };

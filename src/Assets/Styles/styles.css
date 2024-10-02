@@ -220,7 +220,7 @@ body {
 }
 
 .css-99wn1p-MuiList-root-MuiMenu-list {
-    width: 225px !important;
+    width: 245px !important;
     height: 195px !important;
 }
 
@@ -351,4 +351,8 @@ body {
 
 .Loading-BTN svg {
     color: white !important;
+}
+
+.drawer-main-sidebar {
+    background-color: #49505740 !important;
 }

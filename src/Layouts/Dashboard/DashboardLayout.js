@@ -57,6 +57,7 @@ const DashboardLayout = ({ handleSnackbarClose }) => {
 
       <AppSidebar
         drawerWidth={drawerWidth}
+        className="drawer-main-sidebar"
         mobileOpen={mobileOpen}
         handleDrawerClose={handleDrawerClose}
       />

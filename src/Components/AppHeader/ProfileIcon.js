@@ -12,17 +12,34 @@ import CustomModal from "../GeneralComponents/CustomModal";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
 import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
-import { logout } from "../../DAL/Login/Login";
+import { logout, updateProfile } from "../../DAL/Login/Login";
 import LogoutComponent from "./Logout";
 import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
-
+import SnackBar from "../SnackBars/errorSnackbar";
 export default function ProfileIcon() {
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackBarMessage, setSackBarMessage] = React.useState("");
+  const [data, setData] = React.useState([]);
+  const email = JSON.parse(localStorage.getItem("Email"));
+  const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showChangePassword, setShowChangePassword] = React.useState(false);
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
-  const { profileImage } = React.useContext(ProfileImageContext); // Use context for image
+  const { profileImage, setProfileImage } =
+    React.useContext(ProfileImageContext);
+  React.useEffect(() => {
+    const getData = async () => {
+      const response = await updateProfile();
+      if (response.code === 200) {
+        setData(response.admin);
+        setProfileImage(response.admin.profile_image);
+      } else {
+        setSackBarMessage(response.message);
+        setSnackBarOpen(true);
+      }
+    };
+    getData();
+  }, []);
 
   const handleEditProfile = () => {
     navigate("/update-profile");
@@ -43,7 +60,8 @@ export default function ProfileIcon() {
       localStorage.removeItem("token");
       navigate("/");
     } else {
-      setSnackbarOpen(true);
+      setSackBarMessage(response.message);
+      setSnackBarOpen(true);
     }
   };
 
@@ -59,10 +77,17 @@ export default function ProfileIcon() {
   };
 
   // Safely parsing UserData
-  const UserData = JSON.parse(localStorage.getItem("User Data")) || {};
-
+  // const UserData = JSON.parse(localStorage.getItem("User Data")) || {};
+  // console.log(img);
   return (
     <div className="Profile-DropDown">
+      <SnackBar
+        open={snackBarOpen}
+        severity="error"
+        message={snackBarMessage}
+        handleClose={() => setSnackBarOpen(false)}
+        duration={2000}
+      />
       <div className="profile-icon">
         <Tooltip title="Account settings">
           <div
@@ -72,9 +97,7 @@ export default function ProfileIcon() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 45, height: 45 }} src={profileImage || ""}>
-              A
-            </Avatar>
+            <Avatar sx={{ width: 45, height: 45 }} src={profileImage}></Avatar>
           </div>
         </Tooltip>
       </div>
@@ -116,7 +139,7 @@ export default function ProfileIcon() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} sx={{ fontWeight: "600" }}>
-          {UserData.name || "Guest"}{" "}
+          {data.first_name || "Guest"}{" "}
           {/* Default to "Guest" if name is not available */}
         </MenuItem>
         <MenuItem
@@ -129,8 +152,7 @@ export default function ProfileIcon() {
             marginTop: "-10px",
           }}
         >
-          {UserData.email || "No Email Provided"}{" "}
-          {/* Default message for email */}
+          {email || "No Email Provided"} {/* Default message for email */}
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleEditProfile}>
@@ -166,13 +188,6 @@ export default function ProfileIcon() {
             confirmLogout={confirmLogout}
           />
         }
-      />
-      <SuccessSnackBar
-        open={snackbarOpen}
-        severity="error"
-        message="Not Able to LogOut"
-        handleClose={() => setSnackbarOpen(false)}
-        duration={2000}
       />
       <CustomModal
         open={showChangePassword}

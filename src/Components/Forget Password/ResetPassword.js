@@ -30,9 +30,7 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
         setSnackbarMessage("Password updated successfully");
         setSnackbarSeverity("success");
         console.log(formData);
-        setTimeout(() => {
-          Default();
-        }, 1000);
+        Default();
       } else {
         setSnackbarOpen(true);
         setSnackbarMessage(response.message);
