@@ -12,7 +12,7 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useNavigate } from "react-router-dom";
 import { ProfileImageContext } from "../../Hooks/createContext";
 import { profileDetail, updateProfile } from "../../DAL/Login/Login";
-import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
+import { useSnackbar } from "notistack";
 
 const ProfileContainer = styled(Box)({
   position: "relative",
@@ -38,24 +38,26 @@ const StyledAvatar = styled(Avatar)({
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
   const { profileImage, setProfileImage } = useContext(ProfileImageContext);
-  const [profileName, setProfileName] = useState("");
+  const [firsName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
   useEffect(() => {
     const fetchProfileData = async () => {
       const response = await updateProfile();
       if (response.code === 200) {
         const profileData = response.admin;
-        setProfileName(profileData.first_name || "");
+        setFirstName(profileData.first_name || "");
+        setLastName(profileData.last_name || "");
+        setContactNumber(profileData.contact_number);
         const email = JSON.parse(localStorage.getItem("Email"));
-
         setProfileEmail(email || "");
         setProfileImage(profileData.profile_image || "");
+        // enqueueSnackbar(response.message, { variant: "success" });
       } else {
-        setSnackbarOpen(true);
-        setSnackbarMessage("Failed to load profile data.");
+        // enqueueSnackbar(response.message, { variant: "error" });
       }
     };
 
@@ -65,22 +67,23 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedProfile = {
-      first_name: profileName,
-      last_name: profileName,
+      first_name: firsName,
+      last_name: lastName,
+      contact_number: contactNumber,
       profile_image: profileImage,
       status: true,
     };
     const response = await profileDetail(updatedProfile);
     if (response.code === 200) {
-      console.log("SuccessMessage", response.message);
       localStorage.setItem("Email", JSON.stringify(profileEmail));
       navigate("/dashboard");
+      enqueueSnackbar("Admin details updated Successfuly", {
+        variant: "success",
+      });
     } else {
-      setSnackbarOpen(true);
-      setSnackbarMessage(response.message);
+      enqueueSnackbar(response.message, { variant: "error" });
     }
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -91,13 +94,6 @@ const EditProfile = () => {
 
   return (
     <ProfileContainer>
-      <SuccessSnackBar
-        open={snackbarOpen}
-        severity="error"
-        message={snackbarMessage}
-        handleClose={() => setSnackbarOpen(false)}
-        duration={2000}
-      />
       <div className="Position_update">
         <StyledAvatar alt="Profile Image" src={profileImage} />
         <Typography variant="h5" component="h1" gutterBottom>
@@ -124,25 +120,37 @@ const EditProfile = () => {
 
       <form onSubmit={handleSubmit}>
         <TextField
-          label="Full Name"
+          label="First Name"
           name="name"
           variant="standard"
           size="small"
           fullWidth
-          value={profileName}
+          value={firsName}
           margin="normal"
-          onChange={(e) => setProfileName(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
           required
         />
         <TextField
-          label="Email"
-          name="email"
+          label="Last Name"
+          name="name"
           variant="standard"
-          fullWidth
-          value={profileEmail}
           size="small"
+          fullWidth
+          value={lastName}
           margin="normal"
-          onChange={(e) => setProfileEmail(e.target.value)}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+        <TextField
+          label="Contact Number"
+          name="name"
+          type="tel"
+          variant="standard"
+          size="small"
+          fullWidth
+          value={contactNumber}
+          margin="normal"
+          onChange={(e) => setContactNumber(e.target.value)}
           required
         />
         <div className="col-12 d-flex justify-content-end">

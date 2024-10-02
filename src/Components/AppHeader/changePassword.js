@@ -3,11 +3,10 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Button, IconButton, TextField } from "@mui/material";
 import { updateAdminPassword } from "../../DAL/Login/Login";
-import SnackBar from "../SnackBars/errorSnackbar";
+import { useSnackbar } from "notistack";
 
 const ChangePassword = ({ handleClose }) => {
-  const [snackbarOpen, setSnackBarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [oldPasswordVisibility, setOldPasswordVisibility] = useState(true);
@@ -15,8 +14,6 @@ const ChangePassword = ({ handleClose }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [confirmPasswordVisibility, setConfirmPasswordVisibility] =
     useState(true);
-
-  const [success, setSuccess] = useState(false);
 
   const showOrHidePassword = () => {
     setPasswordVisibility(!passwordVisibility);
@@ -37,17 +34,15 @@ const ChangePassword = ({ handleClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setSnackBarOpen(true);
-      setSnackbarMessage("Password Do not match");
+      enqueueSnackbar("Password Don't Match", { variant: "error" });
       return;
     }
     const response = await updateAdminPassword(formData);
     if (response.code === 200) {
-      setSuccess(true);
       handleClose(); //
+      enqueueSnackbar(response.message, { variant: "success" });
     } else {
-      setSnackBarOpen(true);
-      setSnackbarMessage(response.message);
+      enqueueSnackbar(response.message, { variant: "error" });
     }
   };
 
@@ -55,20 +50,8 @@ const ChangePassword = ({ handleClose }) => {
     <>
       <div>
         <div className="text-center">
-          <SnackBar
-            open={snackbarOpen}
-            severity="error"
-            message={snackbarMessage}
-            handleClose={() => setSnackBarOpen(false)}
-            duration={1000}
-          />
           <h5>Change Password</h5>
         </div>
-
-        {success && (
-          <div style={{ color: "green" }}>Password updated successfully!</div>
-        )}
-
         <hr />
         <form onSubmit={handleSubmit}>
           <div className="row">

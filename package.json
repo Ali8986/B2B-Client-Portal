@@ -16,10 +16,12 @@
     "jquery": "^3.7.1",
     "json-server": "^1.0.0-beta.3",
     "mui-one-time-password-input": "^2.0.3",
+    "notistack": "^3.0.1",
     "popper.js": "^1.16.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
+    "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

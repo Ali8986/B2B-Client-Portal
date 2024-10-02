@@ -9,17 +9,16 @@ import { useNavigate } from "react-router-dom";
 import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
 import { login } from "../../DAL/Login/Login"; // Import the login API function
-import SucessSnackBar from "../SnackBars/SuccessSnackBar";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useSnackbar } from "notistack";
+import LoadingButton from "../GeneralComponents/buttonLoadingState";
 
 const LoginForm = ({ Forget }) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const HandleShowHidePassword = () => {
     setShowPassword(!showPassword);
@@ -39,22 +38,15 @@ const LoginForm = ({ Forget }) => {
 
     if (response.code === 200) {
       console.log("Code is", response.code);
-
       localStorage.setItem("token", response.token);
       localStorage.setItem("SnackBarOpeningCount", JSON.stringify(true));
       localStorage.setItem("Email", JSON.stringify(email));
+      enqueueSnackbar(response.message, { variant: "success" });
       navigate("/dashboard");
     } else {
       setLoading(false);
-      console.error("Login failed:", response.message);
-      setSnackbarOpen(true);
-      setSnackbarMessage(`Login failed. ${response.message}`);
-      setSnackbarSeverity("error");
+      enqueueSnackbar(response.message, { variant: "error" });
     }
-  };
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-    localStorage.setItem("SnackBarOpeningCount", JSON.stringify(false));
   };
 
   return (
@@ -107,27 +99,16 @@ const LoginForm = ({ Forget }) => {
             Forget Password?
           </Button>
         </div>
-        <Button
-          startIcon={
-            loading ? (
-              <CircularProgress className="Loading-BTN" size="15px" />
-            ) : null
-          }
+        <LoadingButton
           type="submit"
           size="large"
           variant="contained"
-          className="my-2 loading-Btn"
-          fullWidth
+          className="Loading-BTN mt-3"
+          isLoading={loading}
         >
           Login
-        </Button>
+        </LoadingButton>
       </form>
-      <SucessSnackBar
-        open={snackbarOpen}
-        handleClose={handleCloseSnackbar}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-      />
     </FormBox>
   );
 };

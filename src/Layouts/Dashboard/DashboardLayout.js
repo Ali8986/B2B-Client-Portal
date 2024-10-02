@@ -12,15 +12,8 @@ const drawerWidth = 350;
 const DashboardLayout = ({ handleSnackbarClose }) => {
   const page = JSON.parse(localStorage.getItem("SnackBarOpeningCount"));
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(page);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-  setTimeout(() => {
-    if (page === true) {
-      setSnackbarOpen(false);
-      localStorage.setItem("SnackBarOpeningCount", JSON.stringify(false));
-    }
-  }, 1000);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -39,13 +32,6 @@ const DashboardLayout = ({ handleSnackbarClose }) => {
   }, []);
   return (
     <div className={"Dashboard-layout-container"}>
-      <SucessSnackBar
-        open={snackbarOpen}
-        handleClose={(handleSnackbarClose = () => setSnackbarOpen(false))}
-        message="Login is successful"
-        severity="success"
-        duration={2000}
-      />
       <CssBaseline />
       <AppHeader
         handleDrawerToggle={handleDrawerToggle}

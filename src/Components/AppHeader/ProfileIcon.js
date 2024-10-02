@@ -1,5 +1,6 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
+import { useSnackbar } from "notistack";
+import { useEffect, useState, useContext } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -14,28 +15,22 @@ import ChangePassword from "./changePassword";
 import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
 import { logout, updateProfile } from "../../DAL/Login/Login";
 import LogoutComponent from "./Logout";
-import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
-import SnackBar from "../SnackBars/errorSnackbar";
 export default function ProfileIcon() {
-  const [snackBarMessage, setSackBarMessage] = React.useState("");
-  const [data, setData] = React.useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const [data, setData] = useState([]);
   const email = JSON.parse(localStorage.getItem("Email"));
-  const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [showChangePassword, setShowChangePassword] = React.useState(false);
-  const [showLogoutModal, setShowLogoutModal] = React.useState(false);
-  const { profileImage, setProfileImage } =
-    React.useContext(ProfileImageContext);
-  React.useEffect(() => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { profileImage, setProfileImage } = useContext(ProfileImageContext);
+  useEffect(() => {
     const getData = async () => {
       const response = await updateProfile();
       if (response.code === 200) {
         setData(response.admin);
         setProfileImage(response.admin.profile_image);
       } else {
-        setSackBarMessage(response.message);
-        setSnackBarOpen(true);
       }
     };
     getData();
@@ -58,16 +53,14 @@ export default function ProfileIcon() {
     const response = await logout();
     if (response.code === 200) {
       localStorage.removeItem("token");
+      enqueueSnackbar(response.message, { variant: "success" });
       navigate("/");
     } else {
-      setSackBarMessage(response.message);
-      setSnackBarOpen(true);
+      enqueueSnackbar(response.message, { variant: "error" });
     }
   };
 
-  const handleSignOut = () => {
-    setShowLogoutModal(true);
-  };
+  const handleSignOut = () => {};
 
   const handleCloseChangePassword = () => {
     setShowChangePassword(false);
@@ -75,19 +68,8 @@ export default function ProfileIcon() {
   const handleCloseLogoutModal = () => {
     setShowLogoutModal(false);
   };
-
-  // Safely parsing UserData
-  // const UserData = JSON.parse(localStorage.getItem("User Data")) || {};
-  // console.log(img);
   return (
     <div className="Profile-DropDown">
-      <SnackBar
-        open={snackBarOpen}
-        severity="error"
-        message={snackBarMessage}
-        handleClose={() => setSnackBarOpen(false)}
-        duration={2000}
-      />
       <div className="profile-icon">
         <Tooltip title="Account settings">
           <div
@@ -139,7 +121,7 @@ export default function ProfileIcon() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} sx={{ fontWeight: "600" }}>
-          {data.first_name || "Guest"}{" "}
+          {`${data.first_name} ${data.last_name}` || "Guest"}{" "}
           {/* Default to "Guest" if name is not available */}
         </MenuItem>
         <MenuItem
@@ -172,7 +154,7 @@ export default function ProfileIcon() {
           </ListItemIcon>
           Change Password
         </MenuItem>
-        <MenuItem onClick={handleSignOut}>
+        <MenuItem onClick={() => setShowLogoutModal(true)}>
           <ListItemIcon>
             <Logout fontSize="small" color="primary" />
           </ListItemIcon>

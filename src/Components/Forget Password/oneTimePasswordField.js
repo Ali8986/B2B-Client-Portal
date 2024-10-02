@@ -4,13 +4,11 @@ import { MuiOtpInput } from "mui-one-time-password-input";
 import LogoBox from "../GeneralComponents/Logo-Box";
 import { confirmPinCode } from "../../DAL/Login/Login";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
-import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
+import { useSnackbar } from "notistack";
 
 const OTP = ({ Default, Confirm }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [otp, setOtp] = React.useState("");
   const [email] = React.useState("aliusama.vectorcoder@gmail.com");
   const handleClick = () => {
@@ -29,20 +27,11 @@ const OTP = ({ Default, Confirm }) => {
     setLoading(true);
     const response = await confirmPinCode(formData);
     if (response && response.code === 200) {
-      console.log("Success: OTP Verified");
-      setSnackbarMessage("Success: OTP Verified");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      enqueueSnackbar(response.message, { variant: "success" });
       Confirm();
     } else {
+      enqueueSnackbar(response.message, { variant: "error" });
       setLoading(false);
-      setSnackbarMessage("Failed to verify OTP");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-      console.error(
-        "Failed to verify OTP:",
-        response?.message || "Unknown error"
-      );
     }
   };
   return (
@@ -80,13 +69,6 @@ const OTP = ({ Default, Confirm }) => {
           </LoadingButton>
         </div>
       </FormBox>
-      <SuccessSnackBar
-        open={snackbarOpen}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
-        handleClose={() => setSnackbarOpen(false)}
-        duration={2000}
-      />
     </form>
   );
 };

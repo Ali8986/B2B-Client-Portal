@@ -3,14 +3,12 @@ import { useState } from "react";
 import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
 import { updatePassword } from "../../DAL/Login/Login";
-import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
 import LoadingButton from "../GeneralComponents/buttonLoadingState";
+import { useSnackbar } from "notistack";
 
 const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("");
   const [formData, setFormData] = useState({
     email: "aliusama.vectorcoder@gmail.com",
     user_type: "admin",
@@ -26,19 +24,14 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
       setLoading(true);
       const response = await updatePassword(formData);
       if (response.code === 200) {
-        setSnackbarOpen(true);
-        setSnackbarMessage("Password updated successfully");
-        setSnackbarSeverity("success");
-        console.log(formData);
+        enqueueSnackbar(response.message, { variant: "success" });
         Default();
       } else {
-        setSnackbarOpen(true);
-        setSnackbarMessage(response.message);
-        setSnackbarSeverity("error");
+        enqueueSnackbar(response.message, { variant: "error" });
         setLoading(false);
       }
     } else {
-      setSnackbarOpen(false);
+      enqueueSnackbar("Fields Cannot be Empty", { variant: "error" });
     }
   };
   return (
@@ -57,13 +50,6 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
           required
           onChange={(e) => handleChange("password", e.target.value)}
         />
-        {/* <FormInput
-          label="New password"
-          type="password"
-          value={formData.newPassword}
-          onChange={(e) => handleChange("newPassword", e.target.value)}
-          required
-        /> */}
         <FormInput
           label="Confirm Password"
           type="password"
@@ -75,21 +61,12 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
           type="submit"
           size="large"
           variant="contained"
-          className="Loading-BTN mt-3"
           fullWidth
           isLoading={loading}
         >
           Confirm
         </LoadingButton>
       </form>
-
-      <SuccessSnackBar
-        open={snackbarOpen}
-        severity={snackbarSeverity}
-        message={snackbarMessage}
-        handleClose={() => setSnackbarOpen(false)}
-        duration={2000}
-      />
     </FormBox>
   );
 };

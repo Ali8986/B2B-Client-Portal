@@ -5,7 +5,10 @@ const LoadingButton = ({ isLoading, children, ...props }) => {
   return (
     <Button
       {...props}
+      fullWidth
+      className="Loading-BTN mt-3"
       startIcon={isLoading ? <CircularProgress size={15} /> : null}
+      disabled={isLoading}
     >
       {children}
     </Button>
