@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -8,23 +8,52 @@ import LockResetIcon from "@mui/icons-material/LockReset";
 import { useNavigate } from "react-router-dom";
 import FormBox from "../GeneralComponents/Form-Box";
 import LogoBox from "../GeneralComponents/Logo-Box";
+import { login } from "../../DAL/Login/Login"; // Import the login API function
+import SucessSnackBar from "../SnackBars/SuccessSnackBar";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const LoginForm = ({ Forget, formData, onChange }) => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const HandleShowHidePassword = () => {
-    if (showPassword === false) {
-      setShowPassword(true);
-    } else {
-      setShowPassword(false);
-    }
-  };
+const LoginForm = ({ Forget }) => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  const HandleShowHidePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (event.target.checkValidity()) {
+
+    const formData = {
+      email,
+      password,
+      user_type: "admin",
+    };
+    setLoading(true);
+    const response = await login(formData);
+    console.log("Login response:", response.token);
+
+    if (response.code === 200) {
+      console.log("Code is", response.code);
+
+      localStorage.setItem("token", response.token);
       localStorage.setItem("SnackBarOpeningCount", JSON.stringify(true));
       navigate("/dashboard");
+    } else {
+      setLoading(false);
+      console.error("Login failed:", response.message);
+      setSnackbarOpen(true);
+      setSnackbarMessage(`Login failed. ${response.message}`);
+      setSnackbarSeverity("error");
     }
+  };
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+    localStorage.setItem("SnackBarOpeningCount", JSON.stringify(false));
   };
 
   return (
@@ -41,9 +70,9 @@ const LoginForm = ({ Forget, formData, onChange }) => {
             autoComplete="username"
             label="Email"
             type="email"
-            value={formData.email}
+            value={email}
             fullWidth
-            onChange={(e) => onChange("email", e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             InputProps={{
               endAdornment: <ContactMailIcon />,
@@ -55,17 +84,13 @@ const LoginForm = ({ Forget, formData, onChange }) => {
             label="Password"
             type={showPassword ? "text" : "password"}
             fullWidth
-            value={formData.password}
-            onChange={(e) => onChange("password", e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
             InputProps={{
               endAdornment: (
                 <IconButton onClick={HandleShowHidePassword}>
-                  {showPassword && formData.password ? (
-                    <Visibility />
-                  ) : (
-                    <VisibilityOffIcon />
-                  )}
+                  {showPassword ? <Visibility /> : <VisibilityOffIcon />}
                 </IconButton>
               ),
             }}
@@ -81,10 +106,27 @@ const LoginForm = ({ Forget, formData, onChange }) => {
             Forget Password?
           </Button>
         </div>
-        <Button type="submit" variant="contained" className="my-2" fullWidth>
+        <Button
+          startIcon={
+            loading ? (
+              <CircularProgress className="Loading-BTN" size="15px" />
+            ) : null
+          }
+          type="submit"
+          size="large"
+          variant="contained"
+          className="my-2 loading-Btn"
+          fullWidth
+        >
           Login
         </Button>
       </form>
+      <SucessSnackBar
+        open={snackbarOpen}
+        handleClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
     </FormBox>
   );
 };

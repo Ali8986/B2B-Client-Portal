@@ -12,11 +12,16 @@ import CustomModal from "../GeneralComponents/CustomModal";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
 import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
+import { logout } from "../../DAL/Login/Login";
+import LogoutComponent from "./Logout";
+import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
 
 export default function ProfileIcon() {
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [showChangePassword, setShowChangePassword] = React.useState(false);
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false);
   const { profileImage } = React.useContext(ProfileImageContext); // Use context for image
 
   const handleEditProfile = () => {
@@ -31,14 +36,26 @@ export default function ProfileIcon() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const confirmLogout = async () => {
+    setShowLogoutModal(false);
+    const response = await logout();
+    if (response.code === 200) {
+      localStorage.removeItem("token");
+      navigate("/");
+    } else {
+      setSnackbarOpen(true);
+    }
+  };
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+    setShowLogoutModal(true);
   };
 
   const handleCloseChangePassword = () => {
     setShowChangePassword(false);
+  };
+  const handleCloseLogoutModal = () => {
+    setShowLogoutModal(false);
   };
 
   // Safely parsing UserData
@@ -140,6 +157,23 @@ export default function ProfileIcon() {
           Logout
         </MenuItem>
       </Menu>
+      <CustomModal
+        open={showLogoutModal}
+        handleClose={handleCloseLogoutModal}
+        component={
+          <LogoutComponent
+            handleCloseLogoutModal={handleCloseLogoutModal}
+            confirmLogout={confirmLogout}
+          />
+        }
+      />
+      <SuccessSnackBar
+        open={snackbarOpen}
+        severity="error"
+        message="Not Able to LogOut"
+        handleClose={() => setSnackbarOpen(false)}
+        duration={2000}
+      />
       <CustomModal
         open={showChangePassword}
         handleClose={handleCloseChangePassword}

@@ -1,9 +1,9 @@
 import { Toolbar } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppHeader from "./TopBar";
 import AppSidebar from "./SideBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SucessSnackBar from "../../Components/SnackBars/SuccessSnackBar";
 
@@ -11,6 +11,7 @@ const drawerWidth = 350;
 
 const DashboardLayout = ({ handleSnackbarClose }) => {
   const page = JSON.parse(localStorage.getItem("SnackBarOpeningCount"));
+  const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(page);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -21,8 +22,6 @@ const DashboardLayout = ({ handleSnackbarClose }) => {
     }
   }, 1000);
 
-  // const navigate = useNavigate();
-
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -32,12 +31,12 @@ const DashboardLayout = ({ handleSnackbarClose }) => {
     setMobileOpen(!mobileOpen);
   };
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div className={"Dashboard-layout-container"}>
       <SucessSnackBar

@@ -348,3 +348,7 @@ body {
 .table-container-pro .table-search input:focus-visible {
     outline: 1px solid #7396cc !important;
 }
+
+.Loading-BTN svg {
+    color: white !important;
+}

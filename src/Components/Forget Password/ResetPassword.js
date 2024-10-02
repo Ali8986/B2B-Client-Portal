@@ -1,25 +1,44 @@
-import { Button } from "@mui/material";
 import FormInput from "../GeneralComponents/FormInput";
 import { useState } from "react";
 import FormBox from "../GeneralComponents/Form-Box";
-import SucessSnackBar from "../SnackBars/SuccessSnackBar";
 import LogoBox from "../GeneralComponents/Logo-Box";
+import { updatePassword } from "../../DAL/Login/Login";
+import SuccessSnackBar from "../SnackBars/SuccessSnackBar";
+import LoadingButton from "../GeneralComponents/buttonLoadingState";
 
-const ResetPassword = ({
-  size,
-  Default,
-  formData,
-  onChange,
-  handleSnackbarClose,
-}) => {
+const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
+  const [loading, setLoading] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const handleSubmit = (event) => {
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("");
+  const [formData, setFormData] = useState({
+    email: "aliusama.vectorcoder@gmail.com",
+    user_type: "admin",
+    password: "",
+    confirm_password: "",
+  });
+  const handleChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+  };
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (event.target.checkValidity()) {
-      setSnackbarOpen(true);
-      setTimeout(() => {
-        Default();
-      }, 1000);
+      setLoading(true);
+      const response = await updatePassword(formData);
+      if (response.code === 200) {
+        setSnackbarOpen(true);
+        setSnackbarMessage("Password updated successfully");
+        setSnackbarSeverity("success");
+        console.log(formData);
+        setTimeout(() => {
+          Default();
+        }, 1000);
+      } else {
+        setSnackbarOpen(true);
+        setSnackbarMessage(response.message);
+        setSnackbarSeverity("error");
+        setLoading(false);
+      }
     } else {
       setSnackbarOpen(false);
     }
@@ -27,41 +46,52 @@ const ResetPassword = ({
   return (
     <FormBox>
       <LogoBox />
-      <SucessSnackBar
-        open={snackbarOpen}
-        handleClose={(handleSnackbarClose = () => setSnackbarOpen(false))}
-        message="Password Changed SuccessFully"
-        severity="success"
-        duration={2000}
-      />
       <div className="heading-text py-2">
         <h2>Change Password</h2>
       </div>
       <div className="underline"></div>
-      <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit}>
         <FormInput
           size={size}
-          label="Old Password"
+          label="New Password"
           type="password"
-          value={formData.oldPassword}
-          onChange={(e) => onChange("oldPassword", e.target.value)}
+          value={formData.password}
+          required
+          onChange={(e) => handleChange("password", e.target.value)}
         />
-        <FormInput
+        {/* <FormInput
           label="New password"
           type="password"
           value={formData.newPassword}
-          onChange={(e) => onChange("newPassword", e.target.value)}
-        />
+          onChange={(e) => handleChange("newPassword", e.target.value)}
+          required
+        /> */}
         <FormInput
           label="Confirm Password"
           type="password"
-          value={formData.confirmPassword}
-          onChange={(e) => onChange("confirmPassword", e.target.value)}
+          value={formData.confirm_password}
+          onChange={(e) => handleChange("confirm_password", e.target.value)}
+          required
         />
-        <Button type="submit" variant="contained" className="my-2" fullWidth>
+        <LoadingButton
+          type="submit"
+          size="large"
+          variant="contained"
+          className="Loading-BTN mt-3"
+          fullWidth
+          isLoading={loading}
+        >
           Confirm
-        </Button>
+        </LoadingButton>
       </form>
+
+      <SuccessSnackBar
+        open={snackbarOpen}
+        severity={snackbarSeverity}
+        message={snackbarMessage}
+        handleClose={() => setSnackbarOpen(false)}
+        duration={2000}
+      />
     </FormBox>
   );
 };
