@@ -9,7 +9,7 @@ const LogoutComponent = ({ handleCloseLogoutModal, confirmLogout }) => {
           size="large"
           variant="contained"
           onClick={confirmLogout}
-          className="bg-danger me-3 link-opacity-10-hover"
+          className="bg-danger me-2 link-opacity-10-hover"
         >
           Yes
         </Button>
