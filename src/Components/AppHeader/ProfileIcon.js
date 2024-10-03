@@ -153,7 +153,12 @@ export default function ProfileIcon() {
           </ListItemIcon>
           Change Password
         </MenuItem>
-        <MenuItem onClick={() => setShowLogoutModal(true)}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setShowLogoutModal(true);
+          }}
+        >
           <ListItemIcon>
             <Logout fontSize="small" color="primary" />
           </ListItemIcon>

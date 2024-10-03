@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-
 const LogoutComponent = ({ handleCloseLogoutModal, confirmLogout }) => {
   return (
     <div>
@@ -9,7 +8,7 @@ const LogoutComponent = ({ handleCloseLogoutModal, confirmLogout }) => {
           size="large"
           variant="contained"
           onClick={confirmLogout}
-          className="bg-danger me-2 link-opacity-10-hover"
+          className="bg-danger me-2 Logout-Confirmation-Btn"
         >
           Yes
         </Button>

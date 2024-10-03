@@ -386,3 +386,7 @@ body {
 .Change-Password-field {
     border-radius: 50px !important;
 }
+
+.Logout-Confirmation-Btn:hover {
+    background-color: #dc3546de !important;
+}
