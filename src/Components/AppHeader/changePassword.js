@@ -58,7 +58,6 @@ const ChangePassword = ({ handleClose }) => {
             <div className="col-12 my-3">
               <TextField
                 InputProps={{
-                  style: { borderRadius: 20 },
                   endAdornment: (
                     <IconButton onClick={showOrHideOldPassword}>
                       {oldPasswordVisibility ? (
@@ -80,7 +79,6 @@ const ChangePassword = ({ handleClose }) => {
             <div className="col-12 col-md-6 mb-3 my-md-0 ">
               <TextField
                 InputProps={{
-                  style: { borderRadius: 20 },
                   endAdornment: (
                     <IconButton onClick={showOrHidePassword}>
                       {passwordVisibility ? <VisibilityOff /> : <Visibility />}
@@ -98,7 +96,6 @@ const ChangePassword = ({ handleClose }) => {
             <div className="col-12 col-md-6">
               <TextField
                 InputProps={{
-                  style: { borderRadius: 20 },
                   endAdornment: (
                     <IconButton onClick={showOrHideConfirmPassword}>
                       {confirmPasswordVisibility ? (
@@ -119,13 +116,7 @@ const ChangePassword = ({ handleClose }) => {
             </div>
           </div>
           <div className="my-3">
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ borderRadius: "10px" }}
-            >
+            <Button type="submit" variant="contained" color="primary" fullWidth>
               Update
             </Button>
           </div>

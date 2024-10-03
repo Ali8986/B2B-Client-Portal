@@ -25,7 +25,7 @@ const ProfileContainer = styled(Box)({
   padding: "20px",
   maxWidth: "500px",
   height: "65%",
-  margin: "70px auto",
+  margin: "40px auto",
   backgroundColor: "#f7f7f7",
   borderRadius: "30px",
   boxShadow: "rgba(17, 12, 46, 0.15) 0px 20px 30px 0px;",

@@ -382,3 +382,7 @@ body {
     padding: 20px;
     margin: 10px;
 }
+
+.Change-Password-field {
+    border-radius: 50px !important;
+}
