@@ -56,7 +56,7 @@ const OTP = ({ Default, Confirm }) => {
             Back to Login
           </a>
         </div>
-        <div className="w-100 my-2">
+        <div className="w-100">
           <LoadingButton
             type="submit"
             size="large"

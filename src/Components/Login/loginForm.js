@@ -38,7 +38,6 @@ const LoginForm = ({ Forget }) => {
     if (response.code === 200) {
       console.log("Code is", response.code);
       localStorage.setItem("token", response.token);
-      localStorage.setItem("SnackBarOpeningCount", JSON.stringify(true));
       localStorage.setItem("Email", JSON.stringify(email));
       enqueueSnackbar(response.message, { variant: "success" });
       navigate("/dashboard");

@@ -9,7 +9,6 @@ import { useState } from "react";
 const drawerWidth = 350;
 
 const DashboardLayout = ({ handleSnackbarClose }) => {
-  const page = JSON.parse(localStorage.getItem("SnackBarOpeningCount"));
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);

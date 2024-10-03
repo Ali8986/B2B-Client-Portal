@@ -15,24 +15,28 @@ import ChangePassword from "./changePassword";
 import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
 import { logout, updateProfile } from "../../DAL/Login/Login";
 import LogoutComponent from "./Logout";
+import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
+
 export default function ProfileIcon() {
+  const { user } = useUser(); // Get user data from context
   const { enqueueSnackbar } = useSnackbar();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   const email = JSON.parse(localStorage.getItem("Email"));
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { profileImage, setProfileImage } = useContext(ProfileImageContext);
+
+  const getData = async () => {
+    const response = await updateProfile();
+    if (response.code === 200) {
+      setData(response.admin);
+      setProfileImage(response.admin.profile_image);
+    }
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      const response = await updateProfile();
-      if (response.code === 200) {
-        setData(response.admin);
-        setProfileImage(response.admin.profile_image);
-      } else {
-      }
-    };
     getData();
   }, []);
 
@@ -40,7 +44,6 @@ export default function ProfileIcon() {
     navigate("/update-profile");
   };
 
-  const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -48,6 +51,7 @@ export default function ProfileIcon() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const confirmLogout = async () => {
     setShowLogoutModal(false);
     const response = await logout();
@@ -60,14 +64,6 @@ export default function ProfileIcon() {
     }
   };
 
-  const handleSignOut = () => {};
-
-  const handleCloseChangePassword = () => {
-    setShowChangePassword(false);
-  };
-  const handleCloseLogoutModal = () => {
-    setShowLogoutModal(false);
-  };
   return (
     <div className="Profile-DropDown">
       <div className="profile-icon">
@@ -75,9 +71,9 @@ export default function ProfileIcon() {
           <div
             onClick={handleClick}
             className="profile-icon-button me-3"
-            aria-controls={open ? "account-menu" : undefined}
+            aria-controls={anchorEl ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+            aria-expanded={!!anchorEl}
           >
             <Avatar sx={{ width: 45, height: 45 }} src={profileImage}></Avatar>
           </div>
@@ -86,43 +82,11 @@ export default function ProfileIcon() {
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
-        open={open}
+        open={Boolean(anchorEl)}
         onClose={handleClose}
-        onClick={handleClose}
-        slotProps={{
-          paper: {
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&::before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} sx={{ fontWeight: "600" }}>
-          {`${data.first_name} ${data.last_name}` || "Guest"}{" "}
-          {/* Default to "Guest" if name is not available */}
+          {user || `${data.first_name} ${data.last_name}`}
         </MenuItem>
         <MenuItem
           onClick={handleClose}
@@ -134,7 +98,7 @@ export default function ProfileIcon() {
             marginTop: "-10px",
           }}
         >
-          {email || "No Email Provided"} {/* Default message for email */}
+          {email || "No Email Provided"}
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleEditProfile}>
@@ -163,18 +127,20 @@ export default function ProfileIcon() {
       </Menu>
       <CustomModal
         open={showLogoutModal}
-        handleClose={handleCloseLogoutModal}
+        handleClose={() => setShowLogoutModal(false)}
         component={
           <LogoutComponent
-            handleCloseLogoutModal={handleCloseLogoutModal}
+            handleCloseLogoutModal={() => setShowLogoutModal(false)}
             confirmLogout={confirmLogout}
           />
         }
       />
       <CustomModal
         open={showChangePassword}
-        handleClose={handleCloseChangePassword}
-        component={<ChangePassword handleClose={handleCloseChangePassword} />}
+        handleClose={() => setShowChangePassword(false)}
+        component={
+          <ChangePassword handleClose={() => setShowChangePassword(false)} />
+        }
       />
     </div>
   );

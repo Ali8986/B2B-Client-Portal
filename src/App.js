@@ -5,6 +5,7 @@ import { ProfileImageProvider } from "./Hooks/createContext";
 import { Slide } from "@mui/material";
 import styled from "@emotion/styled/macro";
 import { MaterialDesignContent } from "notistack";
+import { UserProvider } from "./Hooks/adminUser";
 function App() {
   const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
     "&.notistack-MuiContent-success": {
@@ -28,9 +29,11 @@ function App() {
           error: StyledMaterialDesignContent,
         }}
       >
-        <div className="App">
-          <Router />
-        </div>
+        <UserProvider>
+          <div className="App">
+            <Router />
+          </div>
+        </UserProvider>
       </SnackbarProvider>
     </ProfileImageProvider>
   );
