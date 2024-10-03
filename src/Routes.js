@@ -116,7 +116,7 @@ const Router = () => {
         { path: "/events", exact: true, element: <Events /> },
         { path: "/events/addevent/", exact: true, element: <AddEvent /> },
         { path: "/events/editevent/:id", exact: true, element: <EditEvent /> },
-        { path: "/update-profile", exact: true, element: <EditProfile /> },
+        { path: "/edit-profile", exact: true, element: <EditProfile /> },
         {
           path: "/exhibitors/editexhibitor/:id",
           exact: true,

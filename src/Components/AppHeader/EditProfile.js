@@ -14,7 +14,7 @@ import { ProfileImageContext } from "../../Hooks/createContext";
 import { profileDetail, updateProfile } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
-import BackButton from "../GeneralComponents/backButton";
+import HeaderWithBackButton from "../backButton";
 
 const ProfileContainer = styled(Box)({
   position: "relative",
@@ -25,7 +25,7 @@ const ProfileContainer = styled(Box)({
   padding: "20px",
   maxWidth: "500px",
   height: "65%",
-  margin: "80px auto",
+  margin: "70px auto",
   backgroundColor: "#f7f7f7",
   borderRadius: "30px",
   boxShadow: "rgba(17, 12, 46, 0.15) 0px 20px 30px 0px;",
@@ -98,8 +98,8 @@ const EditProfile = () => {
   };
 
   return (
-    <div>
-      <BackButton />
+    <div className="p-3">
+      <HeaderWithBackButton title="Edit Profile" path="/dashboard" />
       <ProfileContainer>
         <div className="Position_update">
           <StyledAvatar alt="Profile Image" src={profileImage} />
