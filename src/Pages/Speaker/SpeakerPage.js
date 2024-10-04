@@ -5,40 +5,45 @@ import { Button } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
 import Loader from "../../Components/GeneralComponents/LoadingIndicator";
-import { SpeakersList } from "../../DAL/Login/Login";
+import { DeletingSpeaker, SpeakersList } from "../../DAL/Login/Login";
+import { useSnackbar } from "notistack";
+
 function Speaker() {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
   const navigate = useNavigate();
 
-  // Data fetching logic
+  const fetchData = async () => {
+    const response = await SpeakersList();
+    if (response.code === 200) {
+      const mappedUsers = response.speakers.map((item) => ({
+        ...item,
+        name: `${item.first_name} ${item.last_name}` || "Unknown",
+        status: item.status,
+        is_show_celendar: false,
+        link: {
+          to: "https://www.google.com/",
+          target: "_blank",
+          show_text: "Preview",
+        },
+        html: "<div>Hello </div>",
+      }));
+      console.log("mappedUsers mappedUsers mappedUsers", mappedUsers);
+      setUsers(mappedUsers);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await SpeakersList();
-      if (response.code === 200) {
-        const mappedUsers = response.speakers.map((item) => ({
-          ...item,
-          name: item.name || "Unknown",
-          is_show_celendar: false,
-          link: {
-            to: "https://www.google.com/",
-            target: "_blank",
-            show_text: "Preview",
-          },
-          html: "<div>Hello </div>",
-        }));
-        setUsers(mappedUsers);
-      } else {
-        console.error("Failed to fetch data");
-      }
-      setLoading(false);
-    };
     fetchData();
   }, []);
+
   const handleEdit = (value) => {
-    navigate(`/speakers/editspeaker/${value.id}`, { state: { user: value } });
+    navigate(`/speakers/edit/${value._id}`, { state: value });
   };
 
   const handleDelete = (value) => {
@@ -46,8 +51,15 @@ function Speaker() {
     setModelOpen(true);
   };
 
-  const onConfirm = () => {
-    setUsers(users.filter((item) => item._id !== valueForDeleting._id));
+  const onConfirm = async (e) => {
+    e.preventDefault();
+    const response = await DeletingSpeaker(valueForDeleting._id);
+    if (response.code === 200) {
+      enqueueSnackbar(response.message, { variant: "success" });
+      fetchData();
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
     setModelOpen(false);
   };
 
@@ -59,33 +71,64 @@ function Speaker() {
     navigate("/speakers/addspeaker");
   };
 
-  // const filterDataByName = (searchTerm) => {
-  //   return users.filter((user) =>
-  //     (user.name || "").toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  // };
-
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
       id: "name",
-      label: "Name",
-      accessor: (row) => row.name,
+      label: "Speakers",
+      renderData: (row, index) => {
+        return (
+          <div key={index} className="d-flex align-items-center">
+            <div className="me-2">
+              {row.image && row.image.thumbnail_1 ? (
+                <img
+                  className="img-fluid"
+                  src={row.image.thumbnail_2}
+                  style={{
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    width: "50px",
+                    height: "50px",
+                    maxWidth: "50px",
+                    maxHeight: "50px",
+                  }}
+                />
+              ) : (
+                <div>{null}</div>
+              )}
+            </div>
+            <div>{row.name}</div>
+          </div>
+        );
+      },
     },
     {
-      id: "first_name",
-      label: "First Name",
-      accessor: (row) => row.first_name,
-    },
-    {
-      id: "last_name",
-      label: "Last Name",
-      accessor: (row) => row.last_name,
+      id: "email",
+      label: "Email",
+      type: "email",
     },
     {
       id: "expertise",
       label: "Expertise",
-      accessor: (row) => row.expertise.map((row) => row),
+      renderData: (row) =>
+        row.expertise.map((row, index) => {
+          return <div key={index}>{row}</div>;
+        }),
+    },
+    {
+      id: "phone",
+      label: "Contact Number",
+      type: "phone",
+    },
+    {
+      id: "status",
+      label: "Status",
+      type: "row_status",
+    },
+    {
+      id: "bio",
+      label: "Bio",
+      type: "bio",
     },
   ];
 
@@ -119,7 +162,7 @@ function Speaker() {
           <Loader />
         ) : (
           <ReactTable
-            data={users} // Example usage of filtering
+            data={users}
             TABLE_HEAD={TABLE_HEAD}
             MENU_OPTIONS={[
               {
@@ -145,9 +188,9 @@ function Speaker() {
                     height="24px"
                     viewBox="0 -960 960 960"
                     width="24px"
-                    fill="#7396cc"
+                    className="Delete-Icon"
                   >
-                    <path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z" />
+                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
                   </svg>
                 ),
                 handleClick: handleDelete,
@@ -171,7 +214,10 @@ function Speaker() {
         open={modelOpen}
         handleClose={() => setModelOpen(false)}
         component={
-          <DeletionConfirmation onConfirm={onConfirm} onCancel={onCancel} />
+          <DeletionConfirmation
+            onConfirm={(e) => onConfirm(e)}
+            onCancel={onCancel}
+          />
         }
       />
     </div>

@@ -1,17 +1,16 @@
 import { Toolbar } from "@mui/material";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppHeader from "./TopBar";
 import AppSidebar from "./SideBar";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 const drawerWidth = 350;
 
-const DashboardLayout = ({ handleSnackbarClose }) => {
+const DashboardLayout = () => {
   const navigate = useNavigate();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -35,7 +34,7 @@ const DashboardLayout = ({ handleSnackbarClose }) => {
         handleDrawerToggle={handleDrawerToggle}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
-        setIsClosing={setIsClosing}
+        setIsClosing={isClosing}
         drawerWidth={drawerWidth}
       />
 

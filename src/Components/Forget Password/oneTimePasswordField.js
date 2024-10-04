@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FormBox from "../GeneralComponents/Form-Box";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import LogoBox from "../GeneralComponents/Logo-Box";
@@ -9,8 +9,8 @@ import { useSnackbar } from "notistack";
 const OTP = ({ Default, Confirm }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = React.useState("");
-  const [email] = React.useState("aliusama.vectorcoder@gmail.com");
+  const [otp, setOtp] = useState("");
+  const [email] = useState("aliusama.vectorcoder@gmail.com");
   const handleClick = () => {
     Default();
   };

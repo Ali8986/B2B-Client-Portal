@@ -15,7 +15,7 @@ const HeaderWithBackButton = ({ title, path }) => {
   };
 
   return (
-    <div className="col-12 d-flex align-items-center mb-4">
+    <div className="col-12 ps-1 d-flex align-items-center mb-4">
       <IconButton
         onClick={handleBackClick}
         style={{ color: "#7396cc" }} // Custom color for the icon

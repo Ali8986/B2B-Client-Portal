@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Drawer, Divider, List } from "@mui/material";
 import SearchAppBar from "../../Components/GeneralComponents/searchBar";
 import Logo from "../../Components/SideBar/SideBarLogo";
@@ -12,9 +12,9 @@ const AppSidebar = ({
   mobileOpen,
   handleDrawerClose,
 }) => {
-  const [inboxOpen, setInboxopen] = React.useState(true);
-  const [searchInput, setSearchInput] = React.useState("");
-  const [filteredResults, setFilteredResults] = React.useState([]);
+  const [inboxOpen, setInboxopen] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
   const handleSearchChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchInput(query);

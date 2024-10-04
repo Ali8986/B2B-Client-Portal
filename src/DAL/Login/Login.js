@@ -141,8 +141,8 @@ export const updateProfile = async (data) => {
 
 export const SpeakersList = async () => {
   const requestObj = {
-    path: `api/speaker/all_list_speaker_with_search`,
-    method: "GET",
+    path: `api/speaker/list_speaker`,
+    method: "POSt",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
@@ -152,6 +152,49 @@ export const SpeakersList = async () => {
 export const AddingSpeaker = async (data) => {
   const requestObj = {
     path: `api/speaker/add_speaker`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+export const EditingSpeaker = async (id, data) => {
+  const requestObj = {
+    path: `api/speaker/update_speaker/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+export const DeletingSpeaker = async (id) => {
+  const requestObj = {
+    path: `api/speaker/delete_speaker/${id}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+export const ExhibitorList = async () => {
+  const requestObj = {
+    path: `api/exhibitor/list_exhibitor`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const AddingExhibitor = async (data) => {
+  const requestObj = {
+    path: `api/exhibitor/add_exhibitor`,
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),

@@ -15,21 +15,7 @@ import { profileDetail, updateProfile } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
 import HeaderWithBackButton from "../backButton";
-
-const ProfileContainer = styled(Box)({
-  position: "relative",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "20px",
-  maxWidth: "500px",
-  height: "65%",
-  margin: "40px auto",
-  backgroundColor: "#f7f7f7",
-  borderRadius: "30px",
-  boxShadow: "rgba(17, 12, 46, 0.15) 0px 20px 30px 0px;",
-});
+import "../../Assets/Styles/EditProfile.css";
 
 const StyledAvatar = styled(Avatar)({
   width: "100px",
@@ -99,8 +85,8 @@ const EditProfile = () => {
 
   return (
     <div className="p-3">
-      <HeaderWithBackButton title="Edit Profile" path="/dashboard" />
-      <ProfileContainer>
+      {/* <HeaderWithBackButton title="Edit Profile" path="/dashboard" /> */}
+      <div className="ProfileContainer">
         <div className="Position_update">
           <StyledAvatar alt="Profile Image" src={profileImage} />
           <Typography variant="h5" component="h1" gutterBottom>
@@ -168,7 +154,7 @@ const EditProfile = () => {
             </Button>
           </div>
         </form>
-      </ProfileContainer>
+      </div>
     </div>
   );
 };

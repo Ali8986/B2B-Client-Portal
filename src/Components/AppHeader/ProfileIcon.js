@@ -115,10 +115,15 @@ export default function ProfileIcon() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose} sx={{ fontWeight: "600" }}>
+        <MenuItem
+          className="Profile-Icon-Link"
+          onClick={handleClose}
+          sx={{ fontWeight: "600" }}
+        >
           {user || `${data.first_name} ${data.last_name}`}
         </MenuItem>
         <MenuItem
+          className="Profile-Icon-Link"
           onClick={handleClose}
           sx={{
             fontStyle: "italic",
@@ -132,6 +137,7 @@ export default function ProfileIcon() {
         </MenuItem>
         <Divider />
         <MenuItem
+          className="Profile-Icon-Link"
           onClick={() => {
             handleEditProfile();
             handleClose();
@@ -143,6 +149,7 @@ export default function ProfileIcon() {
           Edit Profile
         </MenuItem>
         <MenuItem
+          className="Profile-Icon-Link"
           onClick={() => {
             handleClose();
             setShowChangePassword(true);
@@ -154,6 +161,7 @@ export default function ProfileIcon() {
           Change Password
         </MenuItem>
         <MenuItem
+          className="Profile-Icon-Link"
           onClick={() => {
             handleClose();
             setShowLogoutModal(true);

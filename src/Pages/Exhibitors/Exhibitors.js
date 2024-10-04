@@ -5,13 +5,136 @@ import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "./DeletingUser";
 import Loader from "../../Components/GeneralComponents/LoadingIndicator";
+import { ExhibitorList } from "../../DAL/Login/Login";
+import { type } from "@testing-library/user-event/dist/type";
+import Chip from "@mui/material/Chip";
 
-function Exhibitors({ members }) {
+function Exhibitors() {
   const [loading, setLoading] = useState(true); // Set to true initially
   const [modelOpen, setModelOpen] = useState(false);
   const navigate = useNavigate();
+  const [members, setMembers] = useState([
+    {
+      _id: 1,
+      name: "John Smith",
+      company: {
+        name: "ABC Innovations",
+        website: "https://abcinnovations.com",
+      },
+      email: "john.smith@example.com",
+      phone: "+1-555-123-4567",
+      social_links: JSON.stringify([
+        { platform: "LinkedIn", url: "https://linkedin.com/in/johnsmith" },
+        { platform: "Twitter", url: "https://twitter.com/johnsmith" },
+      ]),
+      products_services: JSON.stringify(["AI Software", "Cloud Solutions"]),
+      status: "Rejected",
+      image: null,
+      booth: "A1",
+    },
+    {
+      _id: 2,
+      name: "Jane Doe",
+      company: {
+        name: "XYZ Corp",
+        website: "https://xyzcorp.com",
+      },
+      email: "jane.doe@example.com",
+      phone: "+1-555-987-6543",
+      social_links: JSON.stringify([
+        { platform: "Facebook", url: "https://facebook.com/janedoe" },
+        { platform: "LinkedIn", url: "https://linkedin.com/in/janedoe" },
+      ]),
+      products_services: JSON.stringify([
+        "SEO Services",
+        "Digital Advertising",
+      ]),
+      status: "Pending",
+      image: null,
+      booth: "B5",
+    },
+    {
+      _id: 3,
+      name: "Michael Johnson",
+      company: {
+        name: "DEF Solutions",
+        website: "https://defsolutions.com",
+      },
+      email: "michael.johnson@example.com",
+      phone: "+44-7890-123456",
+      social_links: JSON.stringify([
+        { platform: "LinkedIn", url: "https://linkedin.com/in/michaeljohnson" },
+        { platform: "Twitter", url: "https://twitter.com/michaeljohnson" },
+      ]),
+      products_services: JSON.stringify([
+        "IoT Devices",
+        "Smart Home Solutions",
+      ]),
+      status: "Confirmed",
+      image: null,
+      booth: "C12",
+    },
+  ]);
   const [users, setUsers] = useState([]);
+  const getData = () => {
+    const data = members.map((item) => {
+      return {
+        ...item,
+        is_show_celendar: true,
+        name: item.name,
+        link: {
+          to: "https://www.google.com/",
+          target: "_blank",
+          show_text: "Preview",
+        },
+        thumbnail: {
+          src: item.profileImage,
+          alt: "Profile Image",
+        },
+        status: item.status,
+        html: "<div>html text </div>",
+      };
+    });
+    setUsers(data);
+  };
   const [ValueForDeleting, setValueForDeleting] = useState(null);
+
+  // getting data from API
+  // const GetExhibitorsList = async () => {
+  //   const response = await ExhibitorList();
+  //   if (response.code === 200) {
+  //     console.log(response, "Success....................................");
+  //     const mappedUsers = response.exhibitors.map((item) => ({
+  //       ...item,
+  //       name: item.name || "Unknown",
+  //       status: item.status,
+  //       is_show_celendar: false,
+  //       link: {
+  //         to: "https://www.google.com/",
+  //         target: "_blank",
+  //         show_text: "Preview",
+  //       },
+  //       html: "<div>Hello </div>",
+  //     }));
+  //     setUsers(mappedUsers);
+  //     setLoading(false);
+  //   } else {
+  //     alert("Please select");
+  //     setLoading(false);
+  //   }
+  // };
+  // const mappedUsers = response.speakers.map((item) => ({
+  //   ...item,
+  //   name: `${item.first_name} ${item.last_name}` || "Unknown",
+  //   status: item.status,
+  //   is_show_celendar: false,
+  //   link: {
+  //     to: "https://www.google.com/",
+  //     target: "_blank",
+  //     show_text: "Preview",
+  //   },
+  //   html: "<div>Hello </div>",
+  // }));
   // const [searchText, setSearchText] = useState("");
   // const [page, setPage] = useState(0);
   // const [rowsPerPage, setRowsPerPage] = useState(1);
@@ -49,26 +172,6 @@ function Exhibitors({ members }) {
   };
   const onCancel = () => {
     setModelOpen(false);
-  };
-
-  const getData = () => {
-    const data = members.map((item) => {
-      return {
-        ...item,
-        // is_show_celendar: true,
-        // link: {
-        //   to: "https://www.google.com/",
-        //   target: "_blank",
-        //   show_text: "Preview",
-        // },
-        thumbnail: {
-          src: item.profileImage,
-          alt: "Profile Image",
-        },
-        html: "<div>html text </div>",
-      };
-    });
-    setUsers(data);
   };
 
   const MENU_OPTIONS = [
@@ -114,45 +217,75 @@ function Exhibitors({ members }) {
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
-      id: "any",
+      id: "name",
       label: "Exhibitor",
+      type: "name ",
+    },
+    { id: "email", label: "Email", type: "email" },
+    { id: "phone", label: "Phone Number", type: "phone" },
+    {
+      id: "any",
+      label: "Company",
       renderData: (row) => {
         return (
-          <div className="d-flex align-items-center">
-            <div className="me-2">
-              <img
-                className="img-fluid"
-                src={row.thumbnail.src}
-                alt={row.thumbnail.alt}
-                style={{
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  width: "50px",
-                  height: "50px",
-                  maxWidth: "50px",
-                  maxHeight: "50px",
-                }}
-              />
-            </div>
-            <div className="ms-3">{row.name}</div>
+          <>
+            <div>{row.company.name}</div>
+            <div>{row.company.website}</div>
+          </>
+        );
+      },
+    },
+    {
+      id: "any",
+      label: "Booth",
+      renderData: (row) => {
+        return <div>{row.booth}</div>;
+      },
+    },
+    {
+      id: "any",
+      label: "Products/Services",
+      renderData: (row) => {
+        // Parsing the products/services JSON string to display
+        const products = JSON.parse(row.products_services);
+        return <div>{products.join(", ")}</div>;
+      },
+    },
+    {
+      id: "any",
+      label: "Status",
+      renderData: (row) => {
+        return (
+          <div>
+            <Chip
+              label={
+                row.status === "Pending"
+                  ? "Pending"
+                  : row.status === "Confirmed"
+                  ? "Confirmed"
+                  : row.status === "Rejected"
+                  ? "Rejected"
+                  : ""
+              }
+              color={
+                row.status === "Pending"
+                  ? "secondary"
+                  : row.status === "Confirmed"
+                  ? "success"
+                  : row.status === "Rejected"
+                  ? "error"
+                  : ""
+              }
+            />
           </div>
         );
       },
     },
-    { id: "email", label: "Email" },
-    { id: "phoneNumber", label: "Phone Number" },
-    {
-      id: "any",
-      label: "Job Title",
-      renderData: (row) => {
-        return <div>{row.jobTitle}</div>;
-      },
-    },
-    { id: "status", label: "Status", type: "row_status" },
   ];
 
   useEffect(() => {
     getData();
+    // GetExhibitorsList();
     setLoading(false);
   }, []);
   const handleCloseModal = () => {

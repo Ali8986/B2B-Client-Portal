@@ -218,7 +218,7 @@ body {
     position: relative;
 }
 
-.css-99wn1p-MuiList-root-MuiMenu-list {
+.Profile-DropDown .css-99wn1p-MuiList-root-MuiMenu-list {
     width: 245px !important;
     height: 195px !important;
 }
@@ -389,4 +389,21 @@ body {
 
 .Logout-Confirmation-Btn:hover {
     background-color: #dc3546de !important;
+}
+
+.font-size {
+    font-size: 0.875rem !important;
+
+}
+
+.color {
+    color: white !important;
+}
+
+.Delete-Icon {
+    fill: #d32f2f !important;
+}
+
+.hr {
+    border: 1px solid rgba(128, 128, 128, 0.322);
 }
