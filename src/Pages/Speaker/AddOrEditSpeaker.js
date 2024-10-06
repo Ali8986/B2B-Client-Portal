@@ -34,8 +34,8 @@ function AddEditSpeaker() {
         phone,
         bio,
         expertise,
-        image,
-        status,
+        // image,
+        // status,
       } = state;
 
       setFormData({

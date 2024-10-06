@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Button, MenuItem, Select } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import profile from "../../Assets/Images/profile.jpg";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
 import { AddingExhibitor } from "../../DAL/Login/Login";
@@ -11,8 +11,6 @@ function EditOrAddExhibitor() {
   const location = useLocation();
   const { state } = location;
   const isEditing = !!state;
-  console.log(state);
-  const navigate = useNavigate();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState(null);
   const [formData, setFormData] = useState({
@@ -26,7 +24,7 @@ function EditOrAddExhibitor() {
       name: "",
       website: "",
     },
-    status: "",
+    status: "Confirmed",
   });
 
   useEffect(() => {
@@ -36,7 +34,7 @@ function EditOrAddExhibitor() {
         name: useData.name,
         email: useData.email,
         phone: useData.phone,
-        products_services: useData.products_services,
+        products_services: JSON.parse(useData.products_services),
         booth: useData.booth,
         company: {
           name: useData.company.name,
@@ -87,7 +85,7 @@ function EditOrAddExhibitor() {
       <form onSubmit={handleSubmit}>
         <div className="row p-0 p-lg-3 mt-5 mt-md-2">
           <HeaderWithBackButton
-            title={isEditing ? "Edit Speaker" : "Add Speaker"}
+            title={isEditing ? "Edit Exhibitor" : "Add Exhibitor"}
             path="/exhibitors"
           />
           <div className="col-6 col-lg-6">
@@ -178,7 +176,7 @@ function EditOrAddExhibitor() {
               <MenuItem value="Rejected">Rejected</MenuItem>
             </Select>
           </div>
-          <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3">
+          <div className="col-12 flex-wrap d-flex justify-content-between align-items-center my-3">
             <div className="col-12 col-lg-4 pb-3 pb-lg-0">
               <h4 className="h5">Upload Image</h4>
               <p className="h6">
@@ -210,11 +208,8 @@ function EditOrAddExhibitor() {
               </label>
             </div>
           </div>
-          <hr />
-          <div className="col-12 d-flex flex-wrap justify-content-between mt-3">
-            <p className="h6">
-              Image Name: {imageName ? imageName.name : profile}
-            </p>
+          <div className=" border-bottom"></div>
+          <div className="col-12 d-flex flex-wrap justify-content-end mt-4">
             <Button
               type="submit"
               variant="contained"
@@ -225,7 +220,7 @@ function EditOrAddExhibitor() {
                 marginLeft: "10px",
               }}
             >
-              {isEditing ? "Update" : "Add"}
+              {isEditing ? "Update" : "Submit"}
             </Button>
           </div>
         </div>

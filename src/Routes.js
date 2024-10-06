@@ -9,8 +9,7 @@ import ErrorPage from "./Components/404";
 import EditProfile from "./Components/AppHeader/EditProfile";
 import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
-import AddEvent from "./Pages/Events/AddEvent";
-import EditEvent from "./Pages/Events/EditEvent";
+import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 const Router = () => {
   const router = createBrowserRouter([
     {
@@ -31,8 +30,12 @@ const Router = () => {
         { path: "/speakers/addspeaker", element: <AddOrEditSpeaker /> },
         { path: "/speakers/edit/:id", element: <AddOrEditSpeaker /> },
         { path: "/events", exact: true, element: <Events /> },
-        { path: "/events/addevent/", exact: true, element: <AddEvent /> },
-        { path: "/events/editevent/:id", exact: true, element: <EditEvent /> },
+        { path: "/events/addevent/", exact: true, element: <AddOrEditEvent /> },
+        {
+          path: "/events/editevent/:id",
+          exact: true,
+          element: <AddOrEditEvent />,
+        },
         { path: "/edit-profile", exact: true, element: <EditProfile /> },
         {
           path: "/exhibitors/editexhibitor/:id",

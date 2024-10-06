@@ -5,12 +5,11 @@ import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "./DeletingUser";
 import Loader from "../../Components/GeneralComponents/LoadingIndicator";
-import { ExhibitorList } from "../../DAL/Login/Login";
-import { type } from "@testing-library/user-event/dist/type";
+// import { ExhibitorList } from "../../DAL/Login/Login";
 import Chip from "@mui/material/Chip";
 
 function Exhibitors() {
-  const [loading, setLoading] = useState(true); // Set to true initially
+  const [loading, setLoading] = useState(true);
   const [modelOpen, setModelOpen] = useState(false);
   const navigate = useNavigate();
   const [members, setMembers] = useState([

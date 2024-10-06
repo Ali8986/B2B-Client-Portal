@@ -5,38 +5,39 @@ import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../Exhibitors/DeletingUser";
 import Loader from "../../Components/GeneralComponents/LoadingIndicator";
+import { EventList } from "../../DAL/Login/Login";
 
 function Exhibitors() {
   const [loading, setLoading] = useState(true); // Set to true initially
-  const [events, setEvents] = useState([
-    {
-      _id: 1,
-      name: "Tech Conference 2024",
-      EventHost: "Ahmed Ali",
-      StartDate: "30-09-2024, 3:44:00 PM",
-      EndDate: "30-09-2024, 5:30:00 PM",
-      Venue: "Tech Hub, New York, NY",
-      status: true,
-    },
-    {
-      _id: 2,
-      name: "Startup Pitch Day",
-      EventHost: "Waqar Zaka",
-      StartDate: "23-09-2024, 12:00:00 PM",
-      EndDate: "23-09-2024, 3:15:00 PM",
-      Venue: "Hilton Hotel, London, UK",
-      status: false,
-    },
-    {
-      _id: 3,
-      name: "JavaScript Workshop",
-      EventHost: "John Doe",
-      StartDate: "19-09-2024, 1:30:00 PM",
-      EndDate: "19-09-2024, 5:30:00 PM",
-      Venue: "Tech Park, Berlin, Germany",
-      status: false,
-    },
-  ]);
+  // const [events, setEvents] = useState([
+  //   {
+  //     _id: 1,
+  //     name: "Tech Conference 2024",
+  //     EventHost: "Ahmed Ali",
+  //     StartDate: "30-09-2024, 3:44:00 PM",
+  //     EndDate: "30-09-2024, 5:30:00 PM",
+  //     Venue: "Tech Hub, New York, NY",
+  //     status: true,
+  //   },
+  //   {
+  //     _id: 2,
+  //     name: "Startup Pitch Day",
+  //     EventHost: "Waqar Zaka",
+  //     StartDate: "23-09-2024, 12:00:00 PM",
+  //     EndDate: "23-09-2024, 3:15:00 PM",
+  //     Venue: "Hilton Hotel, London, UK",
+  //     status: false,
+  //   },
+  //   {
+  //     _id: 3,
+  //     name: "JavaScript Workshop",
+  //     EventHost: "John Doe",
+  //     StartDate: "19-09-2024, 1:30:00 PM",
+  //     EndDate: "19-09-2024, 5:30:00 PM",
+  //     Venue: "Tech Park, Berlin, Germany",
+  //     status: false,
+  //   },
+  // ]);
   const [modelOpen, setModelOpen] = useState(false);
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
@@ -61,9 +62,36 @@ function Exhibitors() {
   //   );
   //   setUsers(filteredData);
   // };
+  const getData = async () => {
+    const response = await EventList();
+    if (response.code === 200) {
+      console.log(response);
+      const data = response.events.map((item) => {
+        return {
+          ...item,
+          is_show_celendar: true,
+          link: {
+            to: "https://www.google.com/",
+            target: "_blank",
+            show_text: "Preview",
+          },
+          thumbnail: {
+            src: item.profileImage,
+            alt: "Profile Image",
+          },
+          html: "<div>html text </div>",
+        };
+      });
+      setUsers(data);
+      setLoading(false);
+    } else {
+      alert("Failed to fetch data");
+      setLoading(false);
+    }
+  };
 
   const handleEdit = (value) => {
-    navigate(`/events/editevent/${value._id}`, { state: { user: value } });
+    navigate(`/events/editevent/${value._id}`, { state: { users: value } });
   };
   const handleDelete = (value) => {
     setValueForDeleting(value);
@@ -76,26 +104,6 @@ function Exhibitors() {
   };
   const onCancel = () => {
     setModelOpen(false);
-  };
-
-  const getData = () => {
-    const data = events.map((item) => {
-      return {
-        ...item,
-        // is_show_celendar: true,
-        // link: {
-        //   to: "https://www.google.com/",
-        //   target: "_blank",
-        //   show_text: "Preview",
-        // },
-        // thumbnail: {
-        //   src: item.profileImage,
-        //   alt: "Profile Image",
-        // },
-        // html: "<div>html text </div>",
-      };
-    });
-    setUsers(data);
   };
 
   const MENU_OPTIONS = [
@@ -137,6 +145,19 @@ function Exhibitors() {
       // ],
     },
   ];
+  function formatDateTime(dateString, timeString) {
+    // Combine the date and time strings
+    const combinedString = `${dateString.replace(/:/g, "-")}T${timeString}`;
+
+    // Create a new Date object
+    const dateObj = new Date(combinedString);
+
+    // Format the date and time as desired
+    const formattedDate = dateObj.toLocaleDateString(); // e.g., "10/15/2024"
+    const formattedTime = dateObj.toLocaleTimeString(); // e.g., "10:30:00 AM"
+
+    return `${formattedDate} ${formattedTime}`;
+  }
 
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
@@ -151,17 +172,36 @@ function Exhibitors() {
         );
       },
     },
-    { id: "EventHost", label: "Event Host" },
-    { id: "StartDate", label: "Start Date" },
+    { id: "location", label: "Location", type: "location" },
     {
       id: "any",
-      label: "End Date",
+      label: "Start Date/Time",
       renderData: (row) => {
-        return <div>{row.EndDate}</div>;
+        return (
+          <div className="d-flex align-items-center">
+            <div>{formatDateTime(row.start_date, row.start_time)}</div>
+          </div>
+        );
       },
     },
-    { id: "Venue", label: "Venue", type: "row_Venue" },
-    { id: "status", label: "Status", type: "row_status" },
+    {
+      id: "any",
+      label: "End Date/Time",
+      renderData: (row) => {
+        return (
+          <div className="d-flex align-items-center">
+            <div>{formatDateTime(row.end_date, row.end_time)}</div>
+          </div>
+        );
+      },
+    },
+    { id: "status", label: "Status", type: "status" },
+    { id: "capacity", label: "Capacity", type: "capacity" },
+    {
+      id: "numeber_of_attendees",
+      label: "Attendees",
+      type: "numeber_of_attendees",
+    },
   ];
 
   useEffect(() => {

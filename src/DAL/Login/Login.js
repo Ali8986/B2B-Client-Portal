@@ -203,3 +203,26 @@ export const AddingExhibitor = async (data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const EventList = async () => {
+  const requestObj = {
+    path: `api/event/list_event`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const EditingEvent = async (id, data) => {
+  const requestObj = {
+    path: `api/event/update_event/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
