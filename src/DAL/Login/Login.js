@@ -226,3 +226,15 @@ export const EditingEvent = async (id, data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const AddingEvent = async (data) => {
+  const requestObj = {
+    path: `api/event/add_event`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};

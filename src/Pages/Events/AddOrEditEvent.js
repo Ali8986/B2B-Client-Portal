@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Button, MenuItem, Select, TextField } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
-import { EditingEvent } from "../../DAL/Login/Login";
+import { AddingEvent, EditingEvent } from "../../DAL/Login/Login";
 
 function AddOrEditEvent() {
   // const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  console.log(state, "++++++++++++++++++++++++++++++stae");
+  const { id } = useParams();
   const IsEdinting = !!state;
   const [formData, setFormData] = useState({
     name: "",
     location: "",
     start_date: "",
-    start_time: "",
+    start_time: "20:00:00",
     end_date: "",
-    end_time: "",
-    status: "Scheduled",
+    end_time: "18:00:00",
+    status: "scheduled",
     capacity: "",
     numeber_of_attendees: "",
     event_type: "",
@@ -50,17 +50,24 @@ function AddOrEditEvent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formattedFormData = {
+      ...formData,
+    };
     if (IsEdinting) {
-      const response = await EditingEvent(state._id, formData);
+      const response = await EditingEvent(id, formattedFormData);
       if (response.code === 200) {
         alert("Success");
       } else {
         alert("Error while editing event");
       }
+    } else if (IsEdinting !== true) {
+      const response = await AddingEvent(formattedFormData);
+      if (response.code === 200) {
+        alert("Success");
+      } else {
+        alert("Error while adding event");
+      }
     }
-
-    console.log(formData);
-    // navigate("/events");
   };
 
   return (
@@ -114,14 +121,17 @@ function AddOrEditEvent() {
               value={formData.status}
               onChange={handleChange}
             >
-              <MenuItem value="Closed" selected>
-                Closed
+              <MenuItem value="completed" selected>
+                completed
               </MenuItem>
               <MenuItem value="scheduled" selected>
                 scheduled
               </MenuItem>
-              <MenuItem value="Ongoing" selected>
-                Ongoing
+              <MenuItem value="ongoing" selected>
+                ongoing
+              </MenuItem>
+              <MenuItem value="cancelled" selected>
+                cancelled
               </MenuItem>
             </Select>
           </div>
