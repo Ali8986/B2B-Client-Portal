@@ -238,3 +238,14 @@ export const AddingEvent = async (data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const DeletingEvent = async (id) => {
+  const requestObj = {
+    path: `api/event/delete_event/${id}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};

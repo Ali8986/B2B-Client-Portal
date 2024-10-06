@@ -249,7 +249,7 @@ function AddEditSpeaker() {
                   ) : (
                     <div className="d-flex align-items-center">
                       <CircularProgress size={15} className="color" />
-                      <p className="ms-2 mb-0 font-size">Update</p>
+                      <p className="ms-2 mb-0 font-size">Submit</p>
                     </div>
                   )
                 ) : isEditing ? (

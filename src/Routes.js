@@ -10,6 +10,8 @@ import EditProfile from "./Components/AppHeader/EditProfile";
 import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
+import { useEffect, useState } from "react";
+import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
 const Router = () => {
   const router = createBrowserRouter([
     {
@@ -18,7 +20,11 @@ const Router = () => {
       element: <LoginPage />,
     },
     {
-      element: <DashboardLayout />,
+      element: (
+        <ProtectedRoute>
+          <DashboardLayout />
+        </ProtectedRoute>
+      ),
       children: [
         { path: "/dashboard", index: true, element: <HomePage /> },
         {

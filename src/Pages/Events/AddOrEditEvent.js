@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, MenuItem, Select, TextField } from "@mui/material";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import {
+  Button,
+  CircularProgress,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useLocation, useParams } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
 import { AddingEvent, EditingEvent } from "../../DAL/Login/Login";
+import { useSnackbar } from "notistack";
 
 function AddOrEditEvent() {
-  // const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const { id } = useParams();
   const location = useLocation();
   const { state } = location;
-  const { id } = useParams();
   const IsEdinting = !!state;
+
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -24,6 +33,8 @@ function AddOrEditEvent() {
     event_type: "",
     description: "",
   });
+
+  //setting formData in case of User Clicks on Editing
   useEffect(() => {
     if (IsEdinting && state) {
       const useData = state.users;
@@ -43,6 +54,7 @@ function AddOrEditEvent() {
     }
   }, [IsEdinting, state]);
 
+  //Inputs Fields Change handling
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -54,18 +66,24 @@ function AddOrEditEvent() {
       ...formData,
     };
     if (IsEdinting) {
+      setLoading(true);
       const response = await EditingEvent(id, formattedFormData);
       if (response.code === 200) {
-        alert("Success");
+        enqueueSnackbar(response.message, { variant: "success" });
+        setLoading(false);
       } else {
-        alert("Error while editing event");
+        setLoading(false);
+        enqueueSnackbar(response.message, { variant: "error" });
       }
     } else if (IsEdinting !== true) {
+      setLoading(true);
       const response = await AddingEvent(formattedFormData);
       if (response.code === 200) {
-        alert("Success");
+        enqueueSnackbar(response.message, { variant: "success" });
+        setLoading(false);
       } else {
-        alert("Error while adding event");
+        setLoading(false);
+        enqueueSnackbar(response.message, { variant: "error" });
       }
     }
   };
@@ -185,7 +203,23 @@ function AddOrEditEvent() {
                 marginLeft: "10px",
               }}
             >
-              {IsEdinting ? "Update" : "Submit"}
+              {loading ? (
+                IsEdinting ? (
+                  <div className="d-flex align-items-center">
+                    <CircularProgress size={15} className="color" />
+                    <p className="ms-2 mb-0 font-size">Update</p>
+                  </div>
+                ) : (
+                  <div className="d-flex align-items-center">
+                    <CircularProgress size={15} className="color" />
+                    <p className="ms-2 mb-0 font-size">Submit</p>
+                  </div>
+                )
+              ) : IsEdinting ? (
+                "Update"
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </div>
