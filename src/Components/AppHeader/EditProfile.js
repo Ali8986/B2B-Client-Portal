@@ -2,19 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   TextField,
   Button,
-  Box,
   Avatar,
   Typography,
   IconButton,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { useNavigate } from "react-router-dom";
 import { ProfileImageContext } from "../../Hooks/createContext";
 import { profileDetail, updateProfile } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
-import HeaderWithBackButton from "../backButton";
 import "../../Assets/Styles/EditProfile.css";
 
 const StyledAvatar = styled(Avatar)({
@@ -26,7 +23,6 @@ const StyledAvatar = styled(Avatar)({
 
 const EditProfile = () => {
   const { setUser } = useUser(); // Get user setter from context
-  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { profileImage, setProfileImage } = useContext(ProfileImageContext);
   const [firstName, setFirstName] = useState("");
@@ -78,8 +74,7 @@ const EditProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const newImageURL = URL.createObjectURL(file);
-      setProfileImage(newImageURL);
+      setProfileImage(file);
     }
   };
 

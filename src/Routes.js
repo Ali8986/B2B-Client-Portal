@@ -12,6 +12,7 @@ import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
+import { AddingSpeaker, EditingSpeaker } from "./DAL/Login/Login";
 const Router = () => {
   const router = createBrowserRouter([
     {
@@ -33,8 +34,14 @@ const Router = () => {
           element: <Exhibitors />,
         },
         { path: "/speakers", exact: true, element: <Speaker /> },
-        { path: "/speakers/addspeaker", element: <AddOrEditSpeaker /> },
-        { path: "/speakers/edit/:id", element: <AddOrEditSpeaker /> },
+        {
+          path: "/speakers/addspeaker",
+          element: <AddOrEditSpeaker type={AddingSpeaker} />,
+        },
+        {
+          path: "/speakers/edit/:id",
+          element: <AddOrEditSpeaker type={EditingSpeaker} />,
+        },
         { path: "/events", exact: true, element: <Events /> },
         { path: "/events/addevent/", exact: true, element: <AddOrEditEvent /> },
         {

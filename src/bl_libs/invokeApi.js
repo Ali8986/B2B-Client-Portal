@@ -17,7 +17,7 @@ export async function invokeApi({
     url: baseUri + path,
     headers,
   };
-  console.log(reqObj.url);
+  // console.log(reqObj.url);
 
   reqObj.params = queryParams;
 
@@ -35,11 +35,11 @@ export async function invokeApi({
   if (postData instanceof FormData) {
     console.info(...postData, "<===REQUEST-DATA===>");
   }
-  console.info("<===REQUEST-OBJECT===>", reqObj);
+  // console.info("<===REQUEST-OBJECT===>", reqObj);
 
   try {
     results = await axios(reqObj);
-    console.info("<===Api-Success-Result===>", results);
+    // console.info("<===Api-Success-Result===>", results);
 
     return results.data;
   } catch (error) {

@@ -75,7 +75,10 @@ export default function ProfileIcon() {
             aria-haspopup="true"
             aria-expanded={!!anchorEl}
           >
-            <Avatar sx={{ width: 45, height: 45 }} src={profileImage}></Avatar>
+            <Avatar
+              sx={{ width: 45, height: 45 }}
+              src={profileImage || data.profile_image}
+            ></Avatar>
           </div>
         </Tooltip>
       </div>

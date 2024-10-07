@@ -155,6 +155,7 @@ export const AddingSpeaker = async (data) => {
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
     },
     postData: data,
   };
@@ -166,6 +167,7 @@ export const EditingSpeaker = async (id, data) => {
     method: "PUT",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
     },
     postData: data,
   };
@@ -243,6 +245,17 @@ export const DeletingEvent = async (id) => {
   const requestObj = {
     path: `api/event/delete_event/${id}`,
     method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const SpeakerDetails = async (id) => {
+  const requestObj = {
+    path: `api/speaker/detail_speaker/${id}`,
+    method: "GET",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },

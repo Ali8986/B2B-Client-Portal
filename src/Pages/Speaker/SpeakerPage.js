@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
-import Loader from "../../Components/GeneralComponents/LoadingIndicator";
 import { DeletingSpeaker, SpeakersList } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
+import defaultimg from "../../Assets/Images/Default.jpg";
+import { s3baseUrl } from "../../config/config";
+import { Avatar } from "@mui/material";
 
 function Speaker() {
   const { enqueueSnackbar } = useSnackbar();
@@ -16,7 +18,7 @@ function Speaker() {
   const [valueForDeleting, setValueForDeleting] = useState(null);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const FetchSpeakerList = async () => {
     const response = await SpeakersList();
     if (response.code === 200) {
       const mappedUsers = response.speakers.map((item) => ({
@@ -38,9 +40,6 @@ function Speaker() {
     }
     setLoading(false);
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleEdit = (value) => {
     navigate(`/speakers/edit/${value._id}`, { state: value });
@@ -56,7 +55,7 @@ function Speaker() {
     const response = await DeletingSpeaker(valueForDeleting._id);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      fetchData();
+      FetchSpeakerList();
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -75,32 +74,36 @@ function Speaker() {
     { id: "action", label: "Action", type: "action" },
     {
       id: "name",
-      label: "Speakers",
+      label: "Profile",
       renderData: (row, index) => {
         return (
           <div key={index} className="d-flex align-items-center">
             <div className="me-2">
-              {row.image && row.image.thumbnail_1 ? (
-                <img
-                  className="img-fluid"
-                  src={row.image.thumbnail_2}
-                  style={{
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    width: "50px",
-                    height: "50px",
-                    maxWidth: "50px",
-                    maxHeight: "50px",
-                  }}
-                />
-              ) : (
-                <div>{null}</div>
-              )}
+              <Avatar
+                className="img-fluid"
+                src={
+                  row.image && row.image.thumbnail_1
+                    ? s3baseUrl + row.image.thumbnail_1
+                    : defaultimg
+                }
+                style={{
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  width: "50px",
+                  height: "50px",
+                  maxWidth: "50px",
+                  maxHeight: "50px",
+                }}
+              />
             </div>
-            <div>{row.name}</div>
           </div>
         );
       },
+    },
+    {
+      id: "name",
+      label: "Speaker",
+      renderData: (row) => row.name,
     },
     {
       id: "email",
@@ -125,12 +128,10 @@ function Speaker() {
       label: "Status",
       type: "row_status",
     },
-    {
-      id: "bio",
-      label: "Bio",
-      type: "bio",
-    },
   ];
+  useEffect(() => {
+    FetchSpeakerList();
+  }, []);
 
   return (
     <div className="row my-4 mx-3">
@@ -159,7 +160,9 @@ function Speaker() {
       </div>
       <div className="Exhibitors-Table">
         {loading ? (
-          <Loader />
+          <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
+            <CircularProgress />
+          </div>
         ) : (
           <ReactTable
             data={users}
