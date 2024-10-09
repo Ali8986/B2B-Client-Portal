@@ -197,7 +197,7 @@ function AddEditSpeaker({ type }) {
                   required
                 />
               </div>
-              <div className="col-12 flex-wrap d-flex justify-content-between align-items-center mt-3 mb-2">
+              <div className="col-12 flex-wrap d-flex justify-content-between align-items-center mt-4 pt-1 mb-2">
                 <div className="col-12 col-lg-4 pb-3 pb-lg-0">
                   <h4 className="h5">Upload Image</h4>
                   <p className="h6">

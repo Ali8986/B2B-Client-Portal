@@ -434,3 +434,9 @@ body {
 .table-container-pro .pagination-container .page-count.active {
     color: white !important;
 }
+
+.table-container-pro .custom-button {
+    border: none !important;
+    background-color: #7396cc !important;
+    color: white !important;
+}

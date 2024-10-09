@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
@@ -14,6 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function Speaker() {
+  const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
@@ -209,6 +210,10 @@ function Speaker() {
       FetchSpeakerList(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
+
+  useEffect(() => {
+    console.log("Hello workld My location is chanignhg ", location);
+  }, [location]);
 
   return (
     <div className="row my-4 mx-3">
