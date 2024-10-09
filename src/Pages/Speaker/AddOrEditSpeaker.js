@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Button, MenuItem, Select, TextField } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   AddingSpeaker,
   EditingSpeaker,
@@ -16,8 +16,10 @@ import PhoneInput from "react-phone-number-validation";
 
 function AddEditSpeaker({ type }) {
   const { enqueueSnackbar } = useSnackbar();
-  const [ProfileImage, setProfileImage] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const locaion = useLocation();
+  const { state } = locaion;
+  const [ProfileImage, setProfileImage] = useState(null);
   const { id } = useParams();
   const [formData, setFormData] = useState({
     first_name: "",
@@ -47,10 +49,9 @@ function AddEditSpeaker({ type }) {
     }));
     setPhoneNumber(data.phone || "");
   };
-  const handleChange = (value, country) => {
-    console.log("Phone Number:", value);
-    console.log("Selected Country:", country);
+  const handleChange = (value) => {
     setPhoneNumber(value);
+    setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
 
   const handleImageChange = (e) => {
@@ -71,8 +72,9 @@ function AddEditSpeaker({ type }) {
     const formattedFormData = {
       ...formData,
       expertise: formData.expertise.toString(),
-      phone: phoneNumber,
+      phone: formData.phone,
     };
+
     if (!(formData.image instanceof File)) {
       delete formattedFormData.image;
     }
@@ -87,20 +89,22 @@ function AddEditSpeaker({ type }) {
     }
     setLoading(false);
   };
+  const GetSpeakerDetails = async () => {
+    const response = await SpeakerDetails(id);
+    if (response.code === 200) {
+      handleFormateData(response.company);
+      setLoading(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+  };
   useEffect(() => {
-    if (type === EditingSpeaker) {
-      const GetSpeakerDetails = async () => {
-        const response = await SpeakerDetails(id);
-        if (response.code === 200) {
-          handleFormateData(response.company);
-          setLoading(false);
-        } else {
-          enqueueSnackbar(response.message, { variant: "error" });
-        }
-      };
+    if (state) {
+      handleFormateData(state);
+    } else if (type === EditingSpeaker) {
       GetSpeakerDetails();
     }
-  }, [type]);
+  }, [type, state]);
   return (
     <>
       {loading ? (
@@ -149,10 +153,11 @@ function AddEditSpeaker({ type }) {
               <div className="col-6 d-flex flex-column justify-content-center">
                 <PhoneInput
                   dropdownClass="select-div2"
-                  autoSelectCountry
-                  value={phoneNumber}
-                  setValue={setPhoneNumber}
+                  country="pk"
+                  value={formData.phone}
                   onChange={handleChange}
+                  setValue={setPhoneNumber}
+                  enableSearch={true}
                 />
               </div>
               <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">

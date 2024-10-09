@@ -10,6 +10,9 @@ import { useSnackbar } from "notistack";
 
 function Exhibitors() {
   const navigate = useNavigate();
+  localStorage.removeItem("searchText");
+  localStorage.removeItem("searchResults");
+  localStorage.removeItem("rowsPerPage");
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
   const [modelOpen, setModelOpen] = useState(false);

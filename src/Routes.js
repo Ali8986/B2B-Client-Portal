@@ -10,9 +10,9 @@ import EditProfile from "./Components/AppHeader/EditProfile";
 import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
-import { useEffect, useState } from "react";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
 import { AddingSpeaker, EditingSpeaker } from "./DAL/Login/Login";
+
 const Router = () => {
   const router = createBrowserRouter([
     {

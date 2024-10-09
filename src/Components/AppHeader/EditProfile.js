@@ -74,7 +74,8 @@ const EditProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfileImage(file);
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
     }
   };
 

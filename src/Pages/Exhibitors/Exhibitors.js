@@ -12,6 +12,9 @@ function Exhibitors() {
   const [loading, setLoading] = useState(true);
   const [modelOpen, setModelOpen] = useState(false);
   const navigate = useNavigate();
+  localStorage.removeItem("searchText");
+  localStorage.removeItem("searchResults");
+  localStorage.removeItem("rowsPerPage");
   const [members, setMembers] = useState([
     {
       _id: 1,

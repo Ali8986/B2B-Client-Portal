@@ -15,25 +15,27 @@ const HeaderWithBackButton = ({ title, path }) => {
   };
 
   return (
-    <div className="col-12 ps-1 d-flex align-items-center mb-4">
-      {
-        <IconButton
-          onClick={handleBackClick}
-          style={{ color: "#7396cc" }} // Custom color for the icon
+    <>
+      <div className={path ? "col-12 ps-1 d-flex align-items-center mb-4" : ""}>
+        {path ? (
+          <IconButton
+            onClick={handleBackClick}
+            style={{ color: "#7396cc" }} // Custom color for the icon
+          >
+            <ArrowBackIcon />
+          </IconButton>
+        ) : null}
+        <h2
+          style={{
+            color: "#7396cc",
+            marginBottom: "5px",
+          }}
+          className="ms-2"
         >
-          <ArrowBackIcon />
-        </IconButton>
-      }
-      <h2
-        style={{
-          color: "#7396cc",
-          marginBottom: "5px",
-        }}
-        className="ms-2"
-      >
-        {title}
-      </h2>
-    </div>
+          {title}
+        </h2>
+      </div>
+    </>
   );
 };
 

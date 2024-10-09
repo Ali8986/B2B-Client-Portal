@@ -281,7 +281,6 @@ body {
 .table-container-pro th, .table-container-pro td {
     text-align: left !important;
     text-wrap: wrap !important;
-    width: 100px !important;
     padding: 20px !important;
 }
 
@@ -426,4 +425,12 @@ body {
 
 .select-div2 {
     z-index: 2 !important;
+}
+
+.table-container-pro .data-not-found {
+    text-align: center !important;
+}
+
+.table-container-pro .pagination-container .page-count.active {
+    color: white !important;
 }

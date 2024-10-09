@@ -1,6 +1,9 @@
 import * as React from "react";
 
 function HomePage() {
+  localStorage.removeItem("searchText");
+  localStorage.removeItem("searchResults");
+  localStorage.removeItem("rowsPerPage");
   return (
     <>
       <div className="p-5">

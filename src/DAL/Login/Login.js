@@ -139,16 +139,18 @@ export const updateProfile = async (data) => {
   return invokeApi(requestObj);
 };
 
-export const SpeakersList = async () => {
+export const SpeakersList = async (page, limit, data) => {
   const requestObj = {
-    path: `api/speaker/list_speaker`,
-    method: "POSt",
+    path: `api/speaker/list_speaker?page=${page}&limit=${limit}`,
+    method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
+    postData: data,
   };
   return invokeApi(requestObj);
 };
+
 export const AddingSpeaker = async (data) => {
   const requestObj = {
     path: `api/speaker/add_speaker`,
