@@ -76,15 +76,17 @@ const EditProfile = () => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl);
+      localStorage.setItem("profileImage", imageUrl);
     }
   };
+  const profileimg = localStorage.getItem("profileImage");
 
   return (
     <div className="p-3">
       {/* <HeaderWithBackButton title="Edit Profile" path="/dashboard" /> */}
       <div className="ProfileContainer">
         <div className="Position_update">
-          <StyledAvatar alt="Profile Image" src={profileImage} />
+          <StyledAvatar alt="Profile Image" src={profileimg || profileImage} />
           <Typography variant="h5" component="h1" gutterBottom>
             Edit Profile
           </Typography>

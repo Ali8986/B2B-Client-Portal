@@ -11,9 +11,24 @@ import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
-import { AddingSpeaker, EditingSpeaker } from "./DAL/Login/Login";
+import {
+  AddingExhibitor,
+  AddingSpeaker,
+  EditingExhibitor,
+  EditingSpeaker,
+} from "./DAL/Login/Login";
 
 const Router = () => {
+  const handleNavigation = (nextLocation) => {
+    // If the next location is not speakers, remove searchText
+    if (nextLocation !== "/speakers") {
+      console.log("Navigating away from Speakers, removing searchText");
+      localStorage.removeItem("searchText");
+    }
+  };
+  // Listen to the browser's popstate event to detect back/forward navigation
+  window.onpopstate = () => handleNavigation(window.location.pathname);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -53,11 +68,11 @@ const Router = () => {
         {
           path: "/exhibitors/editexhibitor/:id",
           exact: true,
-          element: <EditOrAddExhibitor />,
+          element: <EditOrAddExhibitor type={EditingExhibitor} />,
         },
         {
           path: "/exhibitors/addexhibitor/",
-          element: <EditOrAddExhibitor />,
+          element: <EditOrAddExhibitor type={AddingExhibitor} />,
         },
       ],
     },

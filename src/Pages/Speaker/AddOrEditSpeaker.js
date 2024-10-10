@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Button, MenuItem, Select, TextField } from "@mui/material";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   AddingSpeaker,
   EditingSpeaker,
@@ -15,6 +15,7 @@ import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
 
 function AddEditSpeaker({ type }) {
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
   const locaion = useLocation();
@@ -49,7 +50,8 @@ function AddEditSpeaker({ type }) {
     }));
     setPhoneNumber(data.phone || "");
   };
-  const handleChange = (value) => {
+  const handlePhoneChange = (value) => {
+    console.log(value);
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
@@ -84,6 +86,7 @@ function AddEditSpeaker({ type }) {
         : await AddingSpeaker(formattedFormData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
+      navigate("/speakers");
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -153,9 +156,9 @@ function AddEditSpeaker({ type }) {
               <div className="col-6 d-flex flex-column justify-content-center">
                 <PhoneInput
                   dropdownClass="select-div2"
-                  country="pk"
+                  required={true}
                   value={formData.phone}
-                  onChange={handleChange}
+                  onChange={handlePhoneChange}
                   setValue={setPhoneNumber}
                   enableSearch={true}
                 />

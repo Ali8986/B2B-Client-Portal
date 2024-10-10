@@ -12,11 +12,14 @@ import { Avatar } from "@mui/material";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
+import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 
 function Speaker() {
-  const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
+  const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedObject, setSelectedObject] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
@@ -26,20 +29,14 @@ function Speaker() {
   const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
   const navigate = useNavigate();
-  const FetchSpeakerList = async (page, rowsPerPage) => {
+  const FetchSpeakerList = async (page, rowsPerPage, savedSearchText) => {
     setLoading(true);
     let postData = {
-      search: searchText,
-      status: false,
+      search: savedSearchText,
     };
     const response = await SpeakersList(page, rowsPerPage, postData);
     if (response.code === 200) {
-      localStorage.setItem("searchResults", JSON.stringify(response.speakers));
       const { speakers, total_speakers, total_pages } = response;
-      console.log(
-        response,
-        "klaslkdjslakjldksalkjdlksalkdjlksajlkdjslkajdlksalkjlksajlkd"
-      );
       const mappedUsers = speakers.map((item) => ({
         ...item,
         name: `${item.first_name} ${item.last_name}` || "Unknown",
@@ -86,7 +83,13 @@ function Speaker() {
     const response = await DeletingSpeaker(valueForDeleting._id);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      FetchSpeakerList();
+      const SpeakersAfterDeletion = users.filter((user) => {
+        if (user._id !== valueForDeleting._id) {
+          return (user.name = user.name);
+        }
+      });
+      setTotalPages((prev) => prev - 1);
+      setUsers(SpeakersAfterDeletion);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -95,6 +98,12 @@ function Speaker() {
 
   const onCancel = () => {
     setModelOpen(false);
+  };
+  const handleDetails = (row) => {
+    const selectedObj = users.find((item) => item._id === row._id);
+    setSelectedObject(selectedObj);
+    console.log(selectedObj);
+    setShowDetails(true);
   };
 
   const handleAddingMember = () => {
@@ -134,7 +143,9 @@ function Speaker() {
     {
       id: "name",
       label: "Speaker",
-      renderData: (row) => row.name,
+      type: "name",
+      handleClick: handleDetails,
+      className: "cursor-pointer"
     },
     {
       id: "phone",
@@ -175,45 +186,32 @@ function Speaker() {
   ];
   const searchFunction = async (e) => {
     e.preventDefault();
-    localStorage.setItem("searchText", searchText);
-    // Reset to page 0 for a new search
+    localStorage.setItem("searchText_speaker_page", searchText);
     setPage(0);
-
-    // Fetch the search result, now for page 0
-    await FetchSpeakerList(0, rowsPerPage);
+    await FetchSpeakerList(0, rowsPerPage, searchText);
+  };
+  const showSpeakerDetailsModal = (e) => {
+    e.preventDefault();
+    setShowDetails(true);
+  };
+  const hideSpeakerDetailsModal = (e) => {
+    e.preventDefault();
+    console.log("cloase modal");
+    setShowDetails(false);
+    setSelectedObject(null);
   };
 
   useEffect(() => {
-    const savedSearchText = localStorage.getItem("searchText");
-    const savedSearchResults = localStorage.getItem("searchResults");
+    const savedSearchText = localStorage.getItem("searchText_speaker_page");
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
-      const searchedData = JSON.parse(savedSearchResults);
-      setUsers(
-        searchedData.map((item) => ({
-          ...item,
-          name: `${item.first_name} ${item.last_name}` || "Unknown",
-          status: item.status,
-          is_show_celendar: false,
-          link: {
-            to: "https://www.google.com/",
-            target: "_blank",
-            show_text: "Preview",
-          },
-          html: "<div>Hello </div>",
-        }))
-      );
       setSearchText(savedSearchText);
+      FetchSpeakerList(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
-      setLoading(false);
     } else {
       FetchSpeakerList(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
-
-  useEffect(() => {
-    console.log("Hello workld My location is chanignhg ", location);
-  }, [location]);
 
   return (
     <div className="row my-4 mx-3">
@@ -264,6 +262,17 @@ function Speaker() {
           />
         )}
       </div>
+      <DetailsModal
+        open={showDetails}
+        handleClose={hideSpeakerDetailsModal}
+        component={
+          <SpeakerDetailsModal
+            handleOpen={showSpeakerDetailsModal}
+            handleClose={hideSpeakerDetailsModal}
+            selectedObject={selectedObject}
+          />
+        }
+      />
       <DeletingModal
         className="Deleting-modal"
         open={modelOpen}

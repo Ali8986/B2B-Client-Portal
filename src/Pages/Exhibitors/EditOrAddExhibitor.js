@@ -1,91 +1,149 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, MenuItem, Select } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import profile from "../../Assets/Images/profile.jpg";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
-import { AddingExhibitor } from "../../DAL/Login/Login";
+import {
+  AddingExhibitor,
+  EditingExhibitor,
+  ExhibitorDetails,
+} from "../../DAL/Login/Login";
+import { useSnackbar } from "notistack";
+import { s3baseUrl } from "../../config/config";
+import PhoneInput from "react-phone-number-validation";
 
-function EditOrAddExhibitor() {
-  const location = useLocation();
-  const { state } = location;
-  const isEditing = !!state;
-  const [image, setImage] = useState(null);
-  const [imageName, setImageName] = useState(null);
+function EditOrAddExhibitor({ type }) {
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const locaion = useLocation();
+  const { state } = locaion;
+  const [loading, setLoading] = useState(false);
+  const [ProfileImage, setProfileImage] = useState(null);
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    products_services: "",
+    products_services: [], // Initialize as an empty array
     booth: "",
     company: {
-      _id: `${new Date().getTime().toString()}`,
+      _id: "6703ad92957ac08c04607764",
       name: "",
       website: "",
     },
-    status: "Confirmed",
+    status: "Pending",
+    image: null,
+    social_links: [], // Initialize social_links as an empty array
   });
 
-  useEffect(() => {
-    if (isEditing && state) {
-      const useData = state.user;
-      setFormData({
-        name: useData.name,
-        email: useData.email,
-        phone: useData.phone,
-        products_services: JSON.parse(useData.products_services),
-        booth: useData.booth,
-        company: {
-          name: useData.company.name,
-          website: useData.company.website,
-        },
-        status: useData.status,
-      });
-    }
-  }, [isEditing, state]);
-
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formattedFormData = {
-      ...formData,
-    };
-    const response = await AddingExhibitor(formattedFormData);
-    if (response.code === 200) {
-      alert("Exhibitor added successfully");
-    } else {
-      alert("Failed to add exhibitor");
-    }
-    console.log(formData);
-    // navigate("/exhibitors");
+  const handleFormateData = (data) => {
+    setFormData((prev) => ({
+      ...prev,
+      name: data.name,
+      email: data.email,
+      phone: data.phone || "",
+      products_services: data.products_services || [], // Ensure this is an array
+      booth: data.booth,
+      status: data.status,
+      company: {
+        _id: data.company._id,
+        name: data.company.name,
+        website: data.company.website,
+      },
+      image: data.image || null, // Set image to null if not present
+      social_links: data.social_links || [], // Initialize social_links as an empty array
+    }));
+    setPhoneNumber(data.phone || "");
+  };
+  const handlePhoneChange = (value) => {
+    console.log(value);
+    setPhoneNumber(value);
+    setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const newImageURL = URL.createObjectURL(file);
-      console.log("Image uploaded successfully:", image);
-      setImageName(file);
-      setImage(newImageURL);
-      // setFormData((prevData) => {
-      //   return { ...prevData, profileImage: newImageURL };
-      // });
-    } else {
-      console.error("No image selected");
+      setProfileImage(newImageURL);
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+      }));
     }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formDataas = new FormData();
+    formDataas.append("email", formData.email);
+    formDataas.append("phone", formData.phone);
+    formDataas.append(
+      "products_services",
+      JSON.stringify(formData.products_services)
+    );
+    formDataas.append("status", formData.status);
+    formDataas.append("booth", formData.booth);
+    formDataas.append("name", formData.name);
+    formDataas.append("company", JSON.stringify(formData.company));
+
+    if (formData.image && formData.image instanceof File) {
+      formDataas.append("image", formData.image);
+    }
+
+    const response =
+      type === EditingExhibitor
+        ? await EditingExhibitor(id, formDataas)
+        : await AddingExhibitor(formDataas);
+
+    if (response.code === 200) {
+      enqueueSnackbar(response.message, { variant: "success" });
+      navigate("/exhibitors");
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+    setLoading(false);
+  };
+  const GetExhibitorDetails = async () => {
+    const response = await ExhibitorDetails(id);
+    if (response.code === 200) {
+      handleFormateData(response.exhibitor);
+      setLoading(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+  };
+  useEffect(() => {
+    if (state) {
+      handleFormateData(state.user);
+    } else if (type === EditingExhibitor) {
+      GetExhibitorDetails();
+    }
+  }, [type, state]);
 
   return (
     <div className="px-3 px-md-4 py-1 py-md-3">
       <form onSubmit={handleSubmit}>
         <div className="row p-0 p-lg-3 mt-5 mt-md-2">
           <HeaderWithBackButton
-            title={isEditing ? "Edit Exhibitor" : "Add Exhibitor"}
+            title={
+              type === EditingExhibitor ? "Edit Exhibitor" : "Add Exhibitor"
+            }
             path="/exhibitors"
           />
           <div className="col-6 col-lg-6">
@@ -94,7 +152,7 @@ function EditOrAddExhibitor() {
               name="name"
               type="text"
               value={formData.name}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className="col-6 col-lg-6">
@@ -103,40 +161,42 @@ function EditOrAddExhibitor() {
               name="email"
               type="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </div>
-          <div className="col-6">
-            <FormInput
-              label="Phone Number"
-              name="phone"
-              type="tel"
+          <div className="col-6 d-flex flex-column justify-content-center">
+            <PhoneInput
+              dropdownClass="select-div2"
+              country="pk"
               value={formData.phone}
-              onChange={handleChange}
+              onChange={handlePhoneChange}
+              setValue={setPhoneNumber}
+              enableSearch={true}
             />
           </div>
           <div className="col-6">
             <FormInput
-              label="Booth"
+              label="Display Space"
               name="booth"
               type="text"
               value={formData.booth}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className="col-12 col-lg-6">
             <FormInput
-              label="Product Services"
+              label="Expertise"
               name="products_services"
               type="text"
               value={formData.products_services}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className="col-12 col-lg-6">
             <FormInput
+              required={false}
               label="Company Name"
-              name="company_name"
+              name="name"
               type="text"
               value={formData.company.name}
               onChange={(e) =>
@@ -151,6 +211,7 @@ function EditOrAddExhibitor() {
             <FormInput
               label="Website Link"
               name="website"
+              required={false}
               type="url"
               value={formData.company.website} // Add company URL
               onChange={(e) =>
@@ -165,7 +226,7 @@ function EditOrAddExhibitor() {
             <Select
               name="status"
               value={formData.status ?? true}
-              onChange={handleChange}
+              onChange={handleInputChange}
             >
               <MenuItem value="Pending" selected>
                 Pending
@@ -173,7 +234,7 @@ function EditOrAddExhibitor() {
               <MenuItem value="Confirmed" selected>
                 Confirmed
               </MenuItem>
-              <MenuItem value="Rejected">Rejected</MenuItem>
+              <MenuItem value="Cancelled">Cancelled</MenuItem>
             </Select>
           </div>
           <div className="col-12 flex-wrap d-flex justify-content-between align-items-center my-3">
@@ -186,7 +247,11 @@ function EditOrAddExhibitor() {
             <div className="col-4 col-lg-4 pb-3 pb-lg-0">
               <Avatar
                 sx={{ width: 70, height: 70, borderRadius: 0 }}
-                src={image || profile}
+                src={
+                  ProfileImage
+                    ? ProfileImage
+                    : `${s3baseUrl}${formData.image?.thumbnail_1 || ""}`
+                }
               >
                 A
               </Avatar>
@@ -214,13 +279,27 @@ function EditOrAddExhibitor() {
               type="submit"
               variant="contained"
               color="primary"
-              sx={{
-                minWidth: "100px",
-                padding: "10px 15px",
-                marginLeft: "10px",
-              }}
+              size="large"
+              disabled={loading}
+              style={{ backgroundColor: "#7396CC" }}
             >
-              {isEditing ? "Update" : "Submit"}
+              {loading ? (
+                type === EditingExhibitor ? (
+                  <div className="d-flex align-items-center">
+                    <CircularProgress size={15} className="color" />
+                    <p className="ms-2 mb-0 font-size">Update</p>
+                  </div>
+                ) : (
+                  <div className="d-flex align-items-center">
+                    <CircularProgress size={15} className="color" />
+                    <p className="ms-2 mb-0 font-size">Submit</p>
+                  </div>
+                )
+              ) : type === EditingExhibitor ? (
+                "Update"
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </div>

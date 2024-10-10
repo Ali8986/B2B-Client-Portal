@@ -8,7 +8,7 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import KeyIcon from "@mui/icons-material/Key";
 import Logout from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CustomModal from "../GeneralComponents/CustomModal";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
@@ -23,6 +23,7 @@ export default function ProfileIcon() {
   const [data, setData] = useState({});
   const email = JSON.parse(localStorage.getItem("Email"));
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -32,6 +33,7 @@ export default function ProfileIcon() {
     const response = await updateProfile();
     if (response.code === 200) {
       setData(response.admin);
+      localStorage.setItem("profileImage");
       setProfileImage(response.admin.profile_image);
     }
   };
@@ -51,6 +53,7 @@ export default function ProfileIcon() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const ProfileImage = localStorage.getItem("profileImage");
 
   const confirmLogout = async () => {
     setShowLogoutModal(false);
@@ -63,6 +66,20 @@ export default function ProfileIcon() {
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      const is_path_includes = (path) => {
+        return pathname.toString().includes(path);
+      };
+      if (!is_path_includes("/speakers")) {
+        localStorage.removeItem("searchText_speaker_page");
+      }
+      if (!is_path_includes("/exhibitors")) {
+        localStorage.removeItem("searchText_exhibitor_page");
+      }
+    }, 1000);
+  }, [pathname]);
 
   return (
     <div className="Profile-DropDown">
@@ -77,7 +94,7 @@ export default function ProfileIcon() {
           >
             <Avatar
               sx={{ width: 45, height: 45 }}
-              src={profileImage || data.profile_image}
+              src={ProfileImage || data.profile_image || profileImage}
             ></Avatar>
           </div>
         </Tooltip>

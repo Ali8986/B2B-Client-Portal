@@ -15,10 +15,10 @@ const style = {
   p: 4,
 };
 
-const CustomModal = ({ open, handleClose, component }) => {
+const DetailsModal = ({ open, handleClose, component }) => {
   return (
     <Modal
-      className="main-modal"
+      className="Details_Modal"
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
@@ -27,15 +27,12 @@ const CustomModal = ({ open, handleClose, component }) => {
     >
       <div
         style={style}
-        className="Password-Change-Container container bg-white text-center p-md-4 border-0 rounded-4"
+        className="Detail_Show_Model container bg-white p-md-4 border-0 rounded-4"
       >
-        <div className="delete-modal-close" onClick={handleClose}>
-          &times;
-        </div>
         {component}
       </div>
     </Modal>
   );
 };
 
-export default CustomModal;
+export default DetailsModal;

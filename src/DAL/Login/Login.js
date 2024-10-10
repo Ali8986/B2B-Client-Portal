@@ -146,7 +146,7 @@ export const SpeakersList = async (page, limit, data) => {
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
-    postData: data,
+    postData: data || "",
   };
   return invokeApi(requestObj);
 };
@@ -185,13 +185,14 @@ export const DeletingSpeaker = async (id) => {
   };
   return invokeApi(requestObj);
 };
-export const ExhibitorList = async () => {
+export const ExhibitorList = async (page, limit, data) => {
   const requestObj = {
-    path: `api/exhibitor/list_exhibitor`,
+    path: `api/exhibitor/list_exhibitor?page=${page}&limit=${limit}`,
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
+    postData: data || "",
   };
   return invokeApi(requestObj);
 };
@@ -202,6 +203,7 @@ export const AddingExhibitor = async (data) => {
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
     },
     postData: data,
   };
@@ -258,6 +260,40 @@ export const SpeakerDetails = async (id) => {
   const requestObj = {
     path: `api/speaker/detail_speaker/${id}`,
     method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+export const ExhibitorDetails = async (id) => {
+  const requestObj = {
+    path: `api/exhibitor/detail_exhibitor/${id}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const EditingExhibitor = async (id, data) => {
+  const requestObj = {
+    path: `api/exhibitor/update_exhibitor/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const DeletingExhibitor = async (id) => {
+  const requestObj = {
+    path: `api/exhibitor/delete_exhibitor/${id}`,
+    method: "DELETE",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
