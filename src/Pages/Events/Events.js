@@ -1,52 +1,71 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { Button } from "@mui/material";
+import { Button, Chip, CircularProgress, Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../Exhibitors/DeletingUser";
-import Loader from "../../Components/GeneralComponents/LoadingIndicator";
 import { DeletingEvent, EventList } from "../../DAL/Login/Login";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useSnackbar } from "notistack";
-
+import DetailsModal from "../../Components/GeneralComponents/detailsModal";
+import EventDetailModal from "../../Components/Events/EventsDetails";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 function Exhibitors() {
   const navigate = useNavigate();
-  localStorage.removeItem("searchText");
-  localStorage.removeItem("searchResults");
-  localStorage.removeItem("rowsPerPage");
   const { enqueueSnackbar } = useSnackbar();
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedObject, setSelectedObject] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
   const [modelOpen, setModelOpen] = useState(false);
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [ValueForDeleting, setValueForDeleting] = useState("");
 
-  const getData = async () => {
-    const response = await EventList();
+  const FetchEvnetsList = async (page, rowsPerPage, savedSearchText) => {
+    setLoading(true);
+    let postData = {
+      search: savedSearchText,
+    };
+    const response = await EventList(page, rowsPerPage, postData);
     if (response.code === 200) {
-      console.log(response);
-      const data = response.events.map((item) => {
-        return {
-          ...item,
-          is_show_celendar: true,
-          link: {
-            to: "https://www.google.com/",
-            target: "_blank",
-            show_text: "Preview",
-          },
-          thumbnail: {
-            src: item.profileImage,
-            alt: "Profile Image",
-          },
-          html: "<div>html text </div>",
-        };
-      });
-      setUsers(data);
-      setLoading(false);
+      const { events, total_events, total_pages } = response;
+      const mappedUsers = events.map((item) => ({
+        ...item,
+        name: item.name || "Unknown",
+        status: item.status,
+        is_show_celendar: false,
+        link: {
+          to: "https://www.google.com/",
+          target: "_blank",
+          show_text: "Preview",
+        },
+        html: "<div>Hello </div>",
+      }));
+      setUsers(mappedUsers);
+      setTotalCount(total_pages);
+      setTotalPages(total_events);
+      localStorage.setItem("rowsPerPage", totalCount);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
-      setLoading(false);
     }
+    setLoading(false);
+  };
+  const handleChangePage = (newPage) => {
+    setPage(newPage);
+    FetchEvnetsList(newPage, rowsPerPage);
   };
 
+  const handleRowsPerPageChange = (event) => {
+    const newRowsPerPage = parseInt(event.target.value, 10);
+    setRowsPerPage(newRowsPerPage);
+    setPage(0);
+    FetchEvnetsList(0, newRowsPerPage);
+  };
   const handleEdit = (value) => {
     navigate(`/events/editevent/${value._id}`, { state: { users: value } });
   };
@@ -54,12 +73,35 @@ function Exhibitors() {
     setValueForDeleting(value._id);
     setModelOpen(true);
   };
+  const hideEventsDetailsModal = (e) => {
+    e.preventDefault();
+    console.log("cloase modal");
+    setShowDetails(false);
+    setSelectedObject(null);
+  };
+  const showEventsDetailsModal = (e) => {
+    e.preventDefault();
+    setShowDetails(true);
+  };
+
+  const handleDetails = (row) => {
+    const selectedObj = users.find((item) => item._id === row._id);
+    setSelectedObject(selectedObj);
+    console.log(selectedObj);
+    setShowDetails(true);
+  };
 
   const onConfirm = async () => {
     const response = await DeletingEvent(ValueForDeleting);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      getData();
+      const EventsAfterDeletion = users.filter((user) => {
+        if (user._id !== ValueForDeleting) {
+          return (user.name = user.name);
+        }
+      });
+      setTotalPages((prev) => prev - 1);
+      setUsers(EventsAfterDeletion);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -68,45 +110,33 @@ function Exhibitors() {
   const onCancel = () => {
     setModelOpen(false);
   };
+  const searchFunction = async (e) => {
+    e.preventDefault();
+    localStorage.setItem("searchText_events_page", searchText);
+    setPage(0); // Reset to the first page
+    await FetchEvnetsList(0, rowsPerPage, searchText); // Fetch the speaker list with the new search text
+  };
 
   const MENU_OPTIONS = [
     {
       label: "Edit",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="#7396cc"
-        >
-          <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
-        </svg>
-      ),
+      icon: <EditIcon />,
       handleClick: handleEdit,
     },
     {
       label: "Delete",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="#7396cc"
-          className="Delete-Icon"
-        >
-          <path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z" />
-        </svg>
-      ),
+      icon: <DeleteForeverIcon className="Delete-Icon" />,
       handleClick: handleDelete,
+    },
+    {
+      label: "View Details",
+      icon: <ContactPageIcon />,
+      handleClick: handleDetails,
     },
   ];
   function formatDateTime(dateString, timeString) {
     const combinedString = `${dateString.replace(/:/g, "-")}T${timeString}`;
-    // Create a new Date object
     const dateObj = new Date(combinedString);
-    // Format the date and time as desired
     const formattedDate = dateObj.toLocaleDateString(); // e.g., "10/15/2024"
     const formattedTime = dateObj.toLocaleTimeString(); // e.g., "10:30:00 AM"
     return `${formattedDate} ${formattedTime}`;
@@ -117,15 +147,16 @@ function Exhibitors() {
     {
       id: "any",
       label: "Title",
-      renderData: (row) => {
+      className: "cursor-pointer",
+      renderData: (row, index) => {
         return (
-          <div className="d-flex align-items-center">
-            <div>{row.name}</div>
-          </div>
+          <Tooltip key={index} title="View Details" arrow className="Tooltip">
+            <span onClick={() => handleDetails(row)}>{row.name}</span>
+          </Tooltip>
         );
       },
     },
-    { id: "location", label: "Location", type: "location" },
+    { id: "location", label: "Venue", type: "location" },
     {
       id: "any",
       label: "Start Date/Time",
@@ -148,12 +179,47 @@ function Exhibitors() {
         );
       },
     },
-    { id: "status", label: "Status", type: "status" },
+    {
+      id: "status",
+      label: "Status",
+      id: "any",
+      label: "Status",
+      renderData: (row) => {
+        return (
+          <div>
+            <Chip
+              label={
+                row.status === "scheduled"
+                  ? "scheduled"
+                  : row.status === "completed"
+                  ? "completed"
+                  : row.status === "ongoing"
+                  ? "ongoing"
+                  : row.status === "cancelled"
+                  ? "cancelled"
+                  : ""
+              }
+              color={
+                row.status === "ongoing"
+                  ? "secondary"
+                  : row.status === "completed"
+                  ? "success"
+                  : row.status === "cancelled"
+                  ? "error"
+                  : row.status === "scheduled"
+                  ? "primary"
+                  : ""
+              }
+            />
+          </div>
+        );
+      },
+    },
     { id: "capacity", label: "Capacity", type: "capacity" },
     {
-      id: "numeber_of_attendees",
+      id: "number_of_attendees",
       label: "Attendees",
-      type: "numeber_of_attendees",
+      type: "number_of_attendees",
     },
   ];
   const handleCloseModal = () => {
@@ -163,9 +229,16 @@ function Exhibitors() {
     navigate("/events/addevent");
   };
   useEffect(() => {
-    getData();
-    setLoading(false);
-  }, []);
+    const savedSearchText = localStorage.getItem("searchText_events_page");
+    const count = localStorage.getItem("rowsPerPage");
+    if (savedSearchText) {
+      setSearchText(savedSearchText); // Set the saved search text
+      FetchEvnetsList(page, rowsPerPage, savedSearchText);
+      setTotalPages(count); // Fetch the speaker list with the saved search text
+    } else {
+      FetchEvnetsList(page, rowsPerPage); // Fetch the default speaker list
+    }
+  }, [page, rowsPerPage]); // Run on page or rows per page change
 
   return (
     <div className="row my-4 mx-3">
@@ -193,13 +266,28 @@ function Exhibitors() {
         </Button>
       </div>
       {loading ? (
-        <Loader />
+        <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
+          <CircularProgress />
+        </div>
       ) : (
         <div className="Exhibitors-Table">
           <ReactTable
             data={users} // required
             TABLE_HEAD={TABLE_HEAD} // required
-            MENU_OPTIONS={MENU_OPTIONS} // required
+            MENU_OPTIONS={MENU_OPTIONS}
+            custom_pagination={{
+              total_count: totalCount,
+              rows_per_page: rowsPerPage,
+              page: page,
+              total_pages: totalPages,
+              handleChangePage: handleChangePage,
+              handleRowsPerPageChange: handleRowsPerPageChange,
+            }}
+            custom_search={{
+              searchText: searchText,
+              setSearchText: setSearchText,
+              handleSubmit: searchFunction,
+            }} // required
             class_name=""
             theme_config={{
               background: "white",
@@ -213,6 +301,17 @@ function Exhibitors() {
           />
         </div>
       )}
+      <DetailsModal
+        open={showDetails}
+        handleClose={hideEventsDetailsModal}
+        component={
+          <EventDetailModal
+            handleOpen={showEventsDetailsModal}
+            handleClose={hideEventsDetailsModal}
+            selectedObject={selectedObject}
+          />
+        }
+      />
       <DeletingModal
         className="Deleting-modal"
         open={modelOpen}

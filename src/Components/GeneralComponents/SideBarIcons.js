@@ -4,6 +4,7 @@ import InterpreterModeOutlinedIcon from "@mui/icons-material/InterpreterModeOutl
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import BusinessIcon from "@mui/icons-material/Business";
 
 export {
   DashboardCustomizeOutlined,
@@ -12,4 +13,5 @@ export {
   InterpreterModeOutlinedIcon,
   CalendarMonthOutlinedIcon,
   PersonRemoveIcon,
+  BusinessIcon,
 };

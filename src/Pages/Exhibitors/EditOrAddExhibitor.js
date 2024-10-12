@@ -66,12 +66,21 @@ function EditOrAddExhibitor({ type }) {
       image: data.image || null, // Set image to null if not present
       social_links: data.social_links || [], // Initialize social_links as an empty array
     }));
-    setPhoneNumber(data.phone || "");
+
+    console.log(data, "JSON.stringify");
+
+    setPhoneNumber(data.phone);
   };
-  const handlePhoneChange = (value) => {
-    console.log(value);
+
+  console.log(phoneNumber, "phoneNumber");
+  const handlePhoneChange = (value, country) => {
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
+  };
+
+  const handleRender = (value, country) => {
+    console.log(country, "countrycountry");
+    console.log(value, "valuevaluevaluevalue");
   };
 
   const handleImageChange = (e) => {
@@ -168,10 +177,13 @@ function EditOrAddExhibitor({ type }) {
             <PhoneInput
               dropdownClass="select-div2"
               country="pk"
-              value={formData.phone}
+              countryCodeEditable={false}
+              required={true}
+              value={phoneNumber}
               onChange={handlePhoneChange}
               setValue={setPhoneNumber}
               enableSearch={true}
+              onRender={(value, country) => console.log(value, country)}
             />
           </div>
           <div className="col-6">
@@ -241,20 +253,22 @@ function EditOrAddExhibitor({ type }) {
             <div className="col-12 col-lg-4 pb-3 pb-lg-0">
               <h4 className="h5">Upload Image</h4>
               <p className="h6">
-                Image Size(350 X 100) ("JPG", "JPEG", "PNG", "WEBP")
+                Image Size (670 X 1000) ("JPG", "JPEG", "PNG", "WEBP","GIF")
               </p>
             </div>
             <div className="col-4 col-lg-4 pb-3 pb-lg-0">
-              <Avatar
-                sx={{ width: 70, height: 70, borderRadius: 0 }}
-                src={
-                  ProfileImage
-                    ? ProfileImage
-                    : `${s3baseUrl}${formData.image?.thumbnail_1 || ""}`
-                }
-              >
-                A
-              </Avatar>
+              {formData.image ? (
+                <Avatar
+                  sx={{ width: 70, height: 70, borderRadius: 0 }}
+                  src={
+                    ProfileImage
+                      ? ProfileImage
+                      : `${s3baseUrl}${formData.image?.thumbnail_1 || ""}`
+                  }
+                >
+                  A
+                </Avatar>
+              ) : null}
             </div>
             <div className="Upload-input-field">
               <input

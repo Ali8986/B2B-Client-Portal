@@ -1,46 +1,48 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { Avatar, Button, Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
-import DeletionConfirmation from "./DeletingUser";
-import Chip from "@mui/material/Chip";
-import { DeletingExhibitor, ExhibitorList } from "../../DAL/Login/Login";
+import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
+import { CompanyList } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import defaultimg from "../../Assets/Images/Default.jpg";
 import { s3baseUrl } from "../../config/config";
+import { Avatar } from "@mui/material";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CircularProgress from "@mui/material/CircularProgress";
+import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
-import ExhibitorDetailsModal from "../../Components/Exhibitors/ExhibitorDetails";
+import Tooltip from "@mui/material/Tooltip";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 
-function Exhibitors() {
-  const [loading, setLoading] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
-  const [selectedObject, setSelectedObject] = useState(null);
-  const [modelOpen, setModelOpen] = useState(false);
+function CompanyDetails() {
   const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
+  const [showDetails, setShowDetails] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [selectedObject, setSelectedObject] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
-
-  const FetchExhibitorsList = async (page, rowsPerPage, savedSearchText) => {
-    const postData = {
-      search: savedSearchText,
-    };
+  const navigate = useNavigate();
+  const FetchSpeakerList = async (page, rowsPerPage) => {
     setLoading(true);
-    const response = await ExhibitorList(page, rowsPerPage, postData);
+    // let postData = {
+    //   search: savedSearchText,
+    // };
+    const response = await CompanyList(page, rowsPerPage);
     if (response.code === 200) {
-      const { exhibitors, total_exhibitors, total_pages } = response;
-      const mappedUsers = exhibitors.map((item) => ({
+      console.log(
+        response.companies,
+        "SuccessfullySuccessfullySuccessfullySuccessfullySuccessfully"
+      );
+      const mappedUsers = response.companies.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
@@ -53,96 +55,70 @@ function Exhibitors() {
         html: "<div>Hello </div>",
       }));
       setUsers(mappedUsers);
-      setTotalCount(total_pages);
-      setTotalPages(total_exhibitors);
+      setTotalCount(response.total_pages);
+      setTotalPages(response.total_companies);
       localStorage.setItem("rowsPerPage", totalCount);
-      setLoading(false);
     } else {
-      setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
+    setLoading(false);
   };
-
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    FetchExhibitorsList(newPage, rowsPerPage);
+    FetchSpeakerList(newPage, rowsPerPage);
   };
+
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    FetchExhibitorsList(0, newRowsPerPage);
+    FetchSpeakerList(0, newRowsPerPage);
   };
-  const searchFunction = async (e) => {
-    e.preventDefault();
-    localStorage.setItem("searchText_exhibitor_page", searchText);
-    // Reset to page 0 for a new search
-    setPage(0);
-    // Fetch the search result, now for page 0
-    await FetchExhibitorsList(0, rowsPerPage, searchText);
+  const handleEdit = (value) => {
+    navigate(`/company/editcompany/${value._id}`, { state: value });
   };
 
-  const handleEdit = (value) => {
-    navigate(`/exhibitors/editexhibitor/${value._id}`, {
-      state: { user: value },
-    });
-  };
   const handleDelete = (value) => {
-    console.log(value);
     setValueForDeleting(value);
     setModelOpen(true);
   };
-  const handleDetails = (row) => {
-    const selectedObj = users.find((item) => item._id === row._id);
-    setSelectedObject(selectedObj);
-    console.log(row);
-    setShowDetails(true);
-  };
 
-  const onConfirm = async (e) => {
-    e.preventDefault();
-    const response = await DeletingExhibitor(valueForDeleting._id);
-    if (response.code === 200) {
-      enqueueSnackbar(response.message, { variant: "success" });
-      const ExhibitorsAfterDeletion = users.filter((user) => {
-        if (user._id !== valueForDeleting._id) {
-          return (user.name = user.name);
-        }
-      });
-      setTotalPages((prev) => prev - 1);
-      setUsers(ExhibitorsAfterDeletion);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
-    setModelOpen(false);
-  };
+  //   const onConfirm = async (e) => {
+  //     e.preventDefault();
+  //     const response = await DeletingSpeaker(valueForDeleting._id);
+  //     if (response.code === 200) {
+  //       const SpeakersAfterDeletion = users.filter((user) => {
+  //         if (user._id !== valueForDeleting._id) {
+  //           return (user.name = user.name);
+  //         }
+  //       });
+  //       setTotalPages((prev) => prev - 1);
+  //       setUsers(SpeakersAfterDeletion);
+  //       enqueueSnackbar(response.message, { variant: "success" });
+  //     } else {
+  //       enqueueSnackbar(response.message, { variant: "error" });
+  //     }
+  //     setModelOpen(false);
+  //   };
 
   const onCancel = () => {
     setModelOpen(false);
   };
+  const handleDetails = (row) => {
+    const selectedObj = users.find((item) => item._id === row._id);
+    setSelectedObject(selectedObj);
+    console.log(selectedObj);
+    setShowDetails(true);
+  };
 
-  const MENU_OPTIONS = [
-    {
-      label: "Edit",
-      icon: <EditIcon />,
-      handleClick: handleEdit,
-    },
-    {
-      label: "Delete",
-      icon: <DeleteForeverIcon className="Delete-Icon" />,
-      handleClick: handleDelete,
-    },
-    {
-      label: "View Details",
-      icon: <ContactPageIcon />,
-      handleClick: handleDetails,
-    },
-  ];
+  const handleAddingMember = () => {
+    navigate("/company/addcompany");
+  };
 
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
-      id: "name",
+      id: "any",
       label: "Profile",
       renderData: (row, index) => {
         return (
@@ -181,96 +157,92 @@ function Exhibitors() {
         );
       },
     },
-    { id: "email", label: "Email", type: "email" },
-    { id: "phone", label: "Phone Number", type: "phone" },
     {
-      id: "any",
-      label: "Company",
-      renderData: (row) => {
-        return (
-          <>
-            <div>{row.company.name}</div>
-            <div>{row.company.website}</div>
-          </>
-        );
-      },
+      id: "phone",
+      label: "Contact Number",
+      type: "phone",
     },
     {
-      id: "any",
-      label: "Booth",
-      renderData: (row) => {
-        return <div>{row.booth}</div>;
-      },
+      id: "industry",
+      label: "Industry",
+      type: "industry",
     },
     {
-      id: "any",
+      id: "address",
+      label: "Address",
+      type: "address",
+    },
+    {
+      id: "employees_count",
+      label: "Employees Count",
+      type: "employees_count",
+    },
+    {
+      id: "status",
       label: "Status",
-      renderData: (row) => {
-        return (
-          <div>
-            <Chip
-              label={
-                row.status === "Pending"
-                  ? "Pending"
-                  : row.status === "Confirmed"
-                  ? "Confirmed"
-                  : row.status === "Cancelled"
-                  ? "Cancelled"
-                  : ""
-              }
-              color={
-                row.status === "Pending"
-                  ? "secondary"
-                  : row.status === "Confirmed"
-                  ? "success"
-                  : row.status === "Cancelled"
-                  ? "error"
-                  : ""
-              }
-            />
-          </div>
-        );
-      },
+      type: "row_status",
     },
   ];
-
-  const showExhibitorDetailsModal = (e) => {
+  const Menu_Options = [
+    {
+      label: "Edit",
+      icon: <EditIcon />,
+      handleClick: handleEdit,
+    },
+    {
+      label: "Delete",
+      icon: <DeleteForeverIcon className="Delete-Icon" />,
+      handleClick: handleDelete,
+    },
+    {
+      label: "View Details",
+      icon: <ContactPageIcon />,
+      handleClick: handleDetails,
+    },
+  ];
+  const searchFunction = async (e) => {
+    e.preventDefault();
+    localStorage.setItem("searchText_speaker_page", searchText);
+    setPage(0);
+    await FetchSpeakerList(0, rowsPerPage, searchText);
+  };
+  const showSpeakerDetailsModal = (e) => {
+    e.preventDefault();
     setShowDetails(true);
   };
-  const handleAddingMember = () => {
-    navigate("/exhibitors/addexhibitor/");
-  };
-  const hideExhibitorDetailsModal = (e) => {
+  const hideSpeakerDetailsModal = (e) => {
+    e.preventDefault();
+    console.log("cloase modal");
     setShowDetails(false);
     setSelectedObject(null);
   };
 
   useEffect(() => {
-    const savedSearchText = localStorage.getItem("searchText_exhibitor_page");
+    const savedSearchText = localStorage.getItem("searchText_speaker_page");
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchExhibitorsList(page, rowsPerPage, savedSearchText);
+      FetchSpeakerList(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
     } else {
-      FetchExhibitorsList(page, rowsPerPage);
+      FetchSpeakerList(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
 
   return (
     <div className="row my-4 mx-3">
       <div className="d-flex justify-content-between align-items-center my-4 ">
-        <HeaderWithBackButton className="Layout-heading" title="Exhibitors" />
+        <HeaderWithBackButton className="Layout-heading" title="Company" />
         <Button
           variant="contained"
           size="medium"
           onClick={handleAddingMember}
           className="Data-Adding-Btn"
         >
-          ADD Exhibitor
+          ADD Company
         </Button>
       </div>
-      <div className="Exhibitors_table">
+      <div className="Speakers_Table">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
             <CircularProgress />
@@ -279,7 +251,7 @@ function Exhibitors() {
           <ReactTable
             data={users}
             TABLE_HEAD={TABLE_HEAD}
-            MENU_OPTIONS={MENU_OPTIONS}
+            MENU_OPTIONS={Menu_Options}
             custom_pagination={{
               total_count: totalCount,
               rows_per_page: rowsPerPage,
@@ -306,14 +278,13 @@ function Exhibitors() {
           />
         )}
       </div>
-
       <DetailsModal
         open={showDetails}
-        handleClose={hideExhibitorDetailsModal}
+        handleClose={hideSpeakerDetailsModal}
         component={
-          <ExhibitorDetailsModal
-            handleOpen={showExhibitorDetailsModal}
-            handleClose={hideExhibitorDetailsModal}
+          <SpeakerDetailsModal
+            handleOpen={showSpeakerDetailsModal}
+            handleClose={hideSpeakerDetailsModal}
             selectedObject={selectedObject}
           />
         }
@@ -324,7 +295,7 @@ function Exhibitors() {
         handleClose={() => setModelOpen(false)}
         component={
           <DeletionConfirmation
-            onConfirm={(e) => onConfirm(e)}
+            // onConfirm={(e) => onConfirm(e)}
             onCancel={onCancel}
           />
         }
@@ -333,4 +304,4 @@ function Exhibitors() {
   );
 }
 
-export default Exhibitors;
+export default CompanyDetails;

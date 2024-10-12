@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Avatar, TextField } from "@mui/material";
+import { Avatar, TextField , IconButton} from "@mui/material";
 import { s3baseUrl } from "../../config/config";
 import profile from "../../Assets/Images/Default.jpg";
 import PhoneInput from "react-phone-number-validation";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
   selectedObject = selectedObject || {};
@@ -14,14 +15,12 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
   return (
     <>
       <div className="row">
-        <div className="d-flex justify-content-between align-items-center Divider">
-          <div className="col-6">
-            <h2 className="h4">Exhibitor Details</h2>
-          </div>
-          <div className="delete-modal-close" onClick={handleClose}>&times;</div>
+        <div className="d-flex justify-content-between align-items-baseline Divider pb-3">
+            <h2 className="h4 m-0">Exhibitor Details</h2>
+          <IconButton className="Close_btn" onClick={handleClose}><CloseIcon /></IconButton>
         </div>
       </div>
-      <div className="col-12 d-flex justify-content-center my-4">
+      <div className="col-12 d-flex justify-content-center my-3 py-4">
         <Avatar
           sx={{ width: 80, height: 80, borderRadius: 1 }}
           src={
@@ -40,6 +39,7 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.name}
             aria-readonly="true"
+            disabled
           />
         </div>
         <div className="col-12 col-md-6">
@@ -50,6 +50,7 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             name="company"
             value={selectedObject.company?.name}
             aria-readonly="true"
+            disabled
           />
         </div>
         <div className="col-12 col-md-6">
@@ -61,6 +62,7 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.email}
             aria-readonly="true"
+            disabled
           />
         </div>
         <div className="col-6 d-flex justify-content-center align-items-center mt-3">
@@ -70,6 +72,7 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             value={selectedObject.phone}
             onChange={handlePhoneChange}
             setValue={setPhoneNumber}
+            disabled
           />
         </div>
         <div className="col-12 col-md-6">
@@ -81,6 +84,7 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.status}
             aria-readonly="true"
+            disabled
           />
         </div>
         <div className="col-12 col-md-6">
@@ -92,9 +96,10 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.booth}
             aria-readonly="true"
+            disabled
           />
         </div>
-        <div className="col-6">
+        <div className="col-12">
           <TextField
             className="form-control mt-3"
             label="Expertise"
@@ -103,13 +108,8 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.products_services}
             aria-readonly="true"
+            disabled
           />
-        </div>
-
-        <div className="d-flex justify-content-end">
-          <button className="Close_Button mt-3" onClick={handleClose}>
-            Close
-          </button>
         </div>
       </form>
     </>

@@ -210,13 +210,14 @@ export const AddingExhibitor = async (data) => {
   return invokeApi(requestObj);
 };
 
-export const EventList = async () => {
+export const EventList = async (page, limt, data) => {
   const requestObj = {
-    path: `api/event/list_event`,
+    path: `api/event/list_event?page=${page}&limit=${limt}`,
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
+    postData: data || "",
   };
   return invokeApi(requestObj);
 };
@@ -294,6 +295,77 @@ export const DeletingExhibitor = async (id) => {
   const requestObj = {
     path: `api/exhibitor/delete_exhibitor/${id}`,
     method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const EventDetails = async (id) => {
+  const requestObj = {
+    path: `api/event/detail_event/${id}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const ImageUpload = async (data) => {
+  const requestObj = {
+    path: `api/app_api/upload_image_s3`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const CompanyList = async (page, limt) => {
+  const requestObj = {
+    path: `api/company/list_company`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const EditingCompany = async (id, data) => {
+  const requestObj = {
+    path: `api/company/update_company/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const AddingCompany = async (data) => {
+  const requestObj = {
+    path: `api/company/add_company`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const CompanyDetails = async (id) => {
+  const requestObj = {
+    path: `/api/company/detail_company/${id}`,
+    method: "GET",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },

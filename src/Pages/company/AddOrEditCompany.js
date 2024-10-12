@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Button, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
+  AddingCompany,
   AddingSpeaker,
+  EditingCompany,
   EditingSpeaker,
   SpeakerDetails,
 } from "../../DAL/Login/Login";
@@ -13,9 +26,14 @@ import { CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
-import ReactEditor from "react-text-editor-kit";
+import { Password, Visibility, VisibilityOff } from "@mui/icons-material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-function AddEditSpeaker({ type }) {
+import dayjs from "dayjs";
+
+function AddorEditCompany({ type }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -24,29 +42,48 @@ function AddEditSpeaker({ type }) {
   const [ProfileImage, setProfileImage] = useState(null);
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
+    name: "",
     email: "",
     phone: "",
-    bio: "",
-    expertise: "",
+    password: "",
+    website: "",
+    industry: "",
+    founded_date: dayjs(new Date()),
+    employees_count: "",
+    address: "",
     image: null,
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event) => {
+    event.preventDefault();
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  const handleDateChange = (name, date) => {
+    setFormData({ ...formData, [name]: date });
+  };
   const handleFormateData = (data) => {
     setFormData((prev) => ({
       ...prev,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      email: data.email,
+      name: data.name,
+      email: data.user.email,
       phone: data.phone || "",
-      bio: data.bio,
-      expertise: data.expertise,
+      website: data.website,
+      founded_date: dayjs(data.founded_date, "YYYY:MM:DD"),
+      industry: data.industry,
       status: data.status,
+      address: data.address,
+      employees_count: data.employees_count || "",
       image: data.image,
     }));
     setPhoneNumber(data.phone || "");
@@ -56,6 +93,7 @@ function AddEditSpeaker({ type }) {
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -73,26 +111,31 @@ function AddEditSpeaker({ type }) {
     setLoading(true);
     const formattedFormData = {
       ...formData,
-      expertise: formData.expertise.toString(),
+      image: formData.image,
+      founded_date: formData.founded_date.format("YYYY:MM:DD"),
       phone: formData.phone,
     };
-
+    console.log(formData.image);
     if (!(formData.image instanceof File)) {
+      alert("Hello World");
       delete formattedFormData.image;
     }
+    if (type === EditingCompany) {
+      delete formattedFormData.password;
+    }
     const response =
-      type === EditingSpeaker
-        ? await EditingSpeaker(id, formattedFormData)
-        : await AddingSpeaker(formattedFormData);
+      type === EditingCompany
+        ? await EditingCompany(id, formattedFormData)
+        : await AddingCompany(formattedFormData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      navigate("/speakers");
+      navigate("/company");
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
     setLoading(false);
   };
-  const GetSpeakerDetails = async () => {
+  const GetCompanyDetails = async () => {
     const response = await SpeakerDetails(id);
     if (response.code === 200) {
       handleFormateData(response.company);
@@ -103,9 +146,13 @@ function AddEditSpeaker({ type }) {
   };
   useEffect(() => {
     if (state) {
+      console.log(
+        state,
+        "state>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
+      );
       handleFormateData(state);
-    } else if (type === EditingSpeaker) {
-      GetSpeakerDetails();
+    } else if (type === EditingCompany) {
+      GetCompanyDetails();
     }
   }, [type, state]);
   return (
@@ -119,25 +166,15 @@ function AddEditSpeaker({ type }) {
           <form onSubmit={handleSubmit}>
             <div className="row p-0 p-lg-3 mt-5 mt-md-2">
               <HeaderWithBackButton
-                title={type === EditingSpeaker ? "Edit Speaker" : "Add Speaker"}
-                path="/speakers"
+                title={type === EditingCompany ? "Edit Company" : "Add Company"}
+                path="/company"
               />
               <div className="col-6 col-lg-6">
                 <FormInput
-                  label="First Name"
+                  label="Name"
                   variant="outlined"
-                  name="first_name"
-                  value={formData.first_name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="col-6 col-lg-6">
-                <FormInput
-                  label="Last Name"
-                  variant="outlined"
-                  name="last_name"
-                  value={formData.last_name}
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
                   required
                 />
@@ -153,7 +190,7 @@ function AddEditSpeaker({ type }) {
                   required
                 />
               </div>
-              <div className="col-6 d-flex flex-column justify-content-center">
+              <div className="col-6 d-flex flex-column justify-content-center my-2">
                 <PhoneInput
                   dropdownClass="select-div2"
                   required={true}
@@ -164,7 +201,66 @@ function AddEditSpeaker({ type }) {
                   enableSearch={true}
                 />
               </div>
-              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
+              {type === AddingCompany ? (
+                <div className="col-6 my-2">
+                  <FormControl sx={{ width: "100%" }} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      fullWidth
+                      name="password"
+                      id="outlined-adornment-password"
+                      onChange={handleInputChange}
+                      type={showPassword ? "text" : "password"}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            onMouseUp={handleMouseUpPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Password"
+                    />
+                  </FormControl>
+                </div>
+              ) : null}
+              <div className="col-6 my-2">
+                <FormInput
+                  label="Website Link"
+                  name="website"
+                  type="url"
+                  value={formData.website} // Add company URL
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-6">
+                <FormInput
+                  label="Industry"
+                  name="industry"
+                  required={true}
+                  type="text"
+                  value={formData.industry}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-6">
+                <FormInput
+                  label="Employees Count"
+                  name="employees_count"
+                  required={true}
+                  type="number"
+                  value={formData.employees_count}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center my-3">
                 <Select
                   name="status"
                   value={formData.status ?? true}
@@ -176,15 +272,26 @@ function AddEditSpeaker({ type }) {
                   <MenuItem value={false}>Inactive</MenuItem>
                 </Select>
               </div>
-              <div className="col-12 col-lg-6">
+              <div className="col-6 Data-Picker my-3">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Founded Date"
+                    value={formData.founded_date}
+                    className="form-control"
+                    onChange={(newValue) =>
+                      handleDateChange("founded_date", newValue)
+                    }
+                  />
+                </LocalizationProvider>
+              </div>
+              <div className={type === AddingCompany ? "col-6" : "col-12"}>
                 <FormInput
-                  label="Expertise (comma separated)"
-                  variant="outlined"
-                  name="expertise"
-                  value={formData.expertise}
+                  label="Address"
+                  name="address"
+                  required={true}
+                  type="text"
+                  value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="e.g. Software Engineering, Public Speaking"
-                  required
                 />
               </div>
               <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2">
@@ -228,24 +335,6 @@ function AddEditSpeaker({ type }) {
                 </div>
               </div>
               <div className="images_box px-0"></div>
-              <div className="col-12">
-                {type === EditingSpeaker && formData.bio === "" ? null : (
-                  <div className="col-12 mt-2">
-                    <TextField
-                      fullWidth
-                      label="Bio"
-                      multiline
-                      rows={3}
-                      variant="outlined"
-                      name="bio"
-                      value={formData.bio}
-                      onChange={handleInputChange}
-                      placeholder="Enter your bio Here.."
-                      required
-                    />
-                  </div>
-                )}
-              </div>
               <div className="col-12 d-flex flex-wrap justify-content-end mt-3">
                 <Button
                   type="submit"
@@ -256,7 +345,7 @@ function AddEditSpeaker({ type }) {
                   style={{ backgroundColor: "#7396CC" }}
                 >
                   {loading ? (
-                    type === EditingSpeaker ? (
+                    type === EditingCompany ? (
                       <div className="d-flex align-items-center">
                         <CircularProgress size={15} className="color" />
                         <p className="ms-2 mb-0 font-size">Update</p>
@@ -267,7 +356,7 @@ function AddEditSpeaker({ type }) {
                         <p className="ms-2 mb-0 font-size">Submit</p>
                       </div>
                     )
-                  ) : type === EditingSpeaker ? (
+                  ) : type === EditingCompany ? (
                     "Update"
                   ) : (
                     "Submit"
@@ -282,4 +371,4 @@ function AddEditSpeaker({ type }) {
   );
 }
 
-export default AddEditSpeaker;
+export default AddorEditCompany;

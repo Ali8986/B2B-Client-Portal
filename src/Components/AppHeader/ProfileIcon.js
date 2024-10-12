@@ -33,7 +33,7 @@ export default function ProfileIcon() {
     const response = await updateProfile();
     if (response.code === 200) {
       setData(response.admin);
-      localStorage.setItem("profileImage");
+      localStorage.setItem("profileImage", response.admin.profile_image);
       setProfileImage(response.admin.profile_image);
     }
   };
@@ -53,7 +53,7 @@ export default function ProfileIcon() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const ProfileImage = localStorage.getItem("profileImage");
+  const prflImg = localStorage.getItem("profileImage");
 
   const confirmLogout = async () => {
     setShowLogoutModal(false);
@@ -78,7 +78,10 @@ export default function ProfileIcon() {
       if (!is_path_includes("/exhibitors")) {
         localStorage.removeItem("searchText_exhibitor_page");
       }
-    }, 1000);
+      if (!is_path_includes("/events")) {
+        localStorage.removeItem("searchText_events_page");
+      }
+    }, 1200);
   }, [pathname]);
 
   return (
@@ -94,7 +97,7 @@ export default function ProfileIcon() {
           >
             <Avatar
               sx={{ width: 45, height: 45 }}
-              src={ProfileImage || data.profile_image || profileImage}
+              src={profileImage ? profileImage : data.profile_image}
             ></Avatar>
           </div>
         </Tooltip>

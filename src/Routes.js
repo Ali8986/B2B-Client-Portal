@@ -12,23 +12,19 @@ import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
 import {
+  AddingCompany,
+  AddingEvent,
   AddingExhibitor,
   AddingSpeaker,
+  EditingCompany,
+  EditingEvent,
   EditingExhibitor,
   EditingSpeaker,
 } from "./DAL/Login/Login";
+import AddorEditCompany from "./Pages/company/AddOrEditCompany";
+import CompanyDetails from "./Pages/company/Companydetails";
 
 const Router = () => {
-  const handleNavigation = (nextLocation) => {
-    // If the next location is not speakers, remove searchText
-    if (nextLocation !== "/speakers") {
-      console.log("Navigating away from Speakers, removing searchText");
-      localStorage.removeItem("searchText");
-    }
-  };
-  // Listen to the browser's popstate event to detect back/forward navigation
-  window.onpopstate = () => handleNavigation(window.location.pathname);
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -58,11 +54,15 @@ const Router = () => {
           element: <AddOrEditSpeaker type={EditingSpeaker} />,
         },
         { path: "/events", exact: true, element: <Events /> },
-        { path: "/events/addevent/", exact: true, element: <AddOrEditEvent /> },
+        {
+          path: "/events/addevent/",
+          exact: true,
+          element: <AddOrEditEvent type={AddingEvent} />,
+        },
         {
           path: "/events/editevent/:id",
           exact: true,
-          element: <AddOrEditEvent />,
+          element: <AddOrEditEvent type={EditingEvent} />,
         },
         { path: "/edit-profile", exact: true, element: <EditProfile /> },
         {
@@ -73,6 +73,17 @@ const Router = () => {
         {
           path: "/exhibitors/addexhibitor/",
           element: <EditOrAddExhibitor type={AddingExhibitor} />,
+        },
+        { path: "/company", exact: true, element: <CompanyDetails /> },
+        {
+          path: "/company/addcompany",
+          exact: true,
+          element: <AddorEditCompany type={AddingCompany} />,
+        },
+        {
+          path: "/company/editcompany/:id",
+          exact: true,
+          element: <AddorEditCompany type={EditingCompany} />,
         },
       ],
     },

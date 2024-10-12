@@ -13,6 +13,7 @@ import { profileDetail, updateProfile } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
 import "../../Assets/Styles/EditProfile.css";
+import { s3baseUrl } from "../../config/config";
 
 const StyledAvatar = styled(Avatar)({
   width: "100px",
@@ -30,26 +31,6 @@ const EditProfile = () => {
   const [contactNumber, setContactNumber] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      const response = await updateProfile();
-      if (response.code === 200) {
-        const profileData = response.admin;
-        setFirstName(profileData.first_name || "");
-        setLastName(profileData.last_name || "");
-        setUser(`${profileData.first_name} ${profileData.last_name}`);
-        setContactNumber(profileData.contact_number);
-        const email = JSON.parse(localStorage.getItem("Email"));
-        setProfileEmail(email || "");
-        setProfileImage(profileData.profile_image || "");
-      } else {
-        enqueueSnackbar(response.message, { variant: "error" });
-      }
-    };
-
-    fetchProfileData();
-  }, [setProfileImage, setUser, enqueueSnackbar]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedProfile = {
@@ -59,6 +40,10 @@ const EditProfile = () => {
       profile_image: profileImage,
       status: true,
     };
+    console.log(
+      profileImage.profileImage,
+      "profileImage+=____________++++++++"
+    );
     const response = await profileDetail(updatedProfile);
     if (response.code === 200) {
       setUser(`${updatedProfile.first_name} ${updatedProfile.last_name}`);
@@ -73,20 +58,40 @@ const EditProfile = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-      localStorage.setItem("profileImage", imageUrl);
-    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfileImage(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
   const profileimg = localStorage.getItem("profileImage");
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const response = await updateProfile();
+      if (response.code === 200) {
+        const profileData = response.admin;
+        setFirstName(profileData.first_name || "");
+        setLastName(profileData.last_name || "");
+        setUser(`${profileData.first_name} ${profileData.last_name}`);
+        setContactNumber(profileData.contact_number);
+        const email = JSON.parse(localStorage.getItem("Email"));
+        setProfileEmail(email || "");
+        setProfileImage(profileData.profile_image || "");
+        console.log(profileData.profile_image);
+      } else {
+        enqueueSnackbar(response.message, { variant: "error" });
+      }
+    };
+
+    fetchProfileData();
+  }, [setProfileImage, setUser, enqueueSnackbar]);
 
   return (
     <div className="p-3">
       {/* <HeaderWithBackButton title="Edit Profile" path="/dashboard" /> */}
       <div className="ProfileContainer">
         <div className="Position_update">
-          <StyledAvatar alt="Profile Image" src={profileimg || profileImage} />
+          <StyledAvatar alt="Profile Image" src={profileImage || profileimg} />
           <Typography variant="h5" component="h1" gutterBottom>
             Edit Profile
           </Typography>

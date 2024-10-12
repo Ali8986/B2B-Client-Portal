@@ -8,6 +8,7 @@
     "@meta-dev-zone/react-table": "^1.1.1",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
+    "@mui/x-date-pickers": "^7.19.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -15,6 +16,7 @@
     "bootstrap": "^5.3.3",
     "jquery": "^3.7.1",
     "json-server": "^1.0.0-beta.3",
+    "moment": "^2.30.1",
     "mui-one-time-password-input": "^2.0.3",
     "notistack": "^3.0.1",
     "popper.js": "^1.16.1",
@@ -26,6 +28,7 @@
     "react-phone-number-validation": "^1.1.0",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
+    "react-text-editor-kit": "^1.5.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

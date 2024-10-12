@@ -14,6 +14,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
+import Tooltip from "@mui/material/Tooltip";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 
 function Speaker() {
   const { enqueueSnackbar } = useSnackbar();
@@ -23,7 +25,7 @@ function Speaker() {
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [modelOpen, setModelOpen] = useState(false);
@@ -82,7 +84,6 @@ function Speaker() {
     e.preventDefault();
     const response = await DeletingSpeaker(valueForDeleting._id);
     if (response.code === 200) {
-      enqueueSnackbar(response.message, { variant: "success" });
       const SpeakersAfterDeletion = users.filter((user) => {
         if (user._id !== valueForDeleting._id) {
           return (user.name = user.name);
@@ -90,6 +91,7 @@ function Speaker() {
       });
       setTotalPages((prev) => prev - 1);
       setUsers(SpeakersAfterDeletion);
+      enqueueSnackbar(response.message, { variant: "success" });
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -141,11 +143,16 @@ function Speaker() {
       },
     },
     {
-      id: "name",
-      label: "Speaker",
-      type: "name",
-      handleClick: handleDetails,
-      className: "cursor-pointer"
+      id: "any",
+      label: "Name",
+      className: "cursor-pointer",
+      renderData: (row, index) => {
+        return (
+          <Tooltip key={index} title="View Details" arrow>
+            <span onClick={() => handleDetails(row)}>{row.name}</span>
+          </Tooltip>
+        );
+      },
     },
     {
       id: "phone",
@@ -182,6 +189,11 @@ function Speaker() {
       label: "Delete",
       icon: <DeleteForeverIcon className="Delete-Icon" />,
       handleClick: handleDelete,
+    },
+    {
+      label: "View Details",
+      icon: <ContactPageIcon />,
+      handleClick: handleDetails,
     },
   ];
   const searchFunction = async (e) => {

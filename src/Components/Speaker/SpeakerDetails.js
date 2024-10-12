@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Avatar, TextField } from "@mui/material";
+import { Avatar, IconButton, TextField } from "@mui/material";
 import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
 import profile from "../../Assets/Images/profile.jpg";
+import CloseIcon from "@mui/icons-material/Close";
 
 const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
   selectedObject = selectedObject || {};
@@ -14,16 +15,14 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
   return (
     <>
       <div className="row">
-        <div className="d-flex justify-content-between align-items-center Divider">
-          <div className="col-6">
-            <h2 className="h4">Speaker Details</h2>
-          </div>
-          <div className="delete-modal-close" onClick={handleClose}>
-            &times;
-          </div>
+        <div className="d-flex justify-content-between align-items-baseline Divider py-2">
+          <h2 className="h4 m-0">Speaker Details</h2>
+          <IconButton className="Close_btn" onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
         </div>
       </div>
-      <div className="col-12 d-flex justify-content-center my-4">
+      <div className="col-12 d-flex justify-content-center my-3 py-4">
         <Avatar
           sx={{ width: 80, height: 80, borderRadius: 1 }}
           src={
@@ -34,7 +33,7 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
         />
       </div>
       <form className="row">
-        <div className="col-12 col-md-6">
+        <div className="col-6">
           <TextField
             className="form-control mt-4 fw-bold "
             label="First Name"
@@ -42,9 +41,10 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.first_name}
             aria-readonly="true"
+            disabled
           />
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-6">
           <TextField
             className="form-control mt-4 fw-bold "
             label="Last Name"
@@ -52,15 +52,17 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.last_name}
             aria-readonly="true"
+            disabled
           />
         </div>
-        <div className="col-12 col-md-6 d-flex flex-column justify-content-center mt-4">
+        <div className="col-6 d-flex flex-column justify-content-center mt-4">
           <PhoneInput
             dropdownClass="select-div2"
             country="pk"
             value={selectedObject.phone}
             onChange={handlePhoneChange}
             setValue={setPhoneNumber}
+            disabled
           />
         </div>
         <div className="col-6">
@@ -72,6 +74,7 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.email}
             aria-readonly="true"
+            disabled
           />
         </div>
         <div className="col-6">
@@ -83,6 +86,7 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.expertise}
             aria-readonly="true"
+            disabled
           />
         </div>
         <div className="col-6">
@@ -94,6 +98,7 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             variant="outlined"
             value={selectedObject.status ? "Active" : "Inactive"}
             aria-readonly="true"
+            disabled
           />
         </div>
 
@@ -108,13 +113,8 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             multiline
             value={selectedObject.bio}
             aria-readonly="true"
+            disabled
           />
-        </div>
-
-        <div className="d-flex justify-content-end">
-          <button className="Close_Button mt-3" onClick={handleClose}>
-            Close
-          </button>
         </div>
       </form>
     </>

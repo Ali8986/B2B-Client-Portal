@@ -1,15 +1,16 @@
+import CompanyDetails from "../../Pages/company/Companydetails";
 import {
   DashboardCustomizeOutlined,
   PersonOutlineOutlinedIcon,
   InterpreterModeOutlinedIcon,
   CalendarMonthOutlinedIcon,
+  BusinessIcon,
 } from "../GeneralComponents/SideBarIcons";
 
 export const options = [
   {
     title: "Dashboard",
     path: "dashboard",
-
     icon: <DashboardCustomizeOutlined />,
   },
   {
@@ -26,5 +27,10 @@ export const options = [
     title: "Events",
     path: "events",
     icon: <CalendarMonthOutlinedIcon />,
+  },
+  {
+    title: "Company",
+    path: "company",
+    icon: <BusinessIcon />,
   },
 ];

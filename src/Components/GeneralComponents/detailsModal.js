@@ -8,7 +8,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 700,
-  maxWidth: "100%",
+  maxWidth: "90%",
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 3,
@@ -27,7 +27,7 @@ const DetailsModal = ({ open, handleClose, component }) => {
     >
       <div
         style={style}
-        className="Detail_Show_Model container bg-white p-md-4 border-0 rounded-4"
+        className="Detail_Show_Model container bg-white mx-1 my-2 m-md-0 pt-2 pt-md-4 pb-3 pb-md-5 px-md-5 border-0 rounded-4"
       >
         {component}
       </div>

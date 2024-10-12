@@ -461,3 +461,27 @@ body {
 .cursor-pointer {
     cursor: pointer;
 }
+
+.Close_btn {
+    background-color: #7396cc !important;
+}
+
+.Close_btn svg {
+    color: white !important;
+}
+
+.Close_btn:hover {
+    background-color: rgba(128, 128, 128, 0.452) !important;
+    color: white !important;
+}
+
+.Data-Picker svg, .css-1lzspe0-MuiSvgIcon-root {
+    color: #7c97c1 !important;
+}
+
+.images_box {
+    margin-left: 15px !important;
+    width: 97.5% !important;
+    margin-bottom: 1.5rem !important;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.411) !important;
+}
