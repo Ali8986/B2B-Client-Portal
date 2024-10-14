@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
-import { CompanyList } from "../../DAL/Login/Login";
+import { CompanyList, DeletingCompany } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import defaultimg from "../../Assets/Images/Default.jpg";
 import { s3baseUrl } from "../../config/config";
@@ -16,9 +16,9 @@ import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import Tooltip from "@mui/material/Tooltip";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import CompanyDetailsModal from "../../Components/company/CompanyDetailsModal";
 
 function CompanyDetails() {
-  const { enqueueSnackbar } = useSnackbar();
   const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedObject, setSelectedObject] = useState(null);
@@ -30,13 +30,18 @@ function CompanyDetails() {
   const [totalPages, setTotalPages] = useState(0);
   const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
+
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const FetchSpeakerList = async (page, rowsPerPage) => {
+
+  const FetchCompnayList = async (page, rowsPerPage, savedSearchText) => {
     setLoading(true);
-    // let postData = {
-    //   search: savedSearchText,
-    // };
-    const response = await CompanyList(page, rowsPerPage);
+
+    let postData = {
+      search: savedSearchText,
+    };
+
+    const response = await CompanyList(page, rowsPerPage, postData);
     if (response.code === 200) {
       console.log(
         response.companies,
@@ -54,6 +59,7 @@ function CompanyDetails() {
         },
         html: "<div>Hello </div>",
       }));
+
       setUsers(mappedUsers);
       setTotalCount(response.total_pages);
       setTotalPages(response.total_companies);
@@ -61,19 +67,22 @@ function CompanyDetails() {
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
+
     setLoading(false);
   };
+
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    FetchSpeakerList(newPage, rowsPerPage);
+    FetchCompnayList(newPage, rowsPerPage);
   };
 
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    FetchSpeakerList(0, newRowsPerPage);
+    FetchCompnayList(0, newRowsPerPage);
   };
+
   const handleEdit = (value) => {
     navigate(`/company/editcompany/${value._id}`, { state: value });
   };
@@ -83,27 +92,28 @@ function CompanyDetails() {
     setModelOpen(true);
   };
 
-  //   const onConfirm = async (e) => {
-  //     e.preventDefault();
-  //     const response = await DeletingSpeaker(valueForDeleting._id);
-  //     if (response.code === 200) {
-  //       const SpeakersAfterDeletion = users.filter((user) => {
-  //         if (user._id !== valueForDeleting._id) {
-  //           return (user.name = user.name);
-  //         }
-  //       });
-  //       setTotalPages((prev) => prev - 1);
-  //       setUsers(SpeakersAfterDeletion);
-  //       enqueueSnackbar(response.message, { variant: "success" });
-  //     } else {
-  //       enqueueSnackbar(response.message, { variant: "error" });
-  //     }
-  //     setModelOpen(false);
-  //   };
+  const onConfirm = async (e) => {
+    e.preventDefault();
+    const response = await DeletingCompany(valueForDeleting._id);
+    if (response.code === 200) {
+      const CompaniesAfterDeletion = users.filter((user) => {
+        if (user._id !== valueForDeleting._id) {
+          return (user.name = user.name);
+        }
+      });
+      setTotalPages((prev) => prev - 1);
+      setUsers(CompaniesAfterDeletion);
+      enqueueSnackbar(response.message, { variant: "success" });
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+    setModelOpen(false);
+  };
 
   const onCancel = () => {
     setModelOpen(false);
   };
+
   const handleDetails = (row) => {
     const selectedObj = users.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
@@ -183,6 +193,7 @@ function CompanyDetails() {
       type: "row_status",
     },
   ];
+
   const Menu_Options = [
     {
       label: "Edit",
@@ -202,15 +213,17 @@ function CompanyDetails() {
   ];
   const searchFunction = async (e) => {
     e.preventDefault();
-    localStorage.setItem("searchText_speaker_page", searchText);
+    localStorage.setItem("searchText_company_page", searchText);
     setPage(0);
-    await FetchSpeakerList(0, rowsPerPage, searchText);
+    await FetchCompnayList(0, rowsPerPage, searchText);
   };
-  const showSpeakerDetailsModal = (e) => {
+
+  const showCompanyDetailsModal = (e) => {
     e.preventDefault();
     setShowDetails(true);
   };
-  const hideSpeakerDetailsModal = (e) => {
+
+  const hideCompanyDetailsModal = (e) => {
     e.preventDefault();
     console.log("cloase modal");
     setShowDetails(false);
@@ -218,14 +231,15 @@ function CompanyDetails() {
   };
 
   useEffect(() => {
-    const savedSearchText = localStorage.getItem("searchText_speaker_page");
+    const savedSearchText = localStorage.getItem("searchText_company_page");
     const count = localStorage.getItem("rowsPerPage");
+
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchSpeakerList(page, rowsPerPage, savedSearchText);
+      FetchCompnayList(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
     } else {
-      FetchSpeakerList(page, rowsPerPage);
+      FetchCompnayList(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
 
@@ -280,11 +294,11 @@ function CompanyDetails() {
       </div>
       <DetailsModal
         open={showDetails}
-        handleClose={hideSpeakerDetailsModal}
+        handleClose={hideCompanyDetailsModal}
         component={
-          <SpeakerDetailsModal
-            handleOpen={showSpeakerDetailsModal}
-            handleClose={hideSpeakerDetailsModal}
+          <CompanyDetailsModal
+            handleOpen={showCompanyDetailsModal}
+            handleClose={hideCompanyDetailsModal}
             selectedObject={selectedObject}
           />
         }
@@ -295,7 +309,7 @@ function CompanyDetails() {
         handleClose={() => setModelOpen(false)}
         component={
           <DeletionConfirmation
-            // onConfirm={(e) => onConfirm(e)}
+            onConfirm={(e) => onConfirm(e)}
             onCancel={onCancel}
           />
         }

@@ -9,15 +9,12 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  TextField,
 } from "@mui/material";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   AddingCompany,
-  AddingSpeaker,
   EditingCompany,
-  EditingSpeaker,
-  SpeakerDetails,
+  CompanyDetails,
 } from "../../DAL/Login/Login";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
@@ -26,21 +23,18 @@ import { CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
-import { Password, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
 import dayjs from "dayjs";
 
 function AddorEditCompany({ type }) {
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
-  const locaion = useLocation();
-  const { state } = locaion;
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [ProfileImage, setProfileImage] = useState(null);
-  const { id } = useParams();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,8 +47,12 @@ function AddorEditCompany({ type }) {
     address: "",
     image: null,
   });
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const locaion = useLocation();
+  const { id } = useParams();
+  const { state } = locaion;
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -65,13 +63,16 @@ function AddorEditCompany({ type }) {
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleDateChange = (name, date) => {
     setFormData({ ...formData, [name]: date });
   };
+
   const handleFormateData = (data) => {
     setFormData((prev) => ({
       ...prev,
@@ -88,6 +89,7 @@ function AddorEditCompany({ type }) {
     }));
     setPhoneNumber(data.phone || "");
   };
+
   const handlePhoneChange = (value) => {
     console.log(value);
     setPhoneNumber(value);
@@ -115,9 +117,7 @@ function AddorEditCompany({ type }) {
       founded_date: formData.founded_date.format("YYYY:MM:DD"),
       phone: formData.phone,
     };
-    console.log(formData.image);
     if (!(formData.image instanceof File)) {
-      alert("Hello World");
       delete formattedFormData.image;
     }
     if (type === EditingCompany) {
@@ -135,8 +135,9 @@ function AddorEditCompany({ type }) {
     }
     setLoading(false);
   };
+
   const GetCompanyDetails = async () => {
-    const response = await SpeakerDetails(id);
+    const response = await CompanyDetails(id);
     if (response.code === 200) {
       handleFormateData(response.company);
       setLoading(false);
@@ -144,17 +145,15 @@ function AddorEditCompany({ type }) {
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
+
   useEffect(() => {
     if (state) {
-      console.log(
-        state,
-        "state>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
-      );
       handleFormateData(state);
     } else if (type === EditingCompany) {
       GetCompanyDetails();
     }
   }, [type, state]);
+
   return (
     <>
       {loading ? (
@@ -231,12 +230,16 @@ function AddorEditCompany({ type }) {
                   </FormControl>
                 </div>
               ) : null}
-              <div className="col-6 my-2">
+              <div
+                className={
+                  type === EditingCompany ? "col-6 my-2" : "col-6 my-0"
+                }
+              >
                 <FormInput
                   label="Website Link"
                   name="website"
                   type="url"
-                  value={formData.website} // Add company URL
+                  value={formData.website}
                   onChange={handleInputChange}
                 />
               </div>
@@ -260,7 +263,13 @@ function AddorEditCompany({ type }) {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center my-3">
+              <div
+                className={
+                  type === EditingCompany
+                    ? "col-6 d-flex flex-column justify-content-center my-3"
+                    : "col-6 d-flex flex-column justify-content-center my-2"
+                }
+              >
                 <Select
                   name="status"
                   value={formData.status ?? true}
@@ -272,7 +281,13 @@ function AddorEditCompany({ type }) {
                   <MenuItem value={false}>Inactive</MenuItem>
                 </Select>
               </div>
-              <div className="col-6 Data-Picker my-3">
+              <div
+                className={
+                  type === EditingCompany
+                    ? "col-6 Data-Picker my-3"
+                    : "col-6 Data-Picker my-2"
+                }
+              >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Founded Date"
@@ -284,7 +299,7 @@ function AddorEditCompany({ type }) {
                   />
                 </LocalizationProvider>
               </div>
-              <div className={type === AddingCompany ? "col-6" : "col-12"}>
+              <div className="col-12 my-2">
                 <FormInput
                   label="Address"
                   name="address"

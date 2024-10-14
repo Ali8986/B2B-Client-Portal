@@ -326,13 +326,14 @@ export const ImageUpload = async (data) => {
   return invokeApi(requestObj);
 };
 
-export const CompanyList = async (page, limt) => {
+export const CompanyList = async (page, limt, data) => {
   const requestObj = {
-    path: `api/company/list_company`,
+    path: `api/company/list_company?page=${page}&limit=${limt}`,
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
+    postData: data || "",
   };
   return invokeApi(requestObj);
 };
@@ -366,6 +367,16 @@ export const CompanyDetails = async (id) => {
   const requestObj = {
     path: `/api/company/detail_company/${id}`,
     method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+export const DeletingCompany = async (id) => {
+  const requestObj = {
+    path: `api/company/delete_company/${id}`,
+    method: "DELETE",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
