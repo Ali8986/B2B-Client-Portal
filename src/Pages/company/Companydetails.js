@@ -12,14 +12,17 @@ import { Avatar } from "@mui/material";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
+import CustomModal from "../../Components/GeneralComponents/CustomModal";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import Tooltip from "@mui/material/Tooltip";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import CompanyDetailsModal from "../../Components/company/CompanyDetailsModal";
+import ChangeCompanyPassword from "../../Components/company/changeCompanyPassword";
+import LockResetIcon from "@mui/icons-material/LockReset";
 
 function CompanyDetails() {
   const [showDetails, setShowDetails] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedObject, setSelectedObject] = useState(null);
   const [users, setUsers] = useState([]);
@@ -43,10 +46,6 @@ function CompanyDetails() {
 
     const response = await CompanyList(page, rowsPerPage, postData);
     if (response.code === 200) {
-      console.log(
-        response.companies,
-        "SuccessfullySuccessfullySuccessfullySuccessfullySuccessfully"
-      );
       const mappedUsers = response.companies.map((item) => ({
         ...item,
         name: item.name || "Unknown",
@@ -83,6 +82,12 @@ function CompanyDetails() {
     FetchCompnayList(0, newRowsPerPage);
   };
 
+  const handlePasswordChange = (row) => {
+    const selectedObj = users.find((item) => item._id === row._id);
+    setSelectedObject(selectedObj);
+    setShowChangePassword(true);
+  };
+
   const handleEdit = (value) => {
     navigate(`/company/editcompany/${value._id}`, { state: value });
   };
@@ -117,7 +122,6 @@ function CompanyDetails() {
   const handleDetails = (row) => {
     const selectedObj = users.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
-    console.log(selectedObj);
     setShowDetails(true);
   };
 
@@ -210,6 +214,11 @@ function CompanyDetails() {
       icon: <ContactPageIcon />,
       handleClick: handleDetails,
     },
+    {
+      label: "Change Password",
+      icon: <LockResetIcon />,
+      handleClick: handlePasswordChange,
+    },
   ];
   const searchFunction = async (e) => {
     e.preventDefault();
@@ -225,7 +234,6 @@ function CompanyDetails() {
 
   const hideCompanyDetailsModal = (e) => {
     e.preventDefault();
-    console.log("cloase modal");
     setShowDetails(false);
     setSelectedObject(null);
   };
@@ -311,6 +319,16 @@ function CompanyDetails() {
           <DeletionConfirmation
             onConfirm={(e) => onConfirm(e)}
             onCancel={onCancel}
+          />
+        }
+      />
+      <CustomModal
+        open={showChangePassword}
+        handleClose={() => setShowChangePassword(false)}
+        component={
+          <ChangeCompanyPassword
+            selectedObject={selectedObject}
+            handleClose={() => setShowChangePassword(false)}
           />
         }
       />

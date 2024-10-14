@@ -75,7 +75,6 @@ function Exhibitors() {
   };
   const hideEventsDetailsModal = (e) => {
     e.preventDefault();
-    console.log("cloase modal");
     setShowDetails(false);
     setSelectedObject(null);
   };
@@ -87,7 +86,6 @@ function Exhibitors() {
   const handleDetails = (row) => {
     const selectedObj = users.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
-    console.log(selectedObj);
     setShowDetails(true);
   };
 

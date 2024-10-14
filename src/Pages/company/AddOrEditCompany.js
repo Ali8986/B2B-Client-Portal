@@ -92,7 +92,6 @@ function AddorEditCompany({ type }) {
   };
 
   const handlePhoneChange = (value) => {
-    console.log(value);
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
@@ -110,7 +109,6 @@ function AddorEditCompany({ type }) {
       setLoading(true);
       const response = await ImageUploadSpecificDirectory(FormDat);
       if (response.code === 200) {
-        console.log("Image upload response:", response);
         setFormData((prev) => ({
           ...prev,
           image: {

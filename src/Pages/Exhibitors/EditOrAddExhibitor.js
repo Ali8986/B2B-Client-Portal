@@ -67,21 +67,15 @@ function EditOrAddExhibitor({ type }) {
       social_links: data.social_links || [], // Initialize social_links as an empty array
     }));
 
-    console.log(data, "JSON.stringify");
-
     setPhoneNumber(data.phone);
   };
 
-  console.log(phoneNumber, "phoneNumber");
   const handlePhoneChange = (value, country) => {
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
 
-  const handleRender = (value, country) => {
-    console.log(country, "countrycountry");
-    console.log(value, "valuevaluevaluevalue");
-  };
+  const handleRender = (value, country) => {};
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -183,7 +177,6 @@ function EditOrAddExhibitor({ type }) {
               onChange={handlePhoneChange}
               setValue={setPhoneNumber}
               enableSearch={true}
-              onRender={(value, country) => console.log(value, country)}
             />
           </div> */}
           <div className="col-6">

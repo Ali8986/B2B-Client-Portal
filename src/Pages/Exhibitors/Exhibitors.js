@@ -88,14 +88,12 @@ function Exhibitors() {
     });
   };
   const handleDelete = (value) => {
-    console.log(value);
     setValueForDeleting(value);
     setModelOpen(true);
   };
   const handleDetails = (row) => {
     const selectedObj = users.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
-    console.log(row);
     setShowDetails(true);
   };
 

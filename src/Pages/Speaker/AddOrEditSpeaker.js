@@ -64,7 +64,6 @@ function AddEditSpeaker({ type }) {
     setPhoneNumber(data.phone || "");
   };
   const handlePhoneChange = (value, country) => {
-    console.log(country);
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
@@ -174,7 +173,6 @@ function AddEditSpeaker({ type }) {
                   onChange={handlePhoneChange}
                   setValue={setPhoneNumber}
                   enableSearch={true}
-                  onRender={(value, country) => console.log(value, country)}
                 />
               </div>
               <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">

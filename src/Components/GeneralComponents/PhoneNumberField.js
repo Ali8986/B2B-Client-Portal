@@ -8,7 +8,6 @@
 //   international = false,
 // }) => {
 //   const handlePhoneChange = (phone) => {
-//     console.log("Phone Number:", phone);
 //     onChange(phone); // Call the provided onChange handler
 //   };
 

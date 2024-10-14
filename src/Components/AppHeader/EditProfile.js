@@ -40,10 +40,6 @@ const EditProfile = () => {
       profile_image: profileImage,
       status: true,
     };
-    console.log(
-      profileImage.profileImage,
-      "profileImage+=____________++++++++"
-    );
     const response = await profileDetail(updatedProfile);
     if (response.code === 200) {
       setUser(`${updatedProfile.first_name} ${updatedProfile.last_name}`);
@@ -77,7 +73,6 @@ const EditProfile = () => {
         const email = JSON.parse(localStorage.getItem("Email"));
         setProfileEmail(email || "");
         setProfileImage(profileData.profile_image || "");
-        console.log(profileData.profile_image);
       } else {
         enqueueSnackbar(response.message, { variant: "error" });
       }

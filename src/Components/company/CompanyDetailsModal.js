@@ -12,9 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
   selectedObject = selectedObject || {};
   const [phoneNumber, setPhoneNumber] = useState("");
-  const handlePhoneChange = (value) => {
-    console.log("hello world");
-  };
+  const handlePhoneChange = (value) => {};
 
   const formatDate = (dateString) => {
     if (!dateString) return null;

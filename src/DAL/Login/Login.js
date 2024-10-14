@@ -396,3 +396,15 @@ export const ImageUploadSpecificDirectory = async (data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const UpdateCompanyPassword = async (data, id) => {
+  const requestObj = {
+    path: `api/app_api/change_password_by_admin/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};

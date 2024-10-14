@@ -33,8 +33,6 @@ const LoginForm = ({ Forget }) => {
     };
     setLoading(true);
     const response = await login(formData);
-    console.log("Login response:", response.token);
-
     if (response.code === 200) {
       localStorage.setItem("token", response.token);
       localStorage.setItem("Email", JSON.stringify(email));

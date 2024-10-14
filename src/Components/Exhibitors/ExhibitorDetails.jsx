@@ -8,9 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
   selectedObject = selectedObject || {};
   const [phoneNumber, setPhoneNumber] = useState("");
-  const handlePhoneChange = (value) => {
-    console.log("hello world");
-  };
+  const handlePhoneChange = (value) => {};
 
   return (
     <>

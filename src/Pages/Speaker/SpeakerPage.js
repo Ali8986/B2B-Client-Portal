@@ -104,7 +104,6 @@ function Speaker() {
   const handleDetails = (row) => {
     const selectedObj = users.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
-    console.log(selectedObj);
     setShowDetails(true);
   };
 
@@ -208,7 +207,6 @@ function Speaker() {
   };
   const hideSpeakerDetailsModal = (e) => {
     e.preventDefault();
-    console.log("cloase modal");
     setShowDetails(false);
     setSelectedObject(null);
   };

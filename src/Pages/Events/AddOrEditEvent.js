@@ -66,7 +66,6 @@ function AddOrEditEvent({ type }) {
     formData.append("width", "600");
     const results = await ImageUpload(formData);
     if (results.code === 200) {
-      console.log(results);
       return `${s3baseUrl}${results.path}`;
       enqueueSnackbar(results.message, { variant: "success" });
     } else {
