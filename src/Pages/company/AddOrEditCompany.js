@@ -206,7 +206,7 @@ function AddorEditCompany({ type }) {
                 dropdownClass="select-div2"
                 required={true}
                 country="pk"
-                value={formData.phone}
+                value={phoneNumber}
                 onChange={handlePhoneChange}
                 setValue={setPhoneNumber}
                 enableSearch={true}

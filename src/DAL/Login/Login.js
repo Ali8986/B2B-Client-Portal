@@ -356,7 +356,6 @@ export const AddingCompany = async (data) => {
     method: "POST",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
-      "Content-Type": "multipart/form-data",
     },
     postData: data,
   };

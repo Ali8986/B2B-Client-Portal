@@ -244,11 +244,10 @@ function Exhibitors() {
         <h2
           className="Layout-heading"
           style={{
-            fontSize: 28,
+            fontSize: 32,
             margin: 0,
             color: "#7396CC",
             fontWeight: 500,
-            textTransform: "uppercase",
             letterSpacing: "-1px",
           }}
         >

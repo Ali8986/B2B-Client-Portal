@@ -43,9 +43,9 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
         />
       </div>
       <form className="row mt-1">
-        <div className="col-6">
+        <div className="col-6 mt-4">
           <TextField
-            className="form-control mt-4 fw-bold "
+            className="form-control fw-bold "
             label="Name"
             name="name"
             variant="outlined"
@@ -55,9 +55,9 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-6 mt-4">
           <TextField
-            className="form-control mt-4 "
+            className="form-control"
             label="Email"
             type="email"
             name="email"
@@ -68,7 +68,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6 d-flex flex-column justify-content-center mt-4">
+        <div className="col-6 d-flex flex-column justify-content-center mt-4 Phone_Input">
           <PhoneInput
             dropdownClass="select-div2"
             country="pk"
@@ -79,9 +79,9 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-6 mt-4">
           <TextField
-            className="form-control mt-4 "
+            className="form-control"
             label="Website Link"
             type="text"
             name="website"
@@ -91,9 +91,9 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
             disabled
           />
         </div>
-        <div className="col-6">
+        <div className="col-6 mt-4">
           <TextField
-            className="form-control mt-4 "
+            className="form-control"
             label="Status"
             type="text"
             name="Status"
@@ -104,9 +104,9 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-6 mt-4">
           <TextField
-            className="form-control mt-4 "
+            className="form-control"
             label="Employees Count"
             type="number"
             name="employees_count"
@@ -117,28 +117,21 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6 Data-Picker my-2 mt-3">
+        <div className="col-6 Data-Picker my-2 mt-4">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Founded Date"
               value={formatDate(selectedObject.founded_date)}
-              className="form-control mt-2"
+              className="form-control"
               readOnly
               disabled
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  InputProps={{ readOnly: true }}
-                />
-              )}
             />
           </LocalizationProvider>
         </div>
 
-        <div className="col-6">
+        <div className="col-6 mt-4">
           <TextField
-            className="form-control mt-4"
+            className="form-control"
             label="Industry Name"
             type="text"
             name="industry"
@@ -149,9 +142,9 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-12">
+        <div className="col-12 mt-4">
           <TextField
-            className="form-control mt-3"
+            className="form-control"
             label="Address"
             type="text"
             name="address"

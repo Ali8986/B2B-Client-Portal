@@ -519,3 +519,12 @@ body {
     cursor: pointer;
     background-color: #7397cc5b;
 }
+
+.placeholder-text {
+    top: 50% !important;
+}
+
+.Phone_Input .phone-input-container #myInput {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+}

@@ -17,7 +17,7 @@ import PhoneInput from "react-phone-number-validation";
 function AddEditSpeaker({ type }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [phoneNumber, setPhoneNumber] = useState("+92");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const locaion = useLocation();
   const { state } = locaion;
   const [ProfileImage, setProfileImage] = useState(null);
@@ -167,6 +167,7 @@ function AddEditSpeaker({ type }) {
               <div className="col-6 d-flex flex-column justify-content-center">
                 <PhoneInput
                   dropdownClass="select-div2"
+                  country="pk"
                   required={true}
                   value={phoneNumber}
                   onChange={handlePhoneChange}

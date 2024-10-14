@@ -1,22 +1,16 @@
 import React from "react";
 import { IconButton, TextField } from "@mui/material";
-import {
-  LocalizationProvider,
-  DatePicker,
-  TimePicker,
-} from "@mui/x-date-pickers";
+import { LocalizationProvider, DateTimeField } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 
 const EventDetailModal = ({ handleClose, selectedObject }) => {
   selectedObject = selectedObject || {};
-  const formatDate = (dateString) => {
-    if (!dateString) return null;
-    if (dateString.includes(":")) {
-      return dayjs(dateString, "HH:mm:ss");
-    }
-    return dayjs(dateString, "YYYY:MM:DD");
+
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return null;
+    return dayjs(dateTimeString);
   };
 
   return (
@@ -87,78 +81,32 @@ const EventDetailModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
+        {/* Start Date and Time */}
         <div className="col-6 Data-Picker my-2 mt-3">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Start Date"
-              value={formatDate(selectedObject.start_date)}
+            <DateTimeField
+              label="Start Date & Time"
+              value={formatDateTime(selectedObject.start_date_time)}
               className="form-control mt-2"
               readOnly
               disabled
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  InputProps={{ readOnly: true }}
-                />
-              )}
             />
           </LocalizationProvider>
         </div>
+
+        {/* End Date and Time */}
         <div className="col-6 Data-Picker my-2 mt-3">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="End Date"
-              value={formatDate(selectedObject.end_date)}
+            <DateTimeField
+              label="End Date & Time"
+              value={formatDateTime(selectedObject.end_date_time)}
               className="form-control mt-2"
               readOnly
               disabled
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  InputProps={{ readOnly: true }}
-                />
-              )}
             />
           </LocalizationProvider>
         </div>
-        <div className="col-6 Data-Picker">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              label="Start Time"
-              value={formatDate(selectedObject.start_time)}
-              className="form-control mt-2"
-              readOnly
-              disabled
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  InputProps={{ readOnly: true }}
-                />
-              )}
-            />
-          </LocalizationProvider>
-        </div>
-        <div className="col-6 Data-Picker">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              label="End Time"
-              value={formatDate(selectedObject.end_time)}
-              className="form-control mt-2"
-              readOnly
-              disabled
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  InputProps={{ readOnly: true }}
-                />
-              )}
-            />
-          </LocalizationProvider>
-        </div>
+
         <div className="col-12">
           <label htmlFor="dashboard-description" className="description-label">
             Description
