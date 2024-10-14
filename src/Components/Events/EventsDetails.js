@@ -160,15 +160,15 @@ const EventDetailModal = ({ handleClose, selectedObject }) => {
           </LocalizationProvider>
         </div>
         <div className="col-12">
-          <TextField
-            className="form-control mt-4"
-            label="Description"
-            variant="outlined"
-            minRows={2}
-            multiline
-            value={selectedObject.description}
-            disabled
-          />
+          <label htmlFor="dashboard-description" className="description-label">
+            Description
+          </label>
+          <div
+            className="events_Detail_description custom-scrollbar"
+            dangerouslySetInnerHTML={{
+              __html: selectedObject.description,
+            }}
+          ></div>
         </div>
       </form>
     </>

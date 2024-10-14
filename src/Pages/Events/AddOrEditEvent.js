@@ -22,6 +22,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import ReactEditor from "react-text-editor-kit";
+import { s3baseUrl } from "../../config/config";
 
 function AddOrEditEvent({ type }) {
   const navigate = useNavigate();
@@ -65,9 +66,11 @@ function AddOrEditEvent({ type }) {
     formData.append("width", "600");
     const results = await ImageUpload(formData);
     if (results.code === 200) {
-      alert("Upload Success!");
+      console.log(results);
+      return `${s3baseUrl}${results.path}`;
+      enqueueSnackbar(results.message, { variant: "success" });
     } else {
-      alert("Upload Failed!");
+      enqueueSnackbar(results.message, { variant: "error" });
     }
   };
 
@@ -165,7 +168,7 @@ function AddOrEditEvent({ type }) {
           <div className="col-6 Data-Picker mb-2">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                disablePast
+                disablePast={type === EditingEvent ? false : true}
                 label="Start Date"
                 value={formData.start_date}
                 className="form-control mt-2"

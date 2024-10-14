@@ -190,7 +190,7 @@ function Exhibitors() {
         return (
           <>
             <div>{row.company.name}</div>
-            <div>{row.company.website}</div>
+            {/* <div>{row.company.website}</div> */}
           </>
         );
       },

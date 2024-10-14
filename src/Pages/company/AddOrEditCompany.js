@@ -15,6 +15,7 @@ import {
   AddingCompany,
   EditingCompany,
   CompanyDetails,
+  ImageUploadSpecificDirectory,
 } from "../../DAL/Login/Login";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
@@ -96,15 +97,35 @@ function AddorEditCompany({ type }) {
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const newImageURL = URL.createObjectURL(file);
-      setProfileImage(newImageURL);
-      setFormData((prev) => ({
-        ...prev,
+      // Prepare data for image upload
+      const FormDat = {
         image: file,
-      }));
+        directory_name: "company",
+      };
+
+      // Call the image upload API
+      setLoading(true);
+      const response = await ImageUploadSpecificDirectory(FormDat);
+      if (response.code === 200) {
+        console.log("Image upload response:", response);
+        setFormData((prev) => ({
+          ...prev,
+          image: {
+            thumbnail_1: response.path.thumbnail_1,
+            thumbnail_2: response.path.thumbnail_2 || "",
+          },
+        }));
+
+        const newImageURL = URL.createObjectURL(file);
+        setProfileImage(newImageURL);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        enqueueSnackbar(response.message, { variant: "error" });
+      }
     }
   };
 
@@ -117,9 +138,7 @@ function AddorEditCompany({ type }) {
       founded_date: formData.founded_date.format("YYYY:MM:DD"),
       phone: formData.phone,
     };
-    if (!(formData.image instanceof File)) {
-      delete formattedFormData.image;
-    }
+
     if (type === EditingCompany) {
       delete formattedFormData.password;
     }
@@ -238,7 +257,7 @@ function AddorEditCompany({ type }) {
                 <FormInput
                   label="Website Link"
                   name="website"
-                  type="url"
+                  type="text"
                   value={formData.website}
                   onChange={handleInputChange}
                 />
@@ -325,9 +344,7 @@ function AddorEditCompany({ type }) {
                           ? ProfileImage
                           : `${s3baseUrl}${formData.image.thumbnail_1}`
                       }
-                    >
-                      A
-                    </Avatar>
+                    ></Avatar>
                   ) : (
                     <div>{null}</div>
                   )}

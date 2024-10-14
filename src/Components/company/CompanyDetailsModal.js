@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 import { Avatar, IconButton, TextField } from "@mui/material";
 import { s3baseUrl } from "../../config/config";
-import PhoneInput from "react-phone-number-validation";
+// import PhoneInput from "react-phone-number-validation";
 import profile from "../../Assets/Images/profile.jpg";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -34,7 +34,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           </IconButton>
         </div>
       </div>
-      <div className="col-12 d-flex justify-content-center my-3 py-4">
+      <div className="col-12 d-flex justify-content-center mt-4 py-2">
         <Avatar
           sx={{ width: 80, height: 80, borderRadius: 1 }}
           src={
@@ -44,7 +44,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           }
         />
       </div>
-      <form className="row">
+      <form className="row mt-1">
         <div className="col-6">
           <TextField
             className="form-control mt-4 fw-bold "
@@ -70,7 +70,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6 d-flex flex-column justify-content-center mt-4">
+        {/* <div className="col-6 d-flex flex-column justify-content-center mt-4">
           <PhoneInput
             dropdownClass="select-div2"
             country="pk"
@@ -79,7 +79,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
             setValue={setPhoneNumber}
             disabled
           />
-        </div>
+        </div> */}
 
         <div className="col-6">
           <TextField
@@ -153,7 +153,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
 
         <div className="col-12">
           <TextField
-            className="form-control mt-4"
+            className="form-control mt-3"
             label="Address"
             type="text"
             name="address"

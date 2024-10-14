@@ -13,12 +13,12 @@ import { CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
-import ReactEditor from "react-text-editor-kit";
+import { formatMeridiem } from "@mui/x-date-pickers/internals";
 
 function AddEditSpeaker({ type }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("+92");
   const locaion = useLocation();
   const { state } = locaion;
   const [ProfileImage, setProfileImage] = useState(null);
@@ -37,6 +37,18 @@ function AddEditSpeaker({ type }) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  // function extractPhoneParts(phoneNumber) {
+  //   const match = phoneNumber.match(/^(\+\d+)\s*(\d+[-\d]+)/);
+  //   if (match) {
+  //     return {
+  //       countryCode: match[1], // Extracts the country code
+  //       phone: match[2], // Extracts the rest of the phone number
+  //     };
+  //   }
+  //   return null;
+  // }
+
   const handleFormateData = (data) => {
     setFormData((prev) => ({
       ...prev,
@@ -51,8 +63,8 @@ function AddEditSpeaker({ type }) {
     }));
     setPhoneNumber(data.phone || "");
   };
-  const handlePhoneChange = (value) => {
-    console.log(value);
+  const handlePhoneChange = (value, country) => {
+    console.log(country);
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
@@ -104,6 +116,7 @@ function AddEditSpeaker({ type }) {
   useEffect(() => {
     if (state) {
       handleFormateData(state);
+      // const result = extractPhoneParts(state.phone);
     } else if (type === EditingSpeaker) {
       GetSpeakerDetails();
     }
@@ -157,11 +170,11 @@ function AddEditSpeaker({ type }) {
                 <PhoneInput
                   dropdownClass="select-div2"
                   required={true}
-                  country="pk"
-                  value={formData.phone}
+                  value={phoneNumber}
                   onChange={handlePhoneChange}
                   setValue={setPhoneNumber}
                   enableSearch={true}
+                  onRender={(value, country) => console.log(value, country)}
                 />
               </div>
               <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">

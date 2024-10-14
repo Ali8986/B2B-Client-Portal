@@ -18,7 +18,7 @@ import {
 } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "../../config/config";
-import PhoneInput from "react-phone-number-validation";
+// import PhoneInput from "react-phone-number-validation";
 
 function EditOrAddExhibitor({ type }) {
   const navigate = useNavigate();
@@ -173,7 +173,7 @@ function EditOrAddExhibitor({ type }) {
               onChange={handleInputChange}
             />
           </div>
-          <div className="col-6 d-flex flex-column justify-content-center">
+          {/* <div className="col-6 d-flex flex-column justify-content-center">
             <PhoneInput
               dropdownClass="select-div2"
               country="pk"
@@ -185,7 +185,7 @@ function EditOrAddExhibitor({ type }) {
               enableSearch={true}
               onRender={(value, country) => console.log(value, country)}
             />
-          </div>
+          </div> */}
           <div className="col-6">
             <FormInput
               label="Display Space"

@@ -1,8 +1,10 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
 import { Avatar, TextField } from "@mui/material";
+import { Height } from "@mui/icons-material";
 
 const style = {
+  height: "90%",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -10,7 +12,6 @@ const style = {
   width: 700,
   maxWidth: "90%",
   bgcolor: "background.paper",
-  border: "1px solid #000",
   boxShadow: 3,
   p: 4,
 };
@@ -23,7 +24,9 @@ const DetailsModal = ({ open, handleClose, component }) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      sx={{ backgroundColor: "rgba(0, 0, 0, 5%)" }}
+      sx={{
+        backgroundColor: "rgba(0, 0, 0, 5%)",
+      }}
     >
       <div
         style={style}

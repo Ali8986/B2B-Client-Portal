@@ -129,7 +129,7 @@ function CompanyDetails() {
     { id: "action", label: "Action", type: "action" },
     {
       id: "any",
-      label: "Profile",
+      label: "Logo",
       renderData: (row, index) => {
         return (
           <div key={index} className="d-flex align-items-center">

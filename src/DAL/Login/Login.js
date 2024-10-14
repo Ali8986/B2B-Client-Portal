@@ -383,3 +383,16 @@ export const DeletingCompany = async (id) => {
   };
   return invokeApi(requestObj);
 };
+
+export const ImageUploadSpecificDirectory = async (data) => {
+  const requestObj = {
+    path: `api/app_api/upload_image_s3_specific_directory`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+      "Content-Type": "multipart/form-data",
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
