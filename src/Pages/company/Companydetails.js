@@ -287,6 +287,7 @@ function CompanyDetails() {
               setSearchText: setSearchText,
               handleSubmit: searchFunction,
             }}
+            // custom-scrollbar
             class_name=""
             theme_config={{
               background: "white",

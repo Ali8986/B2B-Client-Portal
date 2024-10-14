@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Avatar, IconButton, TextField } from "@mui/material";
 import { s3baseUrl } from "../../config/config";
-// import PhoneInput from "react-phone-number-validation";
+import PhoneInput from "react-phone-number-validation";
 import profile from "../../Assets/Images/profile.jpg";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -53,7 +53,7 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             disabled
           />
         </div>
-        {/* <div className="col-6 d-flex flex-column justify-content-center mt-4">
+        <div className="col-6 d-flex flex-column justify-content-center mt-4">
           <PhoneInput
             dropdownClass="select-div2"
             country="pk"
@@ -62,7 +62,7 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
             setValue={setPhoneNumber}
             disabled
           />
-        </div> */}
+        </div>
         <div className="col-6">
           <TextField
             className="form-control mt-4 "

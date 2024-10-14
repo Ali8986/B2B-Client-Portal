@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Avatar, TextField , IconButton} from "@mui/material";
 import { s3baseUrl } from "../../config/config";
 import profile from "../../Assets/Images/Default.jpg";
-// import PhoneInput from "react-phone-number-validation";
+import PhoneInput from "react-phone-number-validation";
 import CloseIcon from '@mui/icons-material/Close';
 
 const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
@@ -63,7 +63,8 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             disabled
           />
         </div>
-        {/* <div className="col-6 d-flex justify-content-center align-items-center mt-3">
+
+        <div className="col-6 d-flex justify-content-center align-items-center mt-3">
           <PhoneInput
             dropdownClass="select-div2 "
             country="pk"
@@ -72,7 +73,8 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             setValue={setPhoneNumber}
             disabled
           />
-        </div> */}
+        </div>
+        
         <div className="col-12 col-md-6">
           <TextField
             className="form-control mt-3"

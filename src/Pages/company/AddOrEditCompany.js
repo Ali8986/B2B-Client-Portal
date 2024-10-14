@@ -173,230 +173,222 @@ function AddorEditCompany({ type }) {
 
   return (
     <>
-      {loading ? (
-        <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
-          <CircularProgress />
-        </div>
-      ) : (
-        <div className="px-3 px-md-4 py-1 py-md-3">
-          <form onSubmit={handleSubmit}>
-            <div className="row p-0 p-lg-3 mt-5 mt-md-2">
-              <HeaderWithBackButton
-                title={type === EditingCompany ? "Edit Company" : "Add Company"}
-                path="/company"
+      <div className="px-3 px-md-4 py-1 py-md-3">
+        <form onSubmit={handleSubmit}>
+          <div className="row p-0 p-lg-3 mt-5 mt-md-2">
+            <HeaderWithBackButton
+              title={type === EditingCompany ? "Edit Company" : "Add Company"}
+              path="/company"
+            />
+            <div className="col-6 col-lg-6">
+              <FormInput
+                label="Name"
+                variant="outlined"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
               />
-              <div className="col-6 col-lg-6">
-                <FormInput
-                  label="Name"
-                  variant="outlined"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="col-6">
-                <FormInput
-                  label="Email"
-                  variant="outlined"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  type="email"
-                  required
-                />
-              </div>
-              <div className="col-6 d-flex flex-column justify-content-center my-2">
-                <PhoneInput
-                  dropdownClass="select-div2"
-                  required={true}
-                  country="pk"
-                  value={formData.phone}
-                  onChange={handlePhoneChange}
-                  setValue={setPhoneNumber}
-                  enableSearch={true}
-                />
-              </div>
-              {type === AddingCompany ? (
-                <div className="col-6 my-2">
-                  <FormControl sx={{ width: "100%" }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">
-                      Password
-                    </InputLabel>
-                    <OutlinedInput
-                      fullWidth
-                      name="password"
-                      id="outlined-adornment-password"
-                      onChange={handleInputChange}
-                      type={showPassword ? "text" : "password"}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            onMouseUp={handleMouseUpPassword}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      label="Password"
-                    />
-                  </FormControl>
-                </div>
-              ) : null}
-              <div
-                className={
-                  type === EditingCompany ? "col-6 my-2" : "col-6 my-0"
-                }
-              >
-                <FormInput
-                  label="Website Link"
-                  name="website"
-                  type="text"
-                  value={formData.website}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-6">
-                <FormInput
-                  label="Industry"
-                  name="industry"
-                  required={true}
-                  type="text"
-                  value={formData.industry}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-6">
-                <FormInput
-                  label="Employees Count"
-                  name="employees_count"
-                  required={true}
-                  type="number"
-                  value={formData.employees_count}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div
-                className={
-                  type === EditingCompany
-                    ? "col-6 d-flex flex-column justify-content-center my-3"
-                    : "col-6 d-flex flex-column justify-content-center my-2"
-                }
-              >
-                <Select
-                  name="status"
-                  value={formData.status ?? true}
-                  onChange={handleInputChange}
-                >
-                  <MenuItem value={true} selected>
-                    Active
-                  </MenuItem>
-                  <MenuItem value={false}>Inactive</MenuItem>
-                </Select>
-              </div>
-              <div
-                className={
-                  type === EditingCompany
-                    ? "col-6 Data-Picker my-3"
-                    : "col-6 Data-Picker my-2"
-                }
-              >
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Founded Date"
-                    value={formData.founded_date}
-                    className="form-control"
-                    onChange={(newValue) =>
-                      handleDateChange("founded_date", newValue)
+            </div>
+            <div className="col-6">
+              <FormInput
+                label="Email"
+                variant="outlined"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                type="email"
+                required
+              />
+            </div>
+            <div className="col-6 d-flex flex-column justify-content-center my-2">
+              <PhoneInput
+                dropdownClass="select-div2"
+                required={true}
+                country="pk"
+                value={formData.phone}
+                onChange={handlePhoneChange}
+                setValue={setPhoneNumber}
+                enableSearch={true}
+              />
+            </div>
+            {type === AddingCompany ? (
+              <div className="col-6 my-2">
+                <FormControl sx={{ width: "100%" }} variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    name="password"
+                    id="outlined-adornment-password"
+                    onChange={handleInputChange}
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          onMouseUp={handleMouseUpPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
                     }
+                    label="Password"
                   />
-                </LocalizationProvider>
+                </FormControl>
               </div>
-              <div className="col-12 my-2">
-                <FormInput
-                  label="Address"
-                  name="address"
-                  required={true}
-                  type="text"
-                  value={formData.address}
-                  onChange={handleInputChange}
+            ) : null}
+            <div
+              className={type === EditingCompany ? "col-6 my-2" : "col-6 my-0"}
+            >
+              <FormInput
+                label="Website Link"
+                name="website"
+                type="text"
+                value={formData.website}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-6">
+              <FormInput
+                label="Industry"
+                name="industry"
+                required={true}
+                type="text"
+                value={formData.industry}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-6">
+              <FormInput
+                label="Employees Count"
+                name="employees_count"
+                required={true}
+                type="number"
+                value={formData.employees_count}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div
+              className={
+                type === EditingCompany
+                  ? "col-6 d-flex flex-column justify-content-center my-3"
+                  : "col-6 d-flex flex-column justify-content-center my-2"
+              }
+            >
+              <Select
+                name="status"
+                value={formData.status ?? true}
+                onChange={handleInputChange}
+              >
+                <MenuItem value={true} selected>
+                  Active
+                </MenuItem>
+                <MenuItem value={false}>Inactive</MenuItem>
+              </Select>
+            </div>
+            <div
+              className={
+                type === EditingCompany
+                  ? "col-6 Data-Picker my-3"
+                  : "col-6 Data-Picker my-2"
+              }
+            >
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Founded Date"
+                  value={formData.founded_date}
+                  className="form-control"
+                  onChange={(newValue) =>
+                    handleDateChange("founded_date", newValue)
+                  }
                 />
+              </LocalizationProvider>
+            </div>
+            <div className="col-12 my-2">
+              <FormInput
+                label="Address"
+                name="address"
+                required={true}
+                type="text"
+                value={formData.address}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2">
+              <div className="col-12 col-lg-4 pb-3 pb-lg-0">
+                <h4 className="h5">Upload Image</h4>
+                <p className="h6">
+                  Image Size (670 X 1000) ("JPG", "JPEG", "PNG", "WEBP","GIF")
+                </p>
               </div>
-              <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2">
-                <div className="col-12 col-lg-4 pb-3 pb-lg-0">
-                  <h4 className="h5">Upload Image</h4>
-                  <p className="h6">
-                    Image Size (670 X 1000) ("JPG", "JPEG", "PNG", "WEBP","GIF")
-                  </p>
-                </div>
-                <div className="col-4 col-lg-4 pb-3 pb-lg-0">
-                  {formData.image ? (
-                    <Avatar
-                      sx={{ width: 70, height: 70, borderRadius: 0 }}
-                      src={
-                        ProfileImage
-                          ? ProfileImage
-                          : `${s3baseUrl}${formData.image.thumbnail_1}`
-                      }
-                    ></Avatar>
-                  ) : (
-                    <div>{null}</div>
-                  )}
-                </div>
-                <div className="Upload-input-field">
-                  <input
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    id="upload-button"
-                    type="file"
-                    onChange={handleImageChange}
-                  />
-                  <label
-                    htmlFor="upload-button"
-                    className="User_Image_Edit d-flex align-items-center"
-                  >
-                    <FileUploadIcon className="Upload-btn" />
-                    <div className="ps-1">upload</div>
-                  </label>
-                </div>
+              <div className="col-4 col-lg-4 pb-3 pb-lg-0">
+                {formData.image ? (
+                  <Avatar
+                    sx={{ width: 70, height: 70, borderRadius: 0 }}
+                    src={
+                      ProfileImage
+                        ? ProfileImage
+                        : `${s3baseUrl}${formData.image.thumbnail_1}`
+                    }
+                  ></Avatar>
+                ) : (
+                  <div>{null}</div>
+                )}
               </div>
-              <div className="images_box px-0"></div>
-              <div className="col-12 d-flex flex-wrap justify-content-end mt-3">
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  disabled={loading}
-                  style={{ backgroundColor: "#7396CC" }}
+              <div className="Upload-input-field">
+                <input
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="upload-button"
+                  type="file"
+                  onChange={handleImageChange}
+                />
+                <label
+                  htmlFor="upload-button"
+                  className="User_Image_Edit d-flex align-items-center"
                 >
-                  {loading ? (
-                    type === EditingCompany ? (
-                      <div className="d-flex align-items-center">
-                        <CircularProgress size={15} className="color" />
-                        <p className="ms-2 mb-0 font-size">Update</p>
-                      </div>
-                    ) : (
-                      <div className="d-flex align-items-center">
-                        <CircularProgress size={15} className="color" />
-                        <p className="ms-2 mb-0 font-size">Submit</p>
-                      </div>
-                    )
-                  ) : type === EditingCompany ? (
-                    "Update"
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
+                  <FileUploadIcon className="Upload-btn" />
+                  <div className="ps-1">upload</div>
+                </label>
               </div>
             </div>
-          </form>
-        </div>
-      )}
+            <div className="images_box px-0"></div>
+            <div className="col-12 d-flex flex-wrap justify-content-end mt-3">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
+                disabled={loading}
+                style={{ backgroundColor: "#7396CC" }}
+              >
+                {loading ? (
+                  type === EditingCompany ? (
+                    <div className="d-flex align-items-center">
+                      <CircularProgress size={15} className="color" />
+                      <p className="ms-2 mb-0 font-size">Update</p>
+                    </div>
+                  ) : (
+                    <div className="d-flex align-items-center">
+                      <CircularProgress size={15} className="color" />
+                      <p className="ms-2 mb-0 font-size">Submit</p>
+                    </div>
+                  )
+                ) : type === EditingCompany ? (
+                  "Update"
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
     </>
   );
 }
