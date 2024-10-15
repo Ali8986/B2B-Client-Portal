@@ -13,14 +13,15 @@ const SpeakerDetailsModal = ({ handleClose, selectedObject }) => {
   return (
     <>
       <div className="row">
-        <div className="d-flex justify-content-between align-items-baseline Divider py-2">
+        <div className="d-flex justify-content-between align-items-baseline py-2">
           <h2 className="h4 m-0">Speaker Details</h2>
           <IconButton className="Close_btn" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </div>
       </div>
-      <div className="col-12 d-flex justify-content-center my-3 py-4">
+      <div className="Divider"></div>
+      <div className="col-12 d-flex justify-content-center mt-3 mb-0 py-4">
         <Avatar
           sx={{ width: 80, height: 80, borderRadius: 1 }}
           src={

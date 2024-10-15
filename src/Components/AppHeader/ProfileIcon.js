@@ -77,6 +77,7 @@ export default function ProfileIcon() {
       }
       if (!is_path_includes("/exhibitors")) {
         localStorage.removeItem("searchText_exhibitor_page");
+        localStorage.removeItem("filter_Exhibitor_Data");
       }
       if (!is_path_includes("/events")) {
         localStorage.removeItem("searchText_events_page");
@@ -84,7 +85,7 @@ export default function ProfileIcon() {
       if (!is_path_includes("/company")) {
         localStorage.removeItem("searchText_company_page");
       }
-    }, 1400);
+    }, 1000);
   }, [pathname]);
 
   return (

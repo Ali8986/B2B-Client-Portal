@@ -53,10 +53,10 @@ const ChangeCompanyPassword = ({ handleClose, selectedObject }) => {
         <div className="text-center">
           <h5>Change Password</h5>
         </div>
-        <hr />
+        <hr className="mb-4 pb-3" />
         <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-12 col-md-6 mb-3 my-md-0 ">
+          <div className="row g-3">
+            <div className="col-12 mb-3 my-md-0 ">
               <TextField
                 InputProps={{
                   endAdornment: (
@@ -73,7 +73,7 @@ const ChangeCompanyPassword = ({ handleClose, selectedObject }) => {
                 onChange={(e) => setNewPassword(e.target.value)}
               />
             </div>
-            <div className="col-12 col-md-6">
+            <div className="col-12">
               <TextField
                 InputProps={{
                   endAdornment: (
@@ -96,7 +96,13 @@ const ChangeCompanyPassword = ({ handleClose, selectedObject }) => {
             </div>
           </div>
           <div className="my-3">
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              size="large"
+            >
               Update
             </Button>
           </div>

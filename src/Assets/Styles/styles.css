@@ -524,7 +524,32 @@ body {
     top: 50% !important;
 }
 
-.Phone_Input .phone-input-container #myInput {
+.phone-input-container #myInput {
     padding-top: 15px !important;
     padding-bottom: 15px !important;
+}
+
+.Data-Adding-Btn svg {
+    color: white !important;
+}
+
+.exhibitor-form-div {
+    width: 400px !important;
+    max-width: 100% !important;
+}
+
+.close-button {
+    border-radius: 50%;
+    line-height: 30px;
+    color: white;
+    text-align: center;
+    width: 30px;
+    background-color: #7c97c1;
+    cursor: pointer;
+}
+
+.drawer-title {
+    margin: 0px !important;
+    font-size: 24px !important;
+    font-weight: 500;
 }

@@ -25,13 +25,14 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
   return (
     <>
       <div className="row">
-        <div className="d-flex justify-content-between align-items-baseline Divider py-2">
+        <div className="d-flex justify-content-between align-items-baseline py-2">
           <h2 className="h4 m-0">Company Details</h2>
           <IconButton className="Close_btn" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </div>
       </div>
+      <div className="Divider"></div>
       <div className="col-12 d-flex justify-content-center mt-4 py-2">
         <Avatar
           sx={{ width: 80, height: 80, borderRadius: 1 }}
@@ -142,7 +143,7 @@ const CompanyDetailsModal = ({ handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-12 mt-4">
+        <div className="col-12 mt-3">
           <TextField
             className="form-control"
             label="Address"

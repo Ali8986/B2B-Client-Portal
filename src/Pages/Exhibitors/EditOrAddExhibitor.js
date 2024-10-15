@@ -5,14 +5,16 @@ import {
   CircularProgress,
   MenuItem,
   Select,
+  TextField,
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import profile from "../../Assets/Images/profile.jpg";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   AddingExhibitor,
+  CompanyList,
   EditingExhibitor,
   ExhibitorDetails,
 } from "../../DAL/Login/Login";
@@ -24,6 +26,7 @@ function EditOrAddExhibitor({ type }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [searchCompanyData, setSearchCompanyData] = useState([]);
   const locaion = useLocation();
   const { state } = locaion;
   const [loading, setLoading] = useState(false);
@@ -122,6 +125,16 @@ function EditOrAddExhibitor({ type }) {
     }
     setLoading(false);
   };
+
+  const getUserData = async () => {
+    const response = await CompanyList(0, 10, null);
+    if (response.code === 200) {
+      setSearchCompanyData(response.companies);
+    } else {
+      enqueueSnackbar("NO Hello", { variant: "error" });
+    }
+  };
+
   const GetExhibitorDetails = async () => {
     const response = await ExhibitorDetails(id);
     if (response.code === 200) {
@@ -199,19 +212,38 @@ function EditOrAddExhibitor({ type }) {
               onChange={handleInputChange}
             />
           </div>
-          <div className="col-12 col-lg-6">
-            <FormInput
-              required={false}
-              label="Company Name"
-              name="name"
-              type="text"
-              value={formData.company.name}
-              onChange={(e) =>
+          <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
+            <Autocomplete
+              id="company_name"
+              value={formData.company}
+              getOptionLabel={(searchCompanyData) =>
+                `${searchCompanyData.name}`
+              }
+              options={searchCompanyData}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              noOptionsText={"Not a company name"}
+              disablePortal
+              sx={{ width: "100%" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Search Company Name" />
+              )}
+              onFocus={getUserData} // Trigger API when focused
+              onChange={(event, newValue) => {
                 setFormData((prevData) => ({
                   ...prevData,
-                  company: { ...prevData.company, name: e.target.value },
-                }))
-              }
+                  company: {
+                    _id: newValue?._id,
+                    name: newValue?.name,
+                    website: newValue?.website,
+                  } || {
+                    _id: "",
+                    name: "",
+                    website: "",
+                  }, // Handle case when no company is selected
+                }));
+              }}
             />
           </div>
           <div className="col-12 col-lg-6">
@@ -219,7 +251,7 @@ function EditOrAddExhibitor({ type }) {
               label="Website Link"
               name="website"
               required={false}
-              type="url"
+              type="text"
               value={formData.company.website} // Add company URL
               onChange={(e) =>
                 setFormData((prevData) => ({
@@ -231,6 +263,7 @@ function EditOrAddExhibitor({ type }) {
           </div>
           <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
             <Select
+              required
               name="status"
               value={formData.status ?? true}
               onChange={handleInputChange}

@@ -13,11 +13,12 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
   return (
     <>
       <div className="row">
-        <div className="d-flex justify-content-between align-items-baseline Divider pb-3">
+        <div className="d-flex justify-content-between align-items-baseline pb-2 pt-2">
             <h2 className="h4 m-0">Exhibitor Details</h2>
           <IconButton className="Close_btn" onClick={handleClose}><CloseIcon /></IconButton>
         </div>
       </div>
+      <div className="Divider"></div>
       <div className="col-12 d-flex justify-content-center my-3 py-4">
         <Avatar
           sx={{ width: 80, height: 80, borderRadius: 1 }}
@@ -51,9 +52,9 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             disabled
           />
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 mt-4">
           <TextField
-            className="form-control mt-3"
+            className="form-control"
             label="Email"
             type="email"
             name="email"
@@ -64,7 +65,7 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
           />
         </div>
 
-        <div className="col-6 d-flex justify-content-center align-items-center mt-3">
+        <div className="col-6 d-flex justify-content-center align-items-center mt-4">
           <PhoneInput
             dropdownClass="select-div2 "
             country="pk"
@@ -75,9 +76,9 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
           />
         </div>
         
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 mt-4">
           <TextField
-            className="form-control mt-3"
+            className="form-control"
             label="Status"
             type="text"
             name="status"
@@ -87,9 +88,9 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             disabled
           />
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 mt-4">
           <TextField
-            className="form-control mt-3"
+            className="form-control"
             label="Display Space"
             type="text"
             name="booth"
@@ -99,9 +100,9 @@ const ExhibitorDetailsModal = ({ open, handleClose, selectedObject }) => {
             disabled
           />
         </div>
-        <div className="col-12">
+        <div className="col-12 mt-4">
           <TextField
-            className="form-control mt-3"
+            className="form-control"
             label="Expertise"
             type="text"
             name="products"

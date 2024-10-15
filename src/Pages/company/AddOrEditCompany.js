@@ -201,7 +201,7 @@ function AddorEditCompany({ type }) {
                 required
               />
             </div>
-            <div className="col-6 d-flex flex-column justify-content-center my-2">
+            <div className="col-6 d-flex flex-column justify-content-center my-2 Company_Phone_Input">
               <PhoneInput
                 dropdownClass="select-div2"
                 required={true}
@@ -321,7 +321,7 @@ function AddorEditCompany({ type }) {
             </div>
             <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2">
               <div className="col-12 col-lg-4 pb-3 pb-lg-0">
-                <h4 className="h5">Upload Image</h4>
+                <h4 className="h5">Upload Company's Logo</h4>
                 <p className="h6">
                   Image Size (670 X 1000) ("JPG", "JPEG", "PNG", "WEBP","GIF")
                 </p>

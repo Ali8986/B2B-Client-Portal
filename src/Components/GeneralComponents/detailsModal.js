@@ -4,7 +4,6 @@ import { Avatar, TextField } from "@mui/material";
 import { Height } from "@mui/icons-material";
 
 const style = {
-  height: "90%",
   position: "absolute",
   top: "50%",
   left: "50%",

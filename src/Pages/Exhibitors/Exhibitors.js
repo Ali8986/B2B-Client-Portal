@@ -16,9 +16,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import ExhibitorDetailsModal from "../../Components/Exhibitors/ExhibitorDetails";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import SearhingExhibitor from "../../Components/Exhibitors/SearchExhibitor";
+import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
+import CustomDrawer from "../../Components/GeneralComponents/CustomDrawer";
 
 function Exhibitors() {
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedObject, setSelectedObject] = useState(null);
   const [modelOpen, setModelOpen] = useState(false);
@@ -33,12 +37,21 @@ function Exhibitors() {
   const [valueForDeleting, setValueForDeleting] = useState(null);
 
   const FetchExhibitorsList = async (page, rowsPerPage, savedSearchText) => {
+    console.log(
+      savedSearchText,
+      "savese savese savesesavese savesesavesesavesesavese"
+    );
     const postData = {
-      search: savedSearchText,
+      search: savedSearchText === `${savedSearchText}` ? savedSearchText : "",
     };
     setLoading(true);
-    const response = await ExhibitorList(page, rowsPerPage, postData);
+    const response = await ExhibitorList(
+      page,
+      rowsPerPage,
+      typeof savedSearchText === "object" ? savedSearchText : postData
+    );
     if (response.code === 200) {
+      console.log("Exhibitors: response response response response", response);
       const { exhibitors, total_exhibitors, total_pages } = response;
       const mappedUsers = exhibitors.map((item) => ({
         ...item,
@@ -67,6 +80,15 @@ function Exhibitors() {
     setPage(newPage);
     FetchExhibitorsList(newPage, rowsPerPage);
   };
+
+  const closeDrawer = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpenDrawer = () => {
+    setIsOpen(true);
+  };
+
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
@@ -245,11 +267,20 @@ function Exhibitors() {
 
   useEffect(() => {
     const savedSearchText = localStorage.getItem("searchText_exhibitor_page");
+    const FilterExhibitorData = JSON.parse(
+      localStorage.getItem("filter_Exhibitor_Data")
+    );
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchExhibitorsList(page, rowsPerPage, savedSearchText);
+      FetchExhibitorsList(page, rowsPerPage, `${savedSearchText}`);
+      console.log(
+        savedSearchText,
+        "savedSearchTextsavedSearchTextsavedSearchTextsavedSearchTextsavedSearchText"
+      );
       setTotalPages(count);
+    } else if (FilterExhibitorData) {
+      FetchExhibitorsList(page, rowsPerPage, FilterExhibitorData);
     } else {
       FetchExhibitorsList(page, rowsPerPage);
     }
@@ -259,14 +290,25 @@ function Exhibitors() {
     <div className="row my-4 mx-3">
       <div className="d-flex justify-content-between align-items-center my-4 ">
         <HeaderWithBackButton className="Layout-heading" title="Exhibitors" />
-        <Button
-          variant="contained"
-          size="medium"
-          onClick={handleAddingMember}
-          className="Data-Adding-Btn"
-        >
-          ADD Exhibitor
-        </Button>
+        <div>
+          <Button
+            variant="contained"
+            size="medium"
+            onClick={handleOpenDrawer}
+            className="Data-Adding-Btn"
+            endIcon={<FilterAltRoundedIcon />}
+          >
+            Filter
+          </Button>
+          <Button
+            variant="contained"
+            size="medium"
+            onClick={handleAddingMember}
+            className="Data-Adding-Btn mx-3"
+          >
+            ADD Exhibitor
+          </Button>
+        </div>
       </div>
       <div className="Exhibitors_table">
         {loading ? (
@@ -324,6 +366,17 @@ function Exhibitors() {
           <DeletionConfirmation
             onConfirm={(e) => onConfirm(e)}
             onCancel={onCancel}
+          />
+        }
+      />
+      <CustomDrawer
+        title={"Filter Exhibitor"}
+        isOpen={isOpen}
+        setIsOpen={closeDrawer}
+        component={
+          <SearhingExhibitor
+            setIsOpen={closeDrawer}
+            FetchExhibitorsList={FetchExhibitorsList}
           />
         }
       />

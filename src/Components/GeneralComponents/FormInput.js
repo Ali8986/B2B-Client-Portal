@@ -1,4 +1,5 @@
-import { TextField } from "@mui/material";
+import { TextField, InputAdornment } from "@mui/material";
+import { useState } from "react";
 
 const FormInput = ({ label, name, type, value, onChange, required = true }) => {
   const autoComplete = type === "password" ? "current-password" : "on";

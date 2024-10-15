@@ -186,6 +186,7 @@ export const DeletingSpeaker = async (id) => {
   return invokeApi(requestObj);
 };
 export const ExhibitorList = async (page, limit, data) => {
+  console.log(data, "datadatadatadatadatadatadatadatadatadata");
   const requestObj = {
     path: `api/exhibitor/list_exhibitor?page=${page}&limit=${limit}`,
     method: "POST",
@@ -333,7 +334,7 @@ export const CompanyList = async (page, limt, data) => {
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
-    postData: data || "",
+    postData: data ? data : {},
   };
   return invokeApi(requestObj);
 };

@@ -16,14 +16,14 @@ const EventDetailModal = ({ handleClose, selectedObject }) => {
   return (
     <>
       <div className="row">
-        <div className="d-flex justify-content-between align-items-baseline Divider py-2">
+        <div className="d-flex justify-content-between align-items-baseline py-2">
           <h2 className="h4 m-0">Event Details</h2>
           <IconButton className="Close_btn" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </div>
       </div>
-
+      <div className="Divider"></div>
       <form className="row">
         <div className="col-6">
           <TextField
