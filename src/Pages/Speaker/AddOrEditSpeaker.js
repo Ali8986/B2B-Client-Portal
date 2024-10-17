@@ -13,6 +13,11 @@ import { CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
+import SocialLinksField from "../../Components/GeneralComponents/SocialLinksInput";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import XIcon from "@mui/icons-material/X";
+import PinterestIcon from "@mui/icons-material/Pinterest";
 
 function AddEditSpeaker({ type }) {
   const navigate = useNavigate();
@@ -29,6 +34,12 @@ function AddEditSpeaker({ type }) {
     phone: "",
     bio: "",
     expertise: "",
+    social_links: [
+      { platform: "Facebook", url: "" },
+      { platform: "LinkedIn", url: "" },
+      { platform: "Twitter", url: "" },
+      { platform: "Pinterest", url: "" },
+    ],
     image: null,
   });
   const [loading, setLoading] = useState(false);
@@ -59,6 +70,7 @@ function AddEditSpeaker({ type }) {
       expertise: data.expertise,
       status: data.status,
       image: data.image,
+      social_links: data.social_links || formData.social_links,
     }));
     setPhoneNumber(data.phone || "");
   };
@@ -78,11 +90,19 @@ function AddEditSpeaker({ type }) {
     }
   };
 
+  const handleSocialLinkChange = (index, url) => {
+    const updatedLinks = [...formData.social_links];
+    updatedLinks[index].url = url; // Update the URL for the specific index
+    setFormData((prev) => ({ ...prev, social_links: updatedLinks }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const social_links = JSON.stringify(formData.social_links);
     const formattedFormData = {
       ...formData,
+      social_links,
       expertise: formData.expertise.toString(),
       phone: formData.phone,
     };
@@ -166,6 +186,8 @@ function AddEditSpeaker({ type }) {
               </div>
               <div className="col-6 d-flex flex-column justify-content-center">
                 <PhoneInput
+                  countryCodeEditable={false}
+                  autoSelectCountry={true}
                   dropdownClass="select-div2"
                   country="pk"
                   required={true}
@@ -239,7 +261,21 @@ function AddEditSpeaker({ type }) {
                 </div>
               </div>
               <div className="images_box px-0"></div>
-              <div className="col-12">
+              {/* ... (Social Links Fields) */}
+              {formData.social_links.map((link, index) => (
+                <div className="col-6 mt-3" key={index}>
+                  <SocialLinksField
+                    label={`${link.platform}`}
+                    variant="outlined"
+                    value={link.url}
+                    onChange={(e) =>
+                      handleSocialLinkChange(index, e.target.value)
+                    }
+                    fullWidth
+                  />
+                </div>
+              ))}{" "}
+              <div className="col-12 mt-2">
                 {type === EditingSpeaker && formData.bio === "" ? null : (
                   <div className="col-12 mt-2">
                     <TextField
@@ -252,7 +288,6 @@ function AddEditSpeaker({ type }) {
                       value={formData.bio}
                       onChange={handleInputChange}
                       placeholder="Enter your bio Here.."
-                      required
                     />
                   </div>
                 )}

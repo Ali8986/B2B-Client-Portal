@@ -203,8 +203,10 @@ function AddorEditCompany({ type }) {
             </div>
             <div className="col-6 d-flex flex-column justify-content-center my-2 Company_Phone_Input">
               <PhoneInput
+                countryCodeEditable={false}
                 dropdownClass="select-div2"
                 required={true}
+                autoSelectCountry={true}
                 country="pk"
                 value={phoneNumber}
                 onChange={handlePhoneChange}
@@ -214,11 +216,12 @@ function AddorEditCompany({ type }) {
             </div>
             {type === AddingCompany ? (
               <div className="col-6 my-2">
-                <FormControl sx={{ width: "100%" }} variant="outlined">
+                <FormControl sx={{ width: "100%" }} variant="outlined" required>
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
                   <OutlinedInput
+                    required
                     fullWidth
                     name="password"
                     id="outlined-adornment-password"

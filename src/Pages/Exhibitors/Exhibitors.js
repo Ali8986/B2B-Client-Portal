@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "./DeletingUser";
 import Chip from "@mui/material/Chip";
-import { DeletingExhibitor, ExhibitorList } from "../../DAL/Login/Login";
+import {
+  DeletingExhibitor,
+  ExhibitorList,
+  CompanyList,
+} from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import defaultimg from "../../Assets/Images/Default.jpg";
 import { s3baseUrl } from "../../config/config";
@@ -19,8 +23,14 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import SearhingExhibitor from "../../Components/Exhibitors/SearchExhibitor";
 import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import CustomDrawer from "../../Components/GeneralComponents/CustomDrawer";
+import ReactFilterChips from "react-filter-chips";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 function Exhibitors() {
+  const EMPTY_FILTER = {
+    status: "all",
+    company_id: "",
+  };
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -35,23 +45,31 @@ function Exhibitors() {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [valueForDeleting, setValueForDeleting] = useState(null);
-
-  const FetchExhibitorsList = async (page, rowsPerPage, savedSearchText) => {
+  const [searchCompanyData, setSearchCompanyData] = useState([]);
+  const [filterState, setFilterState] = useState(EMPTY_FILTER);
+  const [filterStateTem, setFilterStateTem] = useState(EMPTY_FILTER);
+  const [filterData, setSetFilterData] = useState(EMPTY_FILTER);
+  const [value, setValue] = useState(null);
+  const FetchExhibitorsList = async (
+    page,
+    rowsPerPage,
+    SearchUserOrFilterUser
+  ) => {
     console.log(
-      savedSearchText,
-      "savese savese savesesavese savesesavesesavesesavese"
+      SearchUserOrFilterUser,
+      "SearchUserOrFilterUserSearchUserOrFilterUserSearchUserOrFilterUser"
     );
-    const postData = {
-      search: savedSearchText === `${savedSearchText}` ? savedSearchText : "",
-    };
+    let postData = { ...SearchUserOrFilterUser };
+    if (postData.status === "all") {
+      delete postData.status;
+    }
+    if (!!postData.company_id) {
+      postData.company_id = postData?.company_id?._id;
+    }
+
     setLoading(true);
-    const response = await ExhibitorList(
-      page,
-      rowsPerPage,
-      typeof savedSearchText === "object" ? savedSearchText : postData
-    );
+    const response = await ExhibitorList(page, rowsPerPage, postData);
     if (response.code === 200) {
-      console.log("Exhibitors: response response response response", response);
       const { exhibitors, total_exhibitors, total_pages } = response;
       const mappedUsers = exhibitors.map((item) => ({
         ...item,
@@ -69,6 +87,16 @@ function Exhibitors() {
       setTotalCount(total_pages);
       setTotalPages(total_exhibitors);
       localStorage.setItem("rowsPerPage", totalCount);
+      const chipData = { ...SearchUserOrFilterUser };
+      if (!chipData.company_id) {
+        delete chipData.company_id;
+      }
+      if (chipData.search) {
+        delete chipData.search;
+      }
+      console.log("--------------------------------", chipData);
+      setFilterState(chipData);
+      setFilterStateTem(chipData);
       setLoading(false);
     } else {
       setLoading(false);
@@ -85,8 +113,80 @@ function Exhibitors() {
     setIsOpen(false);
   };
 
+  const fetchCompanyData = async (SearchForCompanyName) => {
+    const postData = {
+      search: SearchForCompanyName,
+    };
+    const response = await CompanyList(0, 10, postData);
+    if (response.code === 200) {
+      const company = response.companies.map((item, index) => {
+        return {
+          ...item,
+          chip_label: item.name,
+          chip_value: item.id,
+        };
+      });
+      setSearchCompanyData(company);
+    } else {
+      enqueueSnackbar("Failed to fetch companies", { variant: "error" });
+    }
+  };
+
+  const onDeleteChip = (data) => {
+    console.log(data, "datadatadatadatav");
+    localStorage.setItem("Chips", JSON.stringify(data));
+    setFilterState(data);
+    setFilterStateTem(data);
+    FetchExhibitorsList(page, rowsPerPage, data);
+  };
+
+  const onClear = () => {
+    localStorage.removeItem("Chips");
+    localStorage.removeItem("filter_Exhibitor_Data");
+    setFilterState(EMPTY_FILTER);
+    setFilterStateTem(EMPTY_FILTER);
+    FetchExhibitorsList(page, rowsPerPage, EMPTY_FILTER);
+  };
+
+  const handleStatusChange = (e) => {
+    setSetFilterData((prevData) => ({
+      ...prevData,
+      status: e.target.value || "",
+    }));
+  };
+
+  const RemoveFilterData = (e) => {
+    e.preventDefault();
+    setSetFilterData({
+      search: "",
+      status: "all",
+      company_id: "",
+    });
+    setValue(null);
+    setSetFilterData((prev) => {
+      return {
+        ...prev,
+        status: "all",
+      };
+    });
+    localStorage.removeItem("filter_Exhibitor_Data");
+    localStorage.removeItem("Chips");
+    setFilterState(EMPTY_FILTER);
+    setFilterStateTem(EMPTY_FILTER);
+    FetchExhibitorsList(page, rowsPerPage, EMPTY_FILTER);
+    setIsOpen(false);
+  };
+
   const handleOpenDrawer = () => {
     setIsOpen(true);
+  };
+
+  const handleCompanyNameChange = (event, newValue) => {
+    setValue(newValue);
+    setSetFilterData((prevData) => ({
+      ...prevData,
+      company_id: newValue,
+    }));
   };
 
   const handleRowsPerPageChange = (event) => {
@@ -95,13 +195,14 @@ function Exhibitors() {
     setPage(0);
     FetchExhibitorsList(0, newRowsPerPage);
   };
-  const searchFunction = async (e) => {
+
+  const searchFunction = (e) => {
     e.preventDefault();
-    localStorage.setItem("searchText_exhibitor_page", searchText);
-    // Reset to page 0 for a new search
     setPage(0);
-    // Fetch the search result, now for page 0
-    await FetchExhibitorsList(0, rowsPerPage, searchText);
+    setIsOpen(false);
+    localStorage.setItem("filter_Exhibitor_Data", JSON.stringify(filterData));
+    filterData.search = searchText;
+    FetchExhibitorsList(page, rowsPerPage, filterData);
   };
 
   const handleEdit = (value) => {
@@ -217,7 +318,7 @@ function Exhibitors() {
     },
     {
       id: "any",
-      label: "Booth",
+      label: "Exhibit Space",
       renderData: (row) => {
         return <div>{row.booth}</div>;
       },
@@ -273,22 +374,30 @@ function Exhibitors() {
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchExhibitorsList(page, rowsPerPage, `${savedSearchText}`);
-      console.log(
-        savedSearchText,
-        "savedSearchTextsavedSearchTextsavedSearchTextsavedSearchTextsavedSearchText"
-      );
+      FetchExhibitorsList(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
     } else if (FilterExhibitorData) {
       FetchExhibitorsList(page, rowsPerPage, FilterExhibitorData);
     } else {
-      FetchExhibitorsList(page, rowsPerPage);
+      FetchExhibitorsList(page, rowsPerPage, EMPTY_FILTER);
     }
   }, [page, rowsPerPage]);
 
+  useEffect(() => {
+    fetchCompanyData();
+  }, []);
+
+  useEffect(() => {
+    const savedFilterData = localStorage.getItem("Chips");
+    if (savedFilterData) {
+      const parsedFilterData = JSON.parse(savedFilterData);
+      setFilterState(parsedFilterData);
+    }
+  }, []);
+
   return (
-    <div className="row my-4 mx-3">
-      <div className="d-flex justify-content-between align-items-center my-4 ">
+    <div className="row mt-5 mb-0 mx-3">
+      <div className="d-flex justify-content-between align-items-center flex-wrap">
         <HeaderWithBackButton className="Layout-heading" title="Exhibitors" />
         <div>
           <Button
@@ -304,11 +413,23 @@ function Exhibitors() {
             variant="contained"
             size="medium"
             onClick={handleAddingMember}
-            className="Data-Adding-Btn mx-3"
+            className="Data-Adding-Btn mx-2"
           >
             ADD Exhibitor
           </Button>
         </div>
+      </div>
+      <div className="mb-4 mt-2 ms-2">
+        <ReactFilterChips
+          filterData={filterState}
+          tempState={filterStateTem}
+          emptyFilter={EMPTY_FILTER}
+          clearLabel="Clear All"
+          filterLabel="Filtered By:"
+          onDeleteChip={onDeleteChip}
+          onClear={onClear}
+          customIcon={<CloseRoundedIcon className="Filter_Chip_ICon" />}
+        />
       </div>
       <div className="Exhibitors_table">
         {loading ? (
@@ -375,8 +496,14 @@ function Exhibitors() {
         setIsOpen={closeDrawer}
         component={
           <SearhingExhibitor
-            setIsOpen={closeDrawer}
-            FetchExhibitorsList={FetchExhibitorsList}
+            searchCompanyData={searchCompanyData}
+            filterData={filterData}
+            value={value}
+            handleStatusChange={handleStatusChange}
+            searchFunction={searchFunction}
+            RemoveFilterData={RemoveFilterData}
+            handleCompanyNameChange={handleCompanyNameChange}
+            fetchCompanyData={fetchCompanyData}
           />
         }
       />

@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
-import { CompanyList, DeletingCompany } from "../../DAL/Login/Login";
+import {
+  CompanyList,
+  DeletingCompany,
+  S3ImageDeletion,
+} from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import defaultimg from "../../Assets/Images/Default.jpg";
 import { s3baseUrl } from "../../config/config";
@@ -108,6 +112,20 @@ function CompanyDetails() {
       });
       setTotalPages((prev) => prev - 1);
       setUsers(CompaniesAfterDeletion);
+      const keys = [
+        { Key: valueForDeleting.image.thumbnail_1 },
+        { Key: valueForDeleting.image.thumbnail_2 },
+      ];
+
+      const requestBody = {
+        path: keys,
+      };
+
+      const ImageDeletion = await S3ImageDeletion(requestBody);
+      if (ImageDeletion.code === 200) {
+      } else {
+        enqueueSnackbar(ImageDeletion.message, { variant: "error" });
+      }
       enqueueSnackbar(response.message, { variant: "success" });
     } else {
       enqueueSnackbar(response.message, { variant: "error" });

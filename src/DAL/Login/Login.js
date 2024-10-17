@@ -186,7 +186,6 @@ export const DeletingSpeaker = async (id) => {
   return invokeApi(requestObj);
 };
 export const ExhibitorList = async (page, limit, data) => {
-  console.log(data, "datadatadatadatadatadatadatadatadatadata");
   const requestObj = {
     path: `api/exhibitor/list_exhibitor?page=${page}&limit=${limit}`,
     method: "POST",
@@ -401,6 +400,18 @@ export const UpdateCompanyPassword = async (data, id) => {
   const requestObj = {
     path: `api/app_api/change_password_by_admin/${id}`,
     method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const S3ImageDeletion = async (data) => {
+  const requestObj = {
+    path: `api/app_api/delete_files_from_s3`,
+    method: "DELETE",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },

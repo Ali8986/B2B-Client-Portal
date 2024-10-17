@@ -5,13 +5,11 @@ import {
   CircularProgress,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
-import Autocomplete from "@mui/material/Autocomplete";
 import {
   AddingExhibitor,
   CompanyList,
@@ -21,17 +19,25 @@ import {
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "../../config/config";
 import PhoneInput from "react-phone-number-validation";
+import AutoComplete from "../../Components/GeneralComponents/AutoComplete";
+import SocialLinksField from "../../Components/GeneralComponents/SocialLinksInput";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import XIcon from "@mui/icons-material/X";
+import PinterestIcon from "@mui/icons-material/Pinterest";
 
 function EditOrAddExhibitor({ type }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [searchCompanyData, setSearchCompanyData] = useState([]);
   const locaion = useLocation();
   const { state } = locaion;
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [ProfileImage, setProfileImage] = useState(null);
   const { id } = useParams();
+  const [value, setValue] = useState(null);
+  const [searchCompanyData, setSearchCompanyData] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,7 +51,13 @@ function EditOrAddExhibitor({ type }) {
     },
     status: "Pending",
     image: null,
-    social_links: [], // Initialize social_links as an empty array
+    social_links: [
+      // Initialize as an array of objects
+      { platform: "LinkedIn", url: "" },
+      { platform: "Facebook", url: "" },
+      { platform: "Twitter", url: "" },
+      { platform: "Pinterest", url: "" },
+    ], // Initialize social_links as an empty array
   });
 
   const handleInputChange = (e) => {
@@ -69,7 +81,6 @@ function EditOrAddExhibitor({ type }) {
       image: data.image || null, // Set image to null if not present
       social_links: data.social_links || [], // Initialize social_links as an empty array
     }));
-
     setPhoneNumber(data.phone);
   };
 
@@ -78,7 +89,11 @@ function EditOrAddExhibitor({ type }) {
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
   };
 
-  const handleRender = (value, country) => {};
+  const handleSocialLinkChange = (index, url) => {
+    const updatedLinks = [...formData.social_links];
+    updatedLinks[index].url = url; // Update the URL for the specific index
+    setFormData((prev) => ({ ...prev, social_links: updatedLinks }));
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -90,6 +105,18 @@ function EditOrAddExhibitor({ type }) {
         image: file,
       }));
     }
+  };
+
+  const handleCompanyNameChange = (event, newValue) => {
+    setValue(newValue);
+    setFormData((prevData) => ({
+      ...prevData,
+      company: {
+        _id: newValue?._id,
+        name: newValue?.name,
+        website: newValue?.website,
+      },
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -107,6 +134,10 @@ function EditOrAddExhibitor({ type }) {
     formDataas.append("booth", formData.booth);
     formDataas.append("name", formData.name);
     formDataas.append("company", JSON.stringify(formData.company));
+
+    if (formData.social_links && formData.social_links.length) {
+      formDataas.append("social_links", JSON.stringify(formData.social_links));
+    }
 
     if (formData.image && formData.image instanceof File) {
       formDataas.append("image", formData.image);
@@ -126,19 +157,27 @@ function EditOrAddExhibitor({ type }) {
     setLoading(false);
   };
 
-  const getUserData = async () => {
-    const response = await CompanyList(0, 10, null);
+  const fetchCompanyData = async (SearchText) => {
+    const postData = {
+      search: SearchText,
+    };
+    const response = await CompanyList(0, 10, postData);
     if (response.code === 200) {
       setSearchCompanyData(response.companies);
     } else {
-      enqueueSnackbar("NO Hello", { variant: "error" });
+      enqueueSnackbar("Failed to fetch companies", { variant: "error" });
     }
+  };
+
+  const handleSearchInputChange = (event, newValue) => {
+    setSearchText(newValue);
   };
 
   const GetExhibitorDetails = async () => {
     const response = await ExhibitorDetails(id);
     if (response.code === 200) {
       handleFormateData(response.exhibitor);
+      setValue(response.exhibitor.company);
       setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -147,10 +186,34 @@ function EditOrAddExhibitor({ type }) {
   useEffect(() => {
     if (state) {
       handleFormateData(state.user);
+      const company = state.user.company;
+      setValue(company);
+      console.log(
+        state.user,
+        "state.userstate.userstate.userstate.userstate.userstate.userstate.user"
+      );
     } else if (type === EditingExhibitor) {
       GetExhibitorDetails();
     }
   }, [type, state]);
+
+  useEffect(() => {
+    fetchCompanyData();
+  }, []);
+
+  useEffect(() => {
+    if (searchText) {
+      const timeoutId = setTimeout(() => {
+        fetchCompanyData(searchText);
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
+    } else {
+      formData.company.website = "";
+      fetchCompanyData();
+      setSearchCompanyData([]);
+    }
+  }, [searchText]);
 
   return (
     <div className="px-3 px-md-4 py-1 py-md-3">
@@ -180,7 +243,6 @@ function EditOrAddExhibitor({ type }) {
               onChange={handleInputChange}
             />
           </div>
-
           <div className="col-6 d-flex flex-column justify-content-center">
             <PhoneInput
               dropdownClass="select-div2"
@@ -191,12 +253,12 @@ function EditOrAddExhibitor({ type }) {
               onChange={handlePhoneChange}
               setValue={setPhoneNumber}
               enableSearch={true}
+              autoSelectCountry={true}
             />
           </div>
-
           <div className="col-6">
             <FormInput
-              label="Display Space"
+              label="Exhibit Space"
               name="booth"
               type="text"
               value={formData.booth}
@@ -205,7 +267,7 @@ function EditOrAddExhibitor({ type }) {
           </div>
           <div className="col-12 col-lg-6">
             <FormInput
-              label="Expertise"
+              label="Products and Services"
               name="products_services"
               type="text"
               value={formData.products_services}
@@ -213,37 +275,13 @@ function EditOrAddExhibitor({ type }) {
             />
           </div>
           <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
-            <Autocomplete
-              id="company_name"
-              value={formData.company}
-              getOptionLabel={(searchCompanyData) =>
-                `${searchCompanyData.name}`
-              }
-              options={searchCompanyData}
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              noOptionsText={"Not a company name"}
-              disablePortal
-              sx={{ width: "100%" }}
-              renderInput={(params) => (
-                <TextField {...params} label="Search Company Name" />
-              )}
-              onFocus={getUserData} // Trigger API when focused
-              onChange={(event, newValue) => {
-                setFormData((prevData) => ({
-                  ...prevData,
-                  company: {
-                    _id: newValue?._id,
-                    name: newValue?.name,
-                    website: newValue?.website,
-                  } || {
-                    _id: "",
-                    name: "",
-                    website: "",
-                  }, // Handle case when no company is selected
-                }));
-              }}
+            <AutoComplete
+              value={value}
+              searchCompanyData={searchCompanyData}
+              handleCompanyNameChange={handleCompanyNameChange}
+              onInputChange={handleSearchInputChange}
+              DataNotFound="Not a company name"
+              label="Select Company"
             />
           </div>
           <div className="col-12 col-lg-6">
@@ -263,7 +301,6 @@ function EditOrAddExhibitor({ type }) {
           </div>
           <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
             <Select
-              required
               name="status"
               value={formData.status ?? true}
               onChange={handleInputChange}
@@ -315,7 +352,19 @@ function EditOrAddExhibitor({ type }) {
               </label>
             </div>
           </div>
-          <div className=" border-bottom"></div>
+          <div className="images_box"></div>
+          {/* ... (Social Links Fields) */}
+          {formData.social_links.map((link, index) => (
+            <div className="col-6 mt-3" key={index}>
+              <SocialLinksField
+                label={`${link.platform}.com/`}
+                variant="outlined"
+                value={link.url}
+                onChange={(e) => handleSocialLinkChange(index, e.target.value)}
+                fullWidth
+              />
+            </div>
+          ))}{" "}
           <div className="col-12 d-flex flex-wrap justify-content-end mt-4">
             <Button
               type="submit"

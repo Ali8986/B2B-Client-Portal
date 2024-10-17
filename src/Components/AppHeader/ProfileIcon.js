@@ -78,6 +78,7 @@ export default function ProfileIcon() {
       if (!is_path_includes("/exhibitors")) {
         localStorage.removeItem("searchText_exhibitor_page");
         localStorage.removeItem("filter_Exhibitor_Data");
+        localStorage.removeItem("Chips");
       }
       if (!is_path_includes("/events")) {
         localStorage.removeItem("searchText_events_page");
