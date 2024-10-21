@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@iconify/react": "^5.0.2",
     "env-cmd": "^10.1.0"
   }
 }

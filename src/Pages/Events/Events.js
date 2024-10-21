@@ -38,13 +38,6 @@ function Exhibitors() {
         ...item,
         name: item.name || "Unknown",
         status: item.status,
-        is_show_celendar: false,
-        link: {
-          to: "https://www.google.com/",
-          target: "_blank",
-          show_text: "Preview",
-        },
-        html: "<div>Hello </div>",
       }));
       setUsers(mappedUsers);
       setTotalCount(total_pages);

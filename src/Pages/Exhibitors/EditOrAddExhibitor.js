@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   CircularProgress,
+  FormControl,
   MenuItem,
   Select,
 } from "@mui/material";
@@ -25,8 +26,13 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import XIcon from "@mui/icons-material/X";
 import PinterestIcon from "@mui/icons-material/Pinterest";
-
 function EditOrAddExhibitor({ type }) {
+  const platformIcons = {
+    Facebook: FacebookIcon,
+    LinkedIn: LinkedInIcon,
+    Twitter: XIcon,
+    Pinterest: PinterestIcon,
+  };
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -122,6 +128,13 @@ function EditOrAddExhibitor({ type }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // formData.social_links.map((social_link) => {
+    //   if (social_link.url === "") {
+    //     delete social_link.url;
+    //     delete social_link.platform;
+    //   }
+    // });
 
     const formDataas = new FormData();
     formDataas.append("email", formData.email);
@@ -300,19 +313,22 @@ function EditOrAddExhibitor({ type }) {
             />
           </div>
           <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
-            <Select
-              name="status"
-              value={formData.status ?? true}
-              onChange={handleInputChange}
-            >
-              <MenuItem value="Pending" selected>
-                Pending
-              </MenuItem>
-              <MenuItem value="Confirmed" selected>
-                Confirmed
-              </MenuItem>
-              <MenuItem value="Cancelled">Cancelled</MenuItem>
-            </Select>
+            <FormControl required={true}>
+              <Select
+                required={true}
+                name="status"
+                value={formData.status ?? true}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="Pending" selected>
+                  Pending
+                </MenuItem>
+                <MenuItem value="Confirmed" selected>
+                  Confirmed
+                </MenuItem>
+                <MenuItem value="Cancelled">Cancelled</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <div className="col-12 flex-wrap d-flex justify-content-between align-items-center my-3">
             <div className="col-12 col-lg-4 pb-3 pb-lg-0">
@@ -353,18 +369,18 @@ function EditOrAddExhibitor({ type }) {
             </div>
           </div>
           <div className="images_box"></div>
-          {/* ... (Social Links Fields) */}
           {formData.social_links.map((link, index) => (
             <div className="col-6 mt-3" key={index}>
               <SocialLinksField
-                label={`${link.platform}.com/`}
+                label={`${link.platform}`}
                 variant="outlined"
                 value={link.url}
+                icon={platformIcons[link.platform]}
                 onChange={(e) => handleSocialLinkChange(index, e.target.value)}
                 fullWidth
               />
             </div>
-          ))}{" "}
+          ))}
           <div className="col-12 d-flex flex-wrap justify-content-end mt-4">
             <Button
               type="submit"

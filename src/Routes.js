@@ -11,11 +11,15 @@ import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
+import TemplateConfiguration from "./Pages/Manage_Website/Template_Configuration.js";
+import AddOrEditTemplate from "./Pages/Manage_Website/AddOrUpdate_Template.js";
 import {
   AddingCompany,
   AddingEvent,
   AddingExhibitor,
   AddingSpeaker,
+  Creating_Template,
+  Editing_Template,
   EditingCompany,
   EditingEvent,
   EditingExhibitor,
@@ -84,6 +88,21 @@ const Router = () => {
           path: "/company/editcompany/:id",
           exact: true,
           element: <AddorEditCompany type={EditingCompany} />,
+        },
+        {
+          path: "/template-configuration",
+          exact: true,
+          element: <TemplateConfiguration />,
+        },
+        {
+          path: "/template-configuration/add-template",
+          exact: true,
+          element: <AddOrEditTemplate type={Creating_Template} />,
+        },
+        {
+          path: "/template-configuration/edit-template/:id",
+          exact: true,
+          element: <AddOrEditTemplate type={Editing_Template} />,
         },
       ],
     },

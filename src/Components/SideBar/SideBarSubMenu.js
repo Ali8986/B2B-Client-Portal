@@ -29,9 +29,9 @@ const SidebarSubMenu = ({
           <ListItemIcon>{option.icon}</ListItemIcon>
           <ListItemText primary={option.title} />
           {inboxOpen ? (
-            <ExpandMoreIcon />
-          ) : (
             <ExpandMoreIcon style={{ transform: "rotate(180deg)" }} />
+          ) : (
+            <ExpandMoreIcon style={{ transform: "rotate(0deg)" }} />
           )}
           {/* <ExpandMoreIcon /> */}
         </ListItemButton>

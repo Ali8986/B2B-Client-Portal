@@ -419,3 +419,63 @@ export const S3ImageDeletion = async (data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const Template_Configuration_List = async (page, limt, data) => {
+  console.log("data data data data data data data data data", data);
+  const requestObj = {
+    path: `api/template_configuration/list_template_configuration?page=${page}&limit=${limt}&search=${
+      data ? data : ""
+    }`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Creating_Template = async (data) => {
+  const requestObj = {
+    path: `api/template_configuration/add_template_configuration`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Editing_Template = async (id, data) => {
+  console.log(data, "Template created successfully");
+  const requestObj = {
+    path: `api/template_configuration/update_template_configuration/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Template_Configuration_Details = async (id) => {
+  const requestObj = {
+    path: `api/template_configuration/get_template_configuration/${id}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+export const Deleting_Template_Configuration = async (id) => {
+  const requestObj = {
+    path: `api/template_configuration/delete_template_configuration/${id}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};

@@ -594,3 +594,43 @@ body {
 .Snackbar_Close_Btn svg {
     font-size: 16px !important;
 } */
+
+.placeholder-text span {
+    color: #040405 !important;
+}
+
+.adding_template_attributes svg, .removing_template_attributes svg {
+    font-size: 25px !important;
+}
+
+.adding_template_attributes {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+
+}
+
+.adding_template_attributes:hover {
+    background-color: none !important;
+}
+
+.removing_template_attributes {
+    position: absolute !important;
+    top: 10px !important;
+    right: 46px !important;
+
+}
+
+.removing_template_attributes svg {
+    color: #d32f2f !important;
+}
+
+.background-color {
+    background-color: #cccccc26 !important;
+}
+
+.main_Template_Congif {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    position: relative !important;
+    padding: 70px !important;
+}

@@ -86,6 +86,9 @@ export default function ProfileIcon() {
       if (!is_path_includes("/company")) {
         localStorage.removeItem("searchText_company_page");
       }
+      if (!is_path_includes("/template-configuration")) {
+        localStorage.removeItem("searchText_Template_Config_page");
+      }
     }, 1000);
   }, [pathname]);
 

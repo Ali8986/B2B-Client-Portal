@@ -20,6 +20,12 @@ import XIcon from "@mui/icons-material/X";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 
 function AddEditSpeaker({ type }) {
+  const platformIcons = {
+    Facebook: FacebookIcon,
+    LinkedIn: LinkedInIcon,
+    Twitter: XIcon,
+    Pinterest: PinterestIcon,
+  };
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -33,6 +39,7 @@ function AddEditSpeaker({ type }) {
     email: "",
     phone: "",
     bio: "",
+    status: true,
     expertise: "",
     social_links: [
       { platform: "Facebook", url: "" },
@@ -99,6 +106,11 @@ function AddEditSpeaker({ type }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    formData.social_links.map((social_link) => {
+      if (social_link.url === "") {
+        delete social_link.url;
+      }
+    });
     const social_links = JSON.stringify(formData.social_links);
     const formattedFormData = {
       ...formData,
@@ -261,13 +273,13 @@ function AddEditSpeaker({ type }) {
                 </div>
               </div>
               <div className="images_box px-0"></div>
-              {/* ... (Social Links Fields) */}
               {formData.social_links.map((link, index) => (
                 <div className="col-6 mt-3" key={index}>
                   <SocialLinksField
                     label={`${link.platform}`}
                     variant="outlined"
                     value={link.url}
+                    icon={platformIcons[link.platform]}
                     onChange={(e) =>
                       handleSocialLinkChange(index, e.target.value)
                     }

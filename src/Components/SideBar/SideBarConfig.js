@@ -1,3 +1,4 @@
+import { Children } from "react";
 import CompanyDetails from "../../Pages/company/Companydetails";
 import {
   DashboardCustomizeOutlined,
@@ -5,6 +6,7 @@ import {
   InterpreterModeOutlinedIcon,
   CalendarMonthOutlinedIcon,
   BusinessIcon,
+  CalendarMonthIcon,
 } from "../GeneralComponents/SideBarIcons";
 
 export const options = [
@@ -32,5 +34,16 @@ export const options = [
     title: "Company",
     path: "company",
     icon: <BusinessIcon />,
+  },
+  {
+    title: "Manage Website",
+    icon: <CalendarMonthIcon />,
+    children: [
+      {
+        title: "Template Configuration",
+        path: "template-configuration",
+        icon: <CalendarMonthIcon />,
+      },
+    ],
   },
 ];

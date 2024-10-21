@@ -4,25 +4,23 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
-import { DeletingSpeaker, SpeakersList } from "../../DAL/Login/Login";
+import {
+  Deleting_Template_Configuration,
+  Template_Configuration_List,
+} from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
-import defaultimg from "../../Assets/Images/Default.jpg";
-import { s3baseUrl } from "../../config/config";
-import { Avatar } from "@mui/material";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
-import DetailsModal from "../../Components/GeneralComponents/detailsModal";
+// import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import Tooltip from "@mui/material/Tooltip";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
 
-function Speaker() {
+function TemplateConfiguration() {
   const { enqueueSnackbar } = useSnackbar();
-  const [showDetails, setShowDetails] = useState(false);
+  // const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedObject, setSelectedObject] = useState(null);
-  const [users, setUsers] = useState([]);
+  // const [selectedObject, setSelectedObject] = useState(null);
+  const [Templates, setTemplates] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -31,22 +29,23 @@ function Speaker() {
   const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
   const navigate = useNavigate();
-  const FetchSpeakerList = async (page, rowsPerPage, savedSearchText) => {
+  const FetchTemplateConfig = async (page, rowsPerPage, savedSearchText) => {
     setLoading(true);
-    let postData = {
-      search: savedSearchText,
-    };
-    const response = await SpeakersList(page, rowsPerPage, postData);
+    const response = await Template_Configuration_List(
+      page,
+      rowsPerPage,
+      savedSearchText
+    );
     if (response.code === 200) {
-      const { speakers, total_speakers, total_pages } = response;
-      const mappedUsers = speakers.map((item) => ({
+      const { template_configuration, total_count, total_pages } = response;
+      const mappedUsers = template_configuration.map((item) => ({
         ...item,
         name: `${item.first_name} ${item.last_name}` || "Unknown",
-        status: item.status,
+        status: item.template_status,
       }));
-      setUsers(mappedUsers);
+      setTemplates(mappedUsers);
       setTotalCount(total_pages);
-      setTotalPages(total_speakers);
+      setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -55,17 +54,19 @@ function Speaker() {
   };
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    FetchSpeakerList(newPage, rowsPerPage);
+    FetchTemplateConfig(newPage, rowsPerPage);
   };
 
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    FetchSpeakerList(0, newRowsPerPage);
+    FetchTemplateConfig(0, newRowsPerPage);
   };
   const handleEdit = (value) => {
-    navigate(`/speakers/edit/${value._id}`, { state: value });
+    navigate(`/template-configuration/edit-template/${value._id}`, {
+      state: value,
+    });
   };
 
   const handleDelete = (value) => {
@@ -75,15 +76,17 @@ function Speaker() {
 
   const onConfirm = async (e) => {
     e.preventDefault();
-    const response = await DeletingSpeaker(valueForDeleting._id);
+    const response = await Deleting_Template_Configuration(
+      valueForDeleting._id
+    );
     if (response.code === 200) {
-      const SpeakersAfterDeletion = users.filter((user) => {
+      const TemplatesAfterDeletion = Templates.filter((user) => {
         if (user._id !== valueForDeleting._id) {
           return (user.name = user.name);
         }
       });
       setTotalPages((prev) => prev - 1);
-      setUsers(SpeakersAfterDeletion);
+      setTemplates(TemplatesAfterDeletion);
       enqueueSnackbar(response.message, { variant: "success" });
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -94,76 +97,30 @@ function Speaker() {
   const onCancel = () => {
     setModelOpen(false);
   };
-  const handleDetails = (row) => {
-    const selectedObj = users.find((item) => item._id === row._id);
-    setSelectedObject(selectedObj);
-    setShowDetails(true);
-  };
+  // const handleDetails = (row) => {
+  //   const selectedObj = Templates.find((item) => item._id === row._id);
+  //   setSelectedObject(selectedObj);
+  //   setShowDetails(true);
+  // };
 
   const handleAddingMember = () => {
-    navigate("/speakers/addspeaker");
+    navigate("/template-configuration/add-template");
   };
 
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
-      id: "name",
-      label: "Profile",
-      renderData: (row, index) => {
-        return (
-          <div key={index} className="d-flex align-items-center">
-            <div className="me-2">
-              <Avatar
-                className="img-fluid"
-                src={
-                  row.image && row.image.thumbnail_1
-                    ? s3baseUrl + row.image.thumbnail_1
-                    : defaultimg
-                }
-                style={{
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  width: "50px",
-                  height: "50px",
-                  maxWidth: "50px",
-                  maxHeight: "50px",
-                }}
-              />
-            </div>
-          </div>
-        );
-      },
-    },
-    {
       id: "any",
-      label: "Name",
+      label: "Template Name",
       className: "cursor-pointer",
       renderData: (row, index) => {
-        return (
-          <Tooltip key={index} title="View Details" arrow>
-            <span onClick={() => handleDetails(row)}>{row.name}</span>
-          </Tooltip>
-        );
+        return <span>{row.template_name}</span>;
       },
     },
     {
-      id: "phone",
-      label: "Contact Number",
-      type: "phone",
-    },
-    {
-      id: "email",
-      label: "Email",
-      type: "email",
-    },
-
-    {
-      id: "expertise",
-      label: "Expertise",
-      renderData: (row) =>
-        row.expertise.map((row, index) => {
-          return <div key={index}>{row}</div>;
-        }),
+      id: "page_component_name",
+      label: "Template Type",
+      type: "page_component_name",
     },
     {
       id: "status",
@@ -182,61 +139,62 @@ function Speaker() {
       icon: <DeleteForeverIcon className="Delete-Icon" />,
       handleClick: handleDelete,
     },
-    {
-      label: "View Details",
-      icon: <ContactPageIcon />,
-      handleClick: handleDetails,
-    },
   ];
   const searchFunction = async (e) => {
     e.preventDefault();
-    localStorage.setItem("searchText_speaker_page", searchText);
+    localStorage.setItem("searchText_Template_Config_page", searchText);
     setPage(0);
-    await FetchSpeakerList(0, rowsPerPage, searchText);
-  };
-  const showSpeakerDetailsModal = (e) => {
-    e.preventDefault();
-    setShowDetails(true);
-  };
-  const hideSpeakerDetailsModal = (e) => {
-    e.preventDefault();
-    setShowDetails(false);
-    setSelectedObject(null);
+    await FetchTemplateConfig(0, rowsPerPage, searchText);
   };
 
+  // const showSpeakerDetailsModal = (e) => {
+  //   e.preventDefault();
+  //   setShowDetails(true);
+  // };
+  // const hideSpeakerDetailsModal = (e) => {
+  //   e.preventDefault();
+  //   setShowDetails(false);
+  //   setSelectedObject(null);
+  // };
+
   useEffect(() => {
-    const savedSearchText = localStorage.getItem("searchText_speaker_page");
+    const savedSearchText = localStorage.getItem(
+      "searchText_Template_Config_page"
+    );
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchSpeakerList(page, rowsPerPage, savedSearchText);
+      FetchTemplateConfig(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
     } else {
-      FetchSpeakerList(page, rowsPerPage);
+      FetchTemplateConfig(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
 
   return (
     <div className="row my-4 mx-3">
       <div className="d-flex justify-content-between align-items-center my-4 ">
-        <HeaderWithBackButton className="Layout-heading" title="Speakers" />
+        <HeaderWithBackButton
+          className="Layout-heading"
+          title="Template Configuration"
+        />
         <Button
           variant="contained"
           size="medium"
           onClick={handleAddingMember}
           className="Data-Adding-Btn"
         >
-          ADD Speaker
+          Create Template
         </Button>
       </div>
-      <div className="Speakers_Table">
+      <div className="Template_Configuration">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
             <CircularProgress />
           </div>
         ) : (
           <ReactTable
-            data={users}
+            data={Templates}
             TABLE_HEAD={TABLE_HEAD}
             MENU_OPTIONS={Menu_Options}
             custom_pagination={{
@@ -265,7 +223,7 @@ function Speaker() {
           />
         )}
       </div>
-      <DetailsModal
+      {/* <DetailsModal
         open={showDetails}
         handleClose={hideSpeakerDetailsModal}
         component={
@@ -275,7 +233,7 @@ function Speaker() {
             selectedObject={selectedObject}
           />
         }
-      />
+      /> */}
       <DeletingModal
         className="Deleting-modal"
         open={modelOpen}
@@ -291,4 +249,4 @@ function Speaker() {
   );
 }
 
-export default Speaker;
+export default TemplateConfiguration;
