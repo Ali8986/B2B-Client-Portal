@@ -421,7 +421,6 @@ export const S3ImageDeletion = async (data) => {
 };
 
 export const Template_Configuration_List = async (page, limt, data) => {
-  console.log("data data data data data data data data data", data);
   const requestObj = {
     path: `api/template_configuration/list_template_configuration?page=${page}&limit=${limt}&search=${
       data ? data : ""
@@ -469,10 +468,69 @@ export const Template_Configuration_Details = async (id) => {
   };
   return invokeApi(requestObj);
 };
+
 export const Deleting_Template_Configuration = async (id) => {
   const requestObj = {
     path: `api/template_configuration/delete_template_configuration/${id}`,
     method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Module_Configuration_List = async (page, limt, data) => {
+  const requestObj = {
+    path: `api/module_configuration/list_module_configuration_info?page=${page}&limit=${limt}`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
+  };
+  return invokeApi(requestObj);
+};
+
+export const Deleting_Module_Configuration = async (slug) => {
+  const requestObj = {
+    path: `api/module_configuration/delete_module_configuration_info/${slug}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Creating_Module = async (data) => {
+  const requestObj = {
+    path: `api/module_configuration/add_module_configuration_info`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Editing_Module = async (slug, data) => {
+  const requestObj = {
+    path: `api/module_configuration/update_module_configuration_info/${slug}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Module_Configuration_Details = async (slug) => {
+  const requestObj = {
+    path: `api/module_configuration/get_module_configuration_info/${slug}`,
+    method: "GET",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },

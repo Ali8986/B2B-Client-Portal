@@ -18,7 +18,9 @@ import {
   AddingEvent,
   AddingExhibitor,
   AddingSpeaker,
+  Creating_Module,
   Creating_Template,
+  Editing_Module,
   Editing_Template,
   EditingCompany,
   EditingEvent,
@@ -27,6 +29,8 @@ import {
 } from "./DAL/Login/Login";
 import AddorEditCompany from "./Pages/company/AddOrEditCompany";
 import CompanyDetails from "./Pages/company/Companydetails";
+import ModuleConfiguration from "./Pages/Manage_Website/Module_Configuration.js";
+import AddOrUpdateModule from "./Pages/Manage_Website/AddorUpdate_Module.js";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -104,8 +108,24 @@ const Router = () => {
           exact: true,
           element: <AddOrEditTemplate type={Editing_Template} />,
         },
+        {
+          path: "/module-configuration",
+          exact: true,
+          element: <ModuleConfiguration />,
+        },
+        {
+          path: "/module-configuration/add-module",
+          exact: true,
+          element: <AddOrUpdateModule type={Creating_Module} />,
+        },
+        {
+          path: "/module-configuration/edit-module/:id",
+          exact: true,
+          element: <AddOrUpdateModule type={Editing_Module} />,
+        },
       ],
     },
+
     {
       path: "*",
       element: <ErrorPage />,

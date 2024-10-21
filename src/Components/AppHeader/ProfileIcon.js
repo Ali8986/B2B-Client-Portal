@@ -87,7 +87,13 @@ export default function ProfileIcon() {
         localStorage.removeItem("searchText_company_page");
       }
       if (!is_path_includes("/template-configuration")) {
+        localStorage.setItem("inboxOpen", JSON.stringify(true));
+
         localStorage.removeItem("searchText_Template_Config_page");
+      }
+      if (!is_path_includes("/module-configuration")) {
+        localStorage.setItem("inboxOpen", JSON.stringify(true));
+        localStorage.removeItem("searchText_Module_Config_page");
       }
     }, 1000);
   }, [pathname]);

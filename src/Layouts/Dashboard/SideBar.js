@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Drawer, Divider, List } from "@mui/material";
 import SearchAppBar from "../../Components/GeneralComponents/searchBar";
 import Logo from "../../Components/SideBar/SideBarLogo";
@@ -12,7 +12,10 @@ const AppSidebar = ({
   mobileOpen,
   handleDrawerClose,
 }) => {
-  const [inboxOpen, setInboxopen] = useState(true);
+  const [inboxOpen, setInboxopen] = useState(() => {
+    const storedValue = localStorage.getItem("inboxOpen");
+    return storedValue ? JSON.parse(storedValue) : true;
+  });
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const handleSearchChange = (event) => {
@@ -40,11 +43,9 @@ const AppSidebar = ({
     setFilteredResults(results);
   };
   const handleInboxOpen = () => {
-    if (inboxOpen === true) {
-      setInboxopen(false);
-    } else {
-      setInboxopen(true);
-    }
+    const newInboxOpen = !inboxOpen;
+    setInboxopen(newInboxOpen);
+    localStorage.setItem("inboxOpen", JSON.stringify(newInboxOpen));
   };
   const handleMobileViewChange = () => {
     if (mobileOpen) handleDrawerClose();
@@ -68,7 +69,7 @@ const AppSidebar = ({
                 <SidebarSubMenu
                   key={option.title}
                   option={option}
-                  inboxOpen={!inboxOpen}
+                  inboxOpen={inboxOpen}
                   handleInboxOpen={handleInboxOpen}
                   handleMobileViewChange={handleMobileViewChange}
                 />
@@ -105,7 +106,12 @@ const AppSidebar = ({
       </>
     </>
   );
-
+  useEffect(() => {
+    const storedInboxOpen = localStorage.getItem("inboxOpen");
+    if (storedInboxOpen !== null) {
+      setInboxopen(JSON.parse(storedInboxOpen));
+    }
+  }, []);
   return (
     <div
       className="drawer-container"

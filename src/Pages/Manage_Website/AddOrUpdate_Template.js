@@ -33,17 +33,6 @@ function AddOrEditTemplate({ type }) {
     ".PNG",
     ".WEBP",
   ];
-  const handleExtensionChange = (event, index) => {
-    const { value } = event.target;
-    const updatedAttributes = [...TemplateData.template_attributes_info];
-    updatedAttributes[index].image_extension = value;
-
-    // Update TemplateData state
-    setTemplateData((prev) => ({
-      ...prev,
-      template_attributes_info: updatedAttributes,
-    }));
-  };
 
   const Template = {
     template_name: "",
@@ -63,18 +52,43 @@ function AddOrEditTemplate({ type }) {
     ],
   };
 
+  const [TemplateData, setTemplateData] = useState(Template);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const location = useLocation();
   const { state } = location;
   const { id } = useParams();
 
-  const [TemplateData, setTemplateData] = useState(Template);
-  const [loading, setLoading] = useState(false);
+  const handleExtensionChange = (event, index) => {
+    const { value } = event.target;
+    const updatedAttributes = [...TemplateData.template_attributes_info];
+    updatedAttributes[index].image_extension = value;
+    // Update TemplateData state
+    setTemplateData((prev) => ({
+      ...prev,
+      template_attributes_info: updatedAttributes,
+    }));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setTemplateData((prev) => ({ ...prev, [name]: value }));
+    if (name === "page_component_name") {
+      const pageComponentName = value
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9\-]/g, "");
+      setTemplateData((prev) => ({
+        ...prev,
+        page_component_name: pageComponentName,
+      }));
+    } else {
+      setTemplateData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleAttributeChange = (index, field, value) => {
@@ -83,9 +97,7 @@ function AddOrEditTemplate({ type }) {
       const dbName = value.toLowerCase().replace(/\s+/g, "_");
       updatedAttributes[index]["attribute_db_name"] = dbName;
     }
-
     updatedAttributes[index][field] = value;
-
     if (field === "attribute_type" && value === "file") {
       updatedAttributes[index].image_extension = [...imageExtensions];
     }
@@ -113,6 +125,7 @@ function AddOrEditTemplate({ type }) {
       ],
     }));
   };
+
   const handleRemovingAttributes = (e, index) => {
     e.preventDefault();
     TemplateData.template_attributes_info.splice(index, 1);
@@ -124,7 +137,9 @@ function AddOrEditTemplate({ type }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true);
+
     if (TemplateData.template_attributes_info) {
       TemplateData.template_attributes_info.map((value) => {
         if (value._id) {
@@ -132,15 +147,14 @@ function AddOrEditTemplate({ type }) {
         }
       });
     }
+
     const Template_Config_Data = {
       template_name: TemplateData.template_name,
       template_status: TemplateData.template_status,
       page_component_name: TemplateData.page_component_name,
       template_attributes_info: TemplateData.template_attributes_info,
     };
-    setLoading(true);
 
-    console.log(Template_Config_Data);
     const response =
       type === Editing_Template
         ? await Editing_Template(id, Template_Config_Data)
@@ -152,6 +166,7 @@ function AddOrEditTemplate({ type }) {
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
+
     setLoading(false);
   };
 
@@ -167,6 +182,7 @@ function AddOrEditTemplate({ type }) {
 
   const Get_Template_Details = async () => {
     const response = await Template_Configuration_Details(id);
+
     if (response.code === 200) {
       handleFormateData(response.template_configuration);
     } else {
