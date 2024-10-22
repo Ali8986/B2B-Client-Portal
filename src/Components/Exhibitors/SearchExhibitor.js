@@ -35,13 +35,13 @@ const SearchExhibitor = ({
     <form className="row" onSubmit={searchFunction}>
       <div className="col-12 mt-4">
         <AutoComplete
+          isMultiple={false}
           value={value}
           searchCompanyData={searchCompanyData}
           handleCompanyNameChange={handleCompanyNameChange}
           onInputChange={handleSearchInputChange}
           DataNotFound="Not a company name"
           label="Select Company"
-          isMultiple={"multiple"}
         />
       </div>
       <div className="col-12 mt-3">

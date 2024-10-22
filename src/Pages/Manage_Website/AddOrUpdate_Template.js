@@ -209,7 +209,9 @@ function AddOrEditTemplate({ type }) {
           <form onSubmit={handleSubmit}>
             <div className="row p-0 p-lg-3 mt-5 mt-md-2">
               <HeaderWithBackButton
-                title={type === "Edit" ? "Edit Template" : "Add Template"}
+                title={
+                  type === Editing_Template ? "Edit Template" : "Add Template"
+                }
                 path="/template-configuration"
               />
               <div className="col-6">
@@ -244,11 +246,11 @@ function AddOrEditTemplate({ type }) {
                 </Select>
               </div>
               <div className="mt-3 pt-2">
-                <h2 className="mb-0 h4">Template Attributes Info</h2>
+                <h2 className="mb-0 h4">Template Attributes</h2>
               </div>
               {TemplateData.template_attributes_info.map((Attribute, index) => {
                 return (
-                  <div className="mt-3  mx-0" key={index}>
+                  <div className="mt-3 mx-0" key={index}>
                     <div className="col-12 background-color mx-0 rounded-4 main_Template_Congif">
                       <div className="row">
                         <div className="col-12">
@@ -306,7 +308,6 @@ function AddOrEditTemplate({ type }) {
                                     e.target.value
                                   )
                                 }
-                                required
                               />
                             </div>
                             <div className="col-6 mt-2">
@@ -321,7 +322,6 @@ function AddOrEditTemplate({ type }) {
                                     e.target.value
                                   )
                                 }
-                                required
                               />
                             </div>
                             <div className="col-6 mt-3">

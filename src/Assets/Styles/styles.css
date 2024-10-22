@@ -634,3 +634,9 @@ body {
     position: relative !important;
     padding: 70px !important;
 }
+
+.main_Module_Congif {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    position: relative !important;
+    padding: 30px !important;
+}

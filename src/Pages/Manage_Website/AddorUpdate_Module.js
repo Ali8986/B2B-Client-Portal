@@ -49,7 +49,7 @@ function AddOrUpdateModule({ type }) {
         required: true,
         attribute_db_name: "",
         attribute_db_type: "string",
-        is_access: true,
+        // is_access: true,
       },
     ],
   };
@@ -108,7 +108,7 @@ function AddOrUpdateModule({ type }) {
       attribute_label: "",
       image_extension: [...imageExtensions],
       required: true,
-      is_access: true,
+      // is_access: true,
       attribute_db_name: "",
       attribute_db_type: "string",
     };
@@ -245,7 +245,7 @@ function AddOrUpdateModule({ type }) {
                 </Select>
               </div>
               <div className="mt-3 pt-2">
-                <h2 className="mb-0 h4">Module Attributes Info</h2>
+                <h2 className="mb-0 h4">Module Attributes</h2>
               </div>
               {ModuleData.module_configuration_attributes_info.map(
                 (Attribute, index) => {
@@ -307,7 +307,6 @@ function AddOrUpdateModule({ type }) {
                                       e.target.value
                                     )
                                   }
-                                  required
                                 />
                               </div>
                               <div className="col-6 mt-2">
@@ -322,7 +321,6 @@ function AddOrUpdateModule({ type }) {
                                       e.target.value
                                     )
                                   }
-                                  required
                                 />
                               </div>
                               <div className="col-6 mt-3">
@@ -388,7 +386,7 @@ function AddOrUpdateModule({ type }) {
                               </Select>
                             </FormControl>
                           </div>
-                          <div className="col-6 mt-3">
+                          {/* <div className="col-6 mt-3">
                             <FormControl fullWidth>
                               <InputLabel id="demo-simple-select-label">
                                 access allowed ?
@@ -411,7 +409,7 @@ function AddOrUpdateModule({ type }) {
                                 <MenuItem value={false}>No</MenuItem>
                               </Select>
                             </FormControl>
-                          </div>
+                          </div> */}
                         </div>
                         <IconButton
                           className="adding_template_attributes"

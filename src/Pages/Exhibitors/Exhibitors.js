@@ -55,10 +55,6 @@ function Exhibitors() {
     rowsPerPage,
     SearchUserOrFilterUser
   ) => {
-    console.log(
-      SearchUserOrFilterUser,
-      "SearchUserOrFilterUserSearchUserOrFilterUserSearchUserOrFilterUser"
-    );
     let postData = { ...SearchUserOrFilterUser };
     if (postData.status === "all") {
       delete postData.status;
@@ -87,7 +83,6 @@ function Exhibitors() {
       if (chipData.search) {
         delete chipData.search;
       }
-      console.log("--------------------------------", chipData);
       setFilterState(chipData);
       setFilterStateTem(chipData);
       setLoading(false);
@@ -126,7 +121,6 @@ function Exhibitors() {
   };
 
   const onDeleteChip = (data) => {
-    console.log(data, "datadatadatadatav");
     localStorage.setItem("Chips", JSON.stringify(data));
     setFilterState(data);
     setFilterStateTem(data);

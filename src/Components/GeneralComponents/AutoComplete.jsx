@@ -1,5 +1,4 @@
-import React from "react";
-import { Autocomplete, Chip, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 
 const AutoComplete = ({
   value,
@@ -8,24 +7,33 @@ const AutoComplete = ({
   DataNotFound,
   label,
   onInputChange,
-  isMultiple,
-}) => {
-
+  optionLabelKey = "name",
+  isMultiple = false,
+  onFocus,
+  onBlur
+}) => { 
   return (
     <Autocomplete
+      multiple={isMultiple} // Use the isMultiple prop to set multiple
       fullWidth
       value={value}
-      sx={{display: 'flex', flexWrap: 'wrap' ,width: '100%'}}
-      getOptionLabel={(option) => `${option.name}`}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      getOptionLabel={(option) => option[optionLabelKey]}
       onInputChange={onInputChange}
       options={searchCompanyData}
-      isOptionEqualToValue={(option, value) => option._id === value._id}
+      isOptionEqualToValue={(option, value) => !!value && option._id === value._id}
       noOptionsText={DataNotFound}
       disablePortal
-      renderInput={(params) => (
-        <TextField {...params} label={label} />
+      renderOption={(props, option) => (
+        <li {...props} key={option._id || option[optionLabelKey]}>
+          {option[optionLabelKey]}
+        </li>
       )}
-      onChange={handleCompanyNameChange}
+      renderInput={(params) => <TextField {...params} label={label} />}
+      onChange={(event, newValue) => {
+        handleCompanyNameChange(event, newValue); // Handle change with newValue
+      }}
     />
   );
 };

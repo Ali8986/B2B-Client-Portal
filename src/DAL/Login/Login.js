@@ -446,7 +446,6 @@ export const Creating_Template = async (data) => {
 };
 
 export const Editing_Template = async (id, data) => {
-  console.log(data, "Template created successfully");
   const requestObj = {
     path: `api/template_configuration/update_template_configuration/${id}`,
     method: "PUT",
@@ -534,6 +533,78 @@ export const Module_Configuration_Details = async (slug) => {
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
     },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Website_Pages_List = async (page, limt, data) => {
+  const requestObj = {
+    path: `api/website_page/list_website_page?page=${page}&limit=${limt}&search=${
+      data ? data : ""
+    }`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
+  };
+  return invokeApi(requestObj);
+};
+
+export const Deleting_Website_Pages = async (slug) => {
+  const requestObj = {
+    path: `api/website_page/delete_website_page/${slug}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Creating_Website_Page = async (data) => {
+  const requestObj = {
+    path: `api/website_page/add_website_page`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Editing_Website_Page = async (slug, data) => {
+  const requestObj = {
+    path: `api/website_page/update_website_page/${slug}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Website_Pages_Details = async (slug) => {
+  const requestObj = {
+    path: `api/website_page/get_website_page/${slug}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Template_Or_Module_Listing = async (page, limt, data) => {
+  const requestObj = {
+    path: `api/template_configuration/list_template_or_module?page=${page}&limit=${limt}`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
   };
   return invokeApi(requestObj);
 };

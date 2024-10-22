@@ -95,6 +95,10 @@ export default function ProfileIcon() {
         localStorage.setItem("inboxOpen", JSON.stringify(true));
         localStorage.removeItem("searchText_Module_Config_page");
       }
+      if (!is_path_includes("/website-pages")) {
+        localStorage.setItem("inboxOpen", JSON.stringify(true));
+        localStorage.removeItem("searchText_Website_Pages");
+      }
     }, 1000);
   }, [pathname]);
 

@@ -201,10 +201,6 @@ function EditOrAddExhibitor({ type }) {
       handleFormateData(state.user);
       const company = state.user.company;
       setValue(company);
-      console.log(
-        state.user,
-        "state.userstate.userstate.userstate.userstate.userstate.userstate.user"
-      );
     } else if (type === EditingExhibitor) {
       GetExhibitorDetails();
     }
@@ -289,6 +285,7 @@ function EditOrAddExhibitor({ type }) {
           </div>
           <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
             <AutoComplete
+              isMultiple={false}
               value={value}
               searchCompanyData={searchCompanyData}
               handleCompanyNameChange={handleCompanyNameChange}

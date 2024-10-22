@@ -20,8 +20,10 @@ import {
   AddingSpeaker,
   Creating_Module,
   Creating_Template,
+  Creating_Website_Page,
   Editing_Module,
   Editing_Template,
+  Editing_Website_Page,
   EditingCompany,
   EditingEvent,
   EditingExhibitor,
@@ -31,6 +33,8 @@ import AddorEditCompany from "./Pages/company/AddOrEditCompany";
 import CompanyDetails from "./Pages/company/Companydetails";
 import ModuleConfiguration from "./Pages/Manage_Website/Module_Configuration.js";
 import AddOrUpdateModule from "./Pages/Manage_Website/AddorUpdate_Module.js";
+import WebsitePages from "./Pages/Manage_Website/Website_Pages.js";
+import AddorUpdateWebPages from "./Pages/Manage_Website/AddorUpdate_Pages.js";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -123,9 +127,22 @@ const Router = () => {
           exact: true,
           element: <AddOrUpdateModule type={Editing_Module} />,
         },
+        {
+          path: "/website-pages",
+          element: <WebsitePages />,
+        },
+        {
+          path: "/website-pages/add-page",
+          exact: true,
+          element: <AddorUpdateWebPages type={Creating_Website_Page} />,
+        },
+        {
+          path: "/website-pages/edit-page/:id",
+          exact: true,
+          element: <AddorUpdateWebPages type={Editing_Website_Page} />,
+        },
       ],
     },
-
     {
       path: "*",
       element: <ErrorPage />,

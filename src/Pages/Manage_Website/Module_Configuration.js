@@ -28,9 +28,9 @@ function ModuleConfiguration() {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const FetchModuleConfig = async (page, rowsPerPage, savedSearchText) => {
+  const FetchModuleConfig = async (page, rowsPerPage, SearchModule) => {
     const postData = {
-      search: savedSearchText,
+      search: SearchModule,
     };
     setLoading(true);
     const response = await Module_Configuration_List(
@@ -42,7 +42,7 @@ function ModuleConfiguration() {
       const { module_configuration, total_count, total_pages } = response;
       const mappedUsers = module_configuration.map((item) => ({
         ...item,
-        name: `${item.first_name} ${item.last_name}` || "Unknown",
+        name: item.module_configuration_name || "Unknown",
         status: item.module_configuration_status,
       }));
       setModules(mappedUsers);
@@ -53,6 +53,13 @@ function ModuleConfiguration() {
       enqueueSnackbar(response.message, { variant: "error" });
     }
     setLoading(false);
+  };
+
+  const searchFunction = async (e) => {
+    e.preventDefault();
+    localStorage.setItem("searchText_Module_Config_page", searchText);
+    setPage(0);
+    await FetchModuleConfig(0, rowsPerPage, searchText);
   };
 
   const handleChangePage = (newPage) => {
@@ -67,7 +74,7 @@ function ModuleConfiguration() {
     FetchModuleConfig(0, newRowsPerPage);
   };
 
-  const handleEdit = (value) => {
+  const HandleEditingModule = (value) => {
     navigate(
       `/module-configuration/edit-module/${value.module_configuration_slug}`,
       {
@@ -76,9 +83,17 @@ function ModuleConfiguration() {
     );
   };
 
-  const handleDelete = (value) => {
+  const HandleAddingModule = () => {
+    navigate("/module-configuration/add-module");
+  };
+
+  const HandleDeletingModule = (value) => {
     setValueForDeleting(value);
     setModelOpen(true);
+  };
+
+  const onCancel = () => {
+    setModelOpen(false);
   };
 
   const onConfirm = async (e) => {
@@ -102,26 +117,11 @@ function ModuleConfiguration() {
     setModelOpen(false);
   };
 
-  const onCancel = () => {
-    setModelOpen(false);
-  };
-
-  const handleAddingMember = () => {
-    navigate("/module-configuration/add-module");
-  };
-
-  const searchFunction = async (e) => {
-    e.preventDefault();
-    localStorage.setItem("searchText_Module_Config_page", searchText);
-    setPage(0);
-    await FetchModuleConfig(0, rowsPerPage, searchText);
-  };
-
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
       id: "any",
-      label: "Template Name",
+      label: "Module Name",
       className: "cursor-pointer",
       renderData: (row, index) => {
         return <span>{row.module_configuration_name}</span>;
@@ -143,12 +143,12 @@ function ModuleConfiguration() {
     {
       label: "Edit",
       icon: <EditIcon />,
-      handleClick: handleEdit,
+      handleClick: HandleEditingModule,
     },
     {
       label: "Delete",
       icon: <DeleteForeverIcon className="Delete-Icon" />,
-      handleClick: handleDelete,
+      handleClick: HandleDeletingModule,
     },
   ];
 
@@ -176,7 +176,7 @@ function ModuleConfiguration() {
         <Button
           variant="contained"
           size="medium"
-          onClick={handleAddingMember}
+          onClick={HandleAddingModule}
           className="Data-Adding-Btn"
         >
           Create Module

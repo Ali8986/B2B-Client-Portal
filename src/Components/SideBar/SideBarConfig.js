@@ -49,6 +49,11 @@ export const options = [
         path: "module-configuration",
         icon: <CalendarMonthIcon />,
       },
+      {
+        title: "Website Pages",
+        path: "website-pages",
+        icon: <CalendarMonthIcon />,
+      },
     ],
   },
 ];
