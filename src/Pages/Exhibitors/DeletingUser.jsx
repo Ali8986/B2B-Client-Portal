@@ -20,14 +20,26 @@ const DeletionConfirmation = ({ onConfirm, onCancel }) => {
       <Typography variant="body1" sx={{ marginTop: 1, marginBottom: 3 }}>
         This action cannot be undone.
       </Typography>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Button variant="contained" color="error" onClick={onConfirm}>
-          Yes, Delete
-        </Button>
-        <Button variant="outlined" onClick={onCancel}>
-          Cancel
-        </Button>
-      </Box>
+      <div className="row">
+        <div className="col-12 col-sm-7">
+          <Button
+            variant="contained"
+            color="error"
+            fullWidth
+            onClick={onConfirm}
+          >
+            Yes, Delete
+          </Button>
+        </div>
+        <div className="col-12 col-sm-5 mt-3 mt-sm-0">
+          <Button variant="outlined" fullWidth onClick={onCancel}>
+            Cancel
+          </Button>
+        </div>
+      </div>
+      {/* <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+
+      </Box> */}
     </Box>
   );
 };

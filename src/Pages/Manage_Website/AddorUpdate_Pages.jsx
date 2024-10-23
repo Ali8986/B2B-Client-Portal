@@ -19,12 +19,6 @@ import { useSnackbar } from "notistack";
 import AutoComplete from "../../Components/GeneralComponents/AutoComplete";
 
 function AddorUpdateWebPages({ type }) {
-  const [activeField, setActiveField] = useState("");
-  const [templateData, setTemplateData] = useState([]);
-  const [moduleData, setModuleData] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [selectedModules, setSelectedModules] = useState([]);
-
   const initialPageState = {
     website_page_title: "",
     meta_title: "",
@@ -34,7 +28,11 @@ function AddorUpdateWebPages({ type }) {
     status: true,
     page_alias_url: "",
   };
-
+  const [activeField, setActiveField] = useState("");
+  const [templateData, setTemplateData] = useState([]);
+  const [moduleData, setModuleData] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedModules, setSelectedModules] = useState([]);
   const [PagesData, setPagesData] = useState(initialPageState);
   const [loading, setLoading] = useState(false);
   const [templateSearchText, setTemplateSearchText] = useState("");
@@ -95,47 +93,6 @@ function AddorUpdateWebPages({ type }) {
     setModuleSearchText(newValue);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    if (
-      typeof PagesData.template === "object" &&
-      templateData.template !== null
-    ) {
-      PagesData.template = PagesData.template._id;
-      setPagesData((prev) => {
-        return {
-          ...prev,
-          template: PagesData.template.template_name,
-        };
-      });
-    }
-
-    const Template_Config_Data = {
-      website_page_title: PagesData.website_page_title,
-      meta_title: PagesData.meta_title,
-      meta_description: PagesData.meta_description,
-      template: PagesData.template,
-      module_configuration: PagesData.module_configuration,
-      status: PagesData.status,
-      page_alias_url: PagesData.page_alias_url,
-    };
-
-    const response =
-      type === Editing_Website_Page
-        ? await Editing_Website_Page(id, Template_Config_Data)
-        : await Creating_Website_Page(Template_Config_Data);
-
-    if (response.code === 200) {
-      enqueueSnackbar(response.message, { variant: "success" });
-      navigate("/website-pages");
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
-
-    setLoading(false);
-  };
-
   const handleFormateData = (data) => {
     setPagesData((prev) => ({
       ...prev,
@@ -186,6 +143,47 @@ function AddorUpdateWebPages({ type }) {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (
+      typeof PagesData.template === "object" &&
+      templateData.template !== null
+    ) {
+      PagesData.template = PagesData.template._id;
+      setPagesData((prev) => {
+        return {
+          ...prev,
+          template: PagesData.template.template_name,
+        };
+      });
+    }
+
+    const Template_Config_Data = {
+      website_page_title: PagesData.website_page_title,
+      meta_title: PagesData.meta_title,
+      meta_description: PagesData.meta_description,
+      template: PagesData.template,
+      module_configuration: PagesData.module_configuration,
+      status: PagesData.status,
+      page_alias_url: PagesData.page_alias_url,
+    };
+
+    const response =
+      type === Editing_Website_Page
+        ? await Editing_Website_Page(id, Template_Config_Data)
+        : await Creating_Website_Page(Template_Config_Data);
+
+    if (response.code === 200) {
+      enqueueSnackbar(response.message, { variant: "success" });
+      navigate("/website-pages");
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+
+    setLoading(false);
+  };
+
   // Separate useEffect for initial data fetching
   useEffect(() => {
     if (state) {
@@ -197,7 +195,6 @@ function AddorUpdateWebPages({ type }) {
     }
   }, [state, type]); // This runs only on initial render or state/type change
 
-  // Separate useEffect for fetching templates/modules based on focus
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (activeField) {

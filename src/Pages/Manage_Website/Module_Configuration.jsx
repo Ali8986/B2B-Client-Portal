@@ -3,7 +3,7 @@ import ReactTable from "@meta-dev-zone/react-table";
 import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
-import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
+import DeletionConfirmation from "../Exhibitors/DeletingUser";
 import {
   Deleting_Module_Configuration,
   Module_Configuration_List,

@@ -11,8 +11,8 @@ import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
-import TemplateConfiguration from "./Pages/Manage_Website/Template_Configuration.js";
-import AddOrEditTemplate from "./Pages/Manage_Website/AddOrUpdate_Template.js";
+import TemplateConfiguration from "./Pages/Manage_Website/Template_Configuration";
+import AddOrEditTemplate from "./Pages/Manage_Website/AddOrUpdate_Template";
 import {
   AddingCompany,
   AddingEvent,
@@ -31,10 +31,10 @@ import {
 } from "./DAL/Login/Login";
 import AddorEditCompany from "./Pages/company/AddOrEditCompany";
 import CompanyDetails from "./Pages/company/Companydetails";
-import ModuleConfiguration from "./Pages/Manage_Website/Module_Configuration.js";
-import AddOrUpdateModule from "./Pages/Manage_Website/AddorUpdate_Module.js";
-import WebsitePages from "./Pages/Manage_Website/Website_Pages.js";
-import AddorUpdateWebPages from "./Pages/Manage_Website/AddorUpdate_Pages.js";
+import ModuleConfiguration from "./Pages/Manage_Website/Module_Configuration";
+import AddOrUpdateModule from "./Pages/Manage_Website/AddorUpdate_Module";
+import WebsitePages from "./Pages/Manage_Website/Website_Pages";
+import AddorUpdateWebPages from "./Pages/Manage_Website/AddorUpdate_Pages";
 
 const Router = () => {
   const router = createBrowserRouter([

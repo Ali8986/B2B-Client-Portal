@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
-import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
+import DeletionConfirmation from "../Exhibitors/DeletingUser";
 import {
-  Deleting_Website_Pages,
-  Website_Pages_List,
+  Deleting_Template_Configuration,
+  Template_Configuration_List,
 } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-function WebsitePages() {
+function TemplateConfiguration() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const [valueForDeleting, setValueForDeleting] = useState(null);
+  const [Templates, setTemplates] = useState([]);
   const [modelOpen, setModelOpen] = useState(false);
-  const [WebsitePages, setWebsitePages] = useState([]);
+  const [valueForDeleting, setValueForDeleting] = useState(null);
 
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
@@ -28,17 +28,21 @@ function WebsitePages() {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const FetchWebsitePages = async (page, rowsPerPage, SearhPage) => {
+  const FetchTemplateConfig = async (page, rowsPerPage, SearchTemplate) => {
     setLoading(true);
-    const response = await Website_Pages_List(page, rowsPerPage, SearhPage);
+    const response = await Template_Configuration_List(
+      page,
+      rowsPerPage,
+      SearchTemplate
+    );
     if (response.code === 200) {
-      const { website_pages, total_count, total_pages } = response;
-      const mappedUsers = website_pages.map((item) => ({
+      const { template_configuration, total_count, total_pages } = response;
+      const mappedUsers = template_configuration.map((item) => ({
         ...item,
-        name: item.website_page_title || "Unknown",
-        status: item.status,
+        name: item.template_name || "Unknown",
+        status: item.template_status,
       }));
-      setWebsitePages(mappedUsers);
+      setTemplates(mappedUsers);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);
@@ -48,36 +52,36 @@ function WebsitePages() {
     setLoading(false);
   };
 
-  const searchFunction = (e) => {
+  const searchFunction = async (e) => {
     e.preventDefault();
-    localStorage.setItem("searchText_Website_Pages", searchText);
+    localStorage.setItem("searchText_Template_Config_page", searchText);
     setPage(0);
-    FetchWebsitePages(page, rowsPerPage, searchText);
+    await FetchTemplateConfig(0, rowsPerPage, searchText);
   };
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    FetchWebsitePages(newPage, rowsPerPage);
+    FetchTemplateConfig(newPage, rowsPerPage);
   };
 
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    FetchWebsitePages(0, newRowsPerPage);
+    FetchTemplateConfig(0, newRowsPerPage);
   };
 
-  const HandleEditingWebsitePAges = (value) => {
-    navigate(`/website-pages/edit-page/${value.page_slug}`, {
+  const HandleEditingTemplate = (value) => {
+    navigate(`/template-configuration/edit-template/${value._id}`, {
       state: value,
     });
   };
 
-  const HandleAddingPages = () => {
-    navigate("/website-pages/add-page");
+  const handleAddingTemplate = () => {
+    navigate("/template-configuration/add-template");
   };
 
-  const handleDeletingWebsitePages = (value) => {
+  const HandleDeletingTemplate = (value) => {
     setValueForDeleting(value);
     setModelOpen(true);
   };
@@ -88,15 +92,17 @@ function WebsitePages() {
 
   const onConfirm = async (e) => {
     e.preventDefault();
-    const response = await Deleting_Website_Pages(valueForDeleting.page_slug);
+    const response = await Deleting_Template_Configuration(
+      valueForDeleting._id
+    );
     if (response.code === 200) {
-      const WebsitePagesAfterDeletion = WebsitePages.filter((user) => {
+      const TemplatesAfterDeletion = Templates.filter((user) => {
         if (user._id !== valueForDeleting._id) {
           return (user.name = user.name);
         }
       });
       setTotalPages((prev) => prev - 1);
-      setWebsitePages(WebsitePagesAfterDeletion);
+      setTemplates(TemplatesAfterDeletion);
       enqueueSnackbar(response.message, { variant: "success" });
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -108,10 +114,16 @@ function WebsitePages() {
     { id: "action", label: "Action", type: "action" },
     {
       id: "any",
-      label: "Page Title",
+      label: "Template Name",
+      className: "cursor-pointer",
       renderData: (row, index) => {
-        return <span>{row.website_page_title}</span>;
+        return <span>{row.template_name}</span>;
       },
+    },
+    {
+      id: "page_component_name",
+      label: "Template Type",
+      type: "page_component_name",
     },
     {
       id: "status",
@@ -124,24 +136,26 @@ function WebsitePages() {
     {
       label: "Edit",
       icon: <EditIcon />,
-      handleClick: HandleEditingWebsitePAges,
+      handleClick: HandleEditingTemplate,
     },
     {
       label: "Delete",
       icon: <DeleteForeverIcon className="Delete-Icon" />,
-      handleClick: handleDeletingWebsitePages,
+      handleClick: HandleDeletingTemplate,
     },
   ];
 
   useEffect(() => {
-    const savedSearchText = localStorage.getItem("searchText_Website_Pages");
+    const savedSearchText = localStorage.getItem(
+      "searchText_Template_Config_page"
+    );
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchWebsitePages(page, rowsPerPage, savedSearchText);
+      FetchTemplateConfig(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
     } else {
-      FetchWebsitePages(page, rowsPerPage);
+      FetchTemplateConfig(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
 
@@ -150,25 +164,25 @@ function WebsitePages() {
       <div className="d-flex justify-content-between align-items-center my-4 ">
         <HeaderWithBackButton
           className="Layout-heading"
-          title="Website Pages"
+          title="Template Configuration"
         />
         <Button
           variant="contained"
           size="medium"
-          onClick={HandleAddingPages}
+          onClick={handleAddingTemplate}
           className="Data-Adding-Btn"
         >
-          Add New Page
+          Create Template
         </Button>
       </div>
-      <div className="Website_Configuration">
+      <div className="Template_Configuration">
         {loading ? (
           <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
             <CircularProgress />
           </div>
         ) : (
           <ReactTable
-            data={WebsitePages}
+            data={Templates}
             TABLE_HEAD={TABLE_HEAD}
             MENU_OPTIONS={Menu_Options}
             custom_pagination={{
@@ -212,4 +226,4 @@ function WebsitePages() {
   );
 }
 
-export default WebsitePages;
+export default TemplateConfiguration;
