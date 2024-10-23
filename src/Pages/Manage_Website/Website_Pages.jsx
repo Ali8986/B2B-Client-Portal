@@ -12,6 +12,7 @@ import { useSnackbar } from "notistack";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import SaveAsIcon from '@mui/icons-material/SaveAs';
 
 function WebsitePages() {
   const { enqueueSnackbar } = useSnackbar();
@@ -102,6 +103,10 @@ function WebsitePages() {
     setModelOpen(false);
   };
 
+  const handleUpdatePageContent = (value) => {
+    navigate(`/website-pages/update-page-content/${value.template._id}`);
+  }
+
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
@@ -128,6 +133,11 @@ function WebsitePages() {
       label: "Delete",
       icon: <DeleteForeverIcon className="Delete-Icon" />,
       handleClick: handleDeletingWebsitePages,
+    },
+    {
+      label: "Update Page Content",
+      icon: <SaveAsIcon />,
+      handleClick: handleUpdatePageContent,
     },
   ];
 

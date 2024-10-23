@@ -35,6 +35,7 @@ import ModuleConfiguration from "./Pages/Manage_Website/Module_Configuration";
 import AddOrUpdateModule from "./Pages/Manage_Website/AddorUpdate_Module";
 import WebsitePages from "./Pages/Manage_Website/Website_Pages";
 import AddorUpdateWebPages from "./Pages/Manage_Website/AddorUpdate_Pages";
+import UpdatePageContent from "./Pages/Manage_Website/UpdatePageContent";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -140,6 +141,11 @@ const Router = () => {
           path: "/website-pages/edit-page/:id",
           exact: true,
           element: <AddorUpdateWebPages type={Editing_Website_Page} />,
+        },
+        {
+          path: "/website-pages/update-page-content/:id",
+          exact: true,
+          element: <UpdatePageContent />,
         },
       ],
     },
