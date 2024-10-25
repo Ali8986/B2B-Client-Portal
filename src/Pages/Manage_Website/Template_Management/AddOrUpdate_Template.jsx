@@ -13,9 +13,9 @@ import {
   Creating_Template,
   Editing_Template,
   Template_Configuration_Details,
-} from "../../DAL/Login/Login";
-import FormInput from "../../Components/GeneralComponents/FormInput";
-import HeaderWithBackButton from "../../Components/backButton";
+} from "../../../DAL/Login/Login";
+import FormInput from "../../../Components/GeneralComponents/FormInput";
+import HeaderWithBackButton from "../../../Components/backButton";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 import { useSnackbar } from "notistack";

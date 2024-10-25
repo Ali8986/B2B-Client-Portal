@@ -11,13 +11,14 @@ import Speaker from "./Pages/Speaker/SpeakerPage";
 import AddOrEditSpeaker from "./Pages/Speaker/AddOrEditSpeaker";
 import AddOrEditEvent from "./Pages/Events/AddOrEditEvent";
 import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
-import TemplateConfiguration from "./Pages/Manage_Website/Template_Configuration";
-import AddOrEditTemplate from "./Pages/Manage_Website/AddOrUpdate_Template";
+import TemplateConfiguration from "./Pages/Manage_Website/Template_Management/Template_Configuration";
+import AddOrEditTemplate from "./Pages/Manage_Website/Template_Management/AddOrUpdate_Template";
 import {
   AddingCompany,
   AddingEvent,
   AddingExhibitor,
   AddingSpeaker,
+  Create_Website_Module,
   Creating_Module,
   Creating_Template,
   Creating_Website_Page,
@@ -28,14 +29,18 @@ import {
   EditingEvent,
   EditingExhibitor,
   EditingSpeaker,
+  Updating_Website_Module,
 } from "./DAL/Login/Login";
 import AddorEditCompany from "./Pages/company/AddOrEditCompany";
 import CompanyDetails from "./Pages/company/Companydetails";
-import ModuleConfiguration from "./Pages/Manage_Website/Module_Configuration";
-import AddOrUpdateModule from "./Pages/Manage_Website/AddorUpdate_Module";
+import ModuleConfiguration from "./Pages/Manage_Website/Module_Management/Module_Configuration";
+import AddOrUpdateModule from "./Pages/Manage_Website/Module_Management/AddorUpdate_Module";
 import WebsitePages from "./Pages/Manage_Website/Website_Pages";
 import AddorUpdateWebPages from "./Pages/Manage_Website/AddorUpdate_Pages";
 import UpdatePageContent from "./Pages/Manage_Website/UpdatePageContent";
+import ManageWebPageModule from "./Pages/Manage_Website/Module_Management/Manage_Website_Module";
+import AddOrdEditWebModule from "./Pages/Manage_Website/Module_Management/Add_Or_Edit_Web_Module";
+import UpdateWebModData from "./Pages/Manage_Website/Module_Management/Update_Web_Mod_Data";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -147,8 +152,29 @@ const Router = () => {
           exact: true,
           element: <UpdatePageContent />,
         },
+        {
+          path: "/website-pages/:id/:id",
+          exact: true,
+          element: <ManageWebPageModule />,
+        },
+        {
+          path: "/website-pages/:id/:id/add",
+          exact: true,
+          element: <AddOrdEditWebModule type={Create_Website_Module} />,
+        },
+        {
+          path: "/website-pages/:id/:id/edit/:id",
+          exact: true,
+          element: <AddOrdEditWebModule type={Updating_Website_Module} />,
+        },
+        {
+          path: "/website-pages/:web_page_id/:module_title_slug/update/:id",
+          exact: true,
+          element: <UpdateWebModData />,
+        },
       ],
     },
+
     {
       path: "*",
       element: <ErrorPage />,

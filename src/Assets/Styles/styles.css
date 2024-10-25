@@ -456,7 +456,7 @@ body {
 }
 
 .Divider {
-    border-bottom: 1px solid #7396cc !important;
+    border-bottom: 1px solid #ccc !important;
     border-width: 1px;
 }
 
@@ -645,4 +645,21 @@ body {
 
 .table-container-pro .table-search input:focus {
     width: 230px !important;
+}
+
+.Img_Btn_Delete {
+    left: 57px;
+    top: -28px !important;
+}
+
+.Img_Btn_Delete:hover {
+    background-color: transparent !important;
+}
+
+.Img_Btn_Delete svg {
+    fill: #d32f2f;
+}
+
+.editir_label {
+    font-size: 18px !important;
 }

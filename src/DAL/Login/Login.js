@@ -608,3 +608,105 @@ export const Template_Or_Module_Listing = async (page, limt, data) => {
   };
   return invokeApi(requestObj);
 };
+
+export const Updating_page_Details = async (id, data) => {
+  console.log(id, "id id did ididiidididi ");
+  const requestObj = {
+    path: `api/website_page/update_page_details_object/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
+  };
+  return invokeApi(requestObj);
+};
+
+export const List_Website_Module = async (page, limt, data) => {
+  const requestObj = {
+    path: `api/website_module/list_website_module?page=${page}&limit=${limt}`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
+  };
+  return invokeApi(requestObj);
+};
+
+export const Update_Module_Data = async (id, data) => {
+  const requestObj = {
+    path: `api/website_module/update_module_data_object/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
+  };
+  return invokeApi(requestObj);
+};
+
+export const List_Website_Module_Against_Page = async (
+  page,
+  limit,
+  id,
+  data
+) => {
+  const requestObj = {
+    path: `api/website_module/list_website_module_against_web_page_id/${id}?page=${page}&limit=${limit}&search=${
+      data ? data : ""
+    }`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Create_Website_Module = async (data) => {
+  const requestObj = {
+    path: `api/website_module/add_website_module`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Updating_Website_Module = async (slug, data) => {
+  console.log(data, "slugslugslugslugslugslugslugslug");
+  const requestObj = {
+    path: `api/website_module/update_website_module/${slug}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data ? data : {},
+  };
+  return invokeApi(requestObj);
+};
+
+export const Get_Web_Mod_Detail = async (slug) => {
+  const requestObj = {
+    path: `api/website_module/get_website_module/${slug}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Deleting_Web_Mod = async (slug) => {
+  const requestObj = {
+    path: `api/website_module/delete_website_module/${slug}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};

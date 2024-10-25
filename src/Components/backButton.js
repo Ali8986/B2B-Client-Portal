@@ -7,9 +7,9 @@ const HeaderWithBackButton = ({ title, path }) => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
-    if (path) {
+    if (path && path !== "empty") {
       navigate(path);
-    } else {
+    } else if (path === "empty") {
       navigate(-1); // Navigate one step back if no path is provided
     }
   };
@@ -30,7 +30,7 @@ const HeaderWithBackButton = ({ title, path }) => {
             color: "#7396cc",
             marginBottom: "5px",
           }}
-          className="ms-0 ms-md-2"
+          className='ms-0 ms-md-2'
         >
           {title}
         </h2>

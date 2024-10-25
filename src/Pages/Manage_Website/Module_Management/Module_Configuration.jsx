@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
-import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
-import DeletionConfirmation from "../Exhibitors/DeletingUser";
+import DeletingModal from "../../../Components/GeneralComponents/CustomDeletingModal";
+import DeletionConfirmation from "../../Exhibitors/DeletingUser";
 import {
-  Deleting_Template_Configuration,
-  Template_Configuration_List,
-} from "../../DAL/Login/Login";
+  Deleting_Module_Configuration,
+  Module_Configuration_List,
+} from "../../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
-import HeaderWithBackButton from "../../Components/backButton";
+import HeaderWithBackButton from "../../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-function TemplateConfiguration() {
+function ModuleConfiguration() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const [Templates, setTemplates] = useState([]);
-  const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
+  const [modelOpen, setModelOpen] = useState(false);
+  const [Modules, setModules] = useState([]);
 
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
@@ -28,21 +28,24 @@ function TemplateConfiguration() {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const FetchTemplateConfig = async (page, rowsPerPage, SearchTemplate) => {
+  const FetchModuleConfig = async (page, rowsPerPage, SearchModule) => {
+    const postData = {
+      search: SearchModule,
+    };
     setLoading(true);
-    const response = await Template_Configuration_List(
+    const response = await Module_Configuration_List(
       page,
       rowsPerPage,
-      SearchTemplate
+      postData
     );
     if (response.code === 200) {
-      const { template_configuration, total_count, total_pages } = response;
-      const mappedUsers = template_configuration.map((item) => ({
+      const { module_configuration, total_count, total_pages } = response;
+      const mappedUsers = module_configuration.map((item) => ({
         ...item,
-        name: item.template_name || "Unknown",
-        status: item.template_status,
+        name: item.module_configuration_name || "Unknown",
+        status: item.module_configuration_status,
       }));
-      setTemplates(mappedUsers);
+      setModules(mappedUsers);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);
@@ -54,34 +57,37 @@ function TemplateConfiguration() {
 
   const searchFunction = async (e) => {
     e.preventDefault();
-    localStorage.setItem("searchText_Template_Config_page", searchText);
+    localStorage.setItem("searchText_Module_Config_page", searchText);
     setPage(0);
-    await FetchTemplateConfig(0, rowsPerPage, searchText);
+    await FetchModuleConfig(0, rowsPerPage, searchText);
   };
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    FetchTemplateConfig(newPage, rowsPerPage);
+    FetchModuleConfig(newPage, rowsPerPage);
   };
 
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    FetchTemplateConfig(0, newRowsPerPage);
+    FetchModuleConfig(0, newRowsPerPage);
   };
 
-  const HandleEditingTemplate = (value) => {
-    navigate(`/template-configuration/edit-template/${value._id}`, {
-      state: value,
-    });
+  const HandleEditingModule = (value) => {
+    navigate(
+      `/module-configuration/edit-module/${value.module_configuration_slug}`,
+      {
+        state: value,
+      }
+    );
   };
 
-  const handleAddingTemplate = () => {
-    navigate("/template-configuration/add-template");
+  const HandleAddingModule = () => {
+    navigate("/module-configuration/add-module");
   };
 
-  const HandleDeletingTemplate = (value) => {
+  const HandleDeletingModule = (value) => {
     setValueForDeleting(value);
     setModelOpen(true);
   };
@@ -92,17 +98,18 @@ function TemplateConfiguration() {
 
   const onConfirm = async (e) => {
     e.preventDefault();
-    const response = await Deleting_Template_Configuration(
-      valueForDeleting._id
+
+    const response = await Deleting_Module_Configuration(
+      valueForDeleting.module_configuration_slug
     );
     if (response.code === 200) {
-      const TemplatesAfterDeletion = Templates.filter((user) => {
+      const ModulesAfterDeletion = Modules.filter((user) => {
         if (user._id !== valueForDeleting._id) {
           return (user.name = user.name);
         }
       });
       setTotalPages((prev) => prev - 1);
-      setTemplates(TemplatesAfterDeletion);
+      setModules(ModulesAfterDeletion);
       enqueueSnackbar(response.message, { variant: "success" });
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -114,16 +121,16 @@ function TemplateConfiguration() {
     { id: "action", label: "Action", type: "action" },
     {
       id: "any",
-      label: "Template Name",
+      label: "Module Name",
       className: "cursor-pointer",
       renderData: (row, index) => {
-        return <span>{row.template_name}</span>;
+        return <span>{row.module_configuration_name}</span>;
       },
     },
     {
-      id: "page_component_name",
-      label: "Template Type",
-      type: "page_component_name",
+      id: "module_configuration_type",
+      label: "Module Type",
+      type: "module_configuration_type",
     },
     {
       id: "status",
@@ -136,26 +143,26 @@ function TemplateConfiguration() {
     {
       label: "Edit",
       icon: <EditIcon />,
-      handleClick: HandleEditingTemplate,
+      handleClick: HandleEditingModule,
     },
     {
       label: "Delete",
       icon: <DeleteForeverIcon className="Delete-Icon" />,
-      handleClick: HandleDeletingTemplate,
+      handleClick: HandleDeletingModule,
     },
   ];
 
   useEffect(() => {
     const savedSearchText = localStorage.getItem(
-      "searchText_Template_Config_page"
+      "searchText_Module_Config_page"
     );
     const count = localStorage.getItem("rowsPerPage");
     if (savedSearchText) {
       setSearchText(savedSearchText);
-      FetchTemplateConfig(page, rowsPerPage, savedSearchText);
+      FetchModuleConfig(page, rowsPerPage, savedSearchText);
       setTotalPages(count);
     } else {
-      FetchTemplateConfig(page, rowsPerPage);
+      FetchModuleConfig(page, rowsPerPage);
     }
   }, [page, rowsPerPage]);
 
@@ -164,15 +171,15 @@ function TemplateConfiguration() {
       <div className="d-flex justify-content-between align-items-center my-4 ">
         <HeaderWithBackButton
           className="Layout-heading"
-          title="Template Configuration"
+          title="Module Configuration"
         />
         <Button
           variant="contained"
           size="medium"
-          onClick={handleAddingTemplate}
+          onClick={HandleAddingModule}
           className="Data-Adding-Btn"
         >
-          Create Template
+          Create Module
         </Button>
       </div>
       <div className="Template_Configuration">
@@ -182,7 +189,7 @@ function TemplateConfiguration() {
           </div>
         ) : (
           <ReactTable
-            data={Templates}
+            data={Modules}
             TABLE_HEAD={TABLE_HEAD}
             MENU_OPTIONS={Menu_Options}
             custom_pagination={{
@@ -226,4 +233,4 @@ function TemplateConfiguration() {
   );
 }
 
-export default TemplateConfiguration;
+export default ModuleConfiguration;

@@ -1,27 +1,32 @@
 import { useEffect, useState } from "react";
 import {
   ImageUpload,
+  Module_Configuration_Details,
   S3ImageDeletion,
+  Update_Module_Data,
   Updating_page_Details,
   Website_Pages_Details,
-} from "../../DAL/Login/Login";
-import { useNavigate, useParams } from "react-router-dom";
-import HeaderWithBackButton from "../../Components/backButton";
+} from "../../../DAL/Login/Login";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import HeaderWithBackButton from "../../../Components/backButton";
 import Avatar from "@mui/material/Avatar";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import FormInput from "../../Components/GeneralComponents/FormInput";
-import { s3baseUrl } from "../../config/config";
+import FormInput from "../../../Components/GeneralComponents/FormInput";
+import { s3baseUrl } from "../../../config/config";
 import { useSnackbar } from "notistack";
 import { Button, CircularProgress } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { IconButton } from "@mui/material";
-import ReactEditorComponent from "../../Components/GeneralComponents/ReactTextEditor";
+import ReactEditorComponent from "../../../Components/GeneralComponents/ReactTextEditor";
 
-const UpdatePageContent = () => {
+const UpdateWebModData = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
+  const { state } = location;
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
   const [templateData, setTemplateData] = useState([]);
   const [formData, setFormData] = useState({});
@@ -49,6 +54,11 @@ const UpdatePageContent = () => {
     }
     const imageData = new FormData();
     imageData.append("image", file);
+
+    console.log(
+      "formdat formdat formdat formdat formdat formdat formdat for",
+      FormData
+    );
     const response = await ImageUpload(imageData);
     if (response.code === 200) {
     } else {
@@ -83,15 +93,15 @@ const UpdatePageContent = () => {
     }
   };
 
-  const imageAttributes = templateData?.template_attributes_info?.filter(
+  const imageAttributes = templateData?.filter(
     (attribute) => attribute.attribute_type === "file"
   );
 
-  const editorAttributes = templateData?.template_attributes_info?.filter(
+  const editorAttributes = templateData?.filter(
     (attribute) => attribute.attribute_type === "editor"
   );
 
-  const inputAttributes = templateData?.template_attributes_info?.filter(
+  const inputAttributes = templateData?.filter(
     (attribute) => attribute.attribute_type === "input"
   );
 
@@ -127,13 +137,13 @@ const UpdatePageContent = () => {
     }
 
     const postData = {
-      page_details: formData,
+      module_data: formData,
     };
 
-    const response = await Updating_page_Details(pageId, postData);
+    const response = await Update_Module_Data(pageId, postData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      navigate(`/website-pages`);
+      //   navigate(`/website-pages`);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -141,14 +151,17 @@ const UpdatePageContent = () => {
   };
 
   const fetchTemplateDetails = async () => {
-    const response = await Website_Pages_Details(id);
+    const response = await Module_Configuration_Details(id);
     if (response.code === 200) {
-      setTemplateData(response.website_page.template);
-      setPageId(response.website_page._id);
-      setFormData({
-        ...response.website_page.page_details,
-        template_id: response.website_page.template._id,
-      });
+      //   console.log(
+      //     response.module_configuratio,
+      //     "templateDatatemplateDatatemplateDatatemplateData"
+      //   );
+      setPageId(state._id);
+      setTemplateData(
+        response?.module_configuration?.module_configuration_attributes_info
+      );
+      setTitle(response?.module_configuration?.module_configuration_name);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -156,6 +169,9 @@ const UpdatePageContent = () => {
   };
 
   useEffect(() => {
+    if (state.module_data) {
+      setFormData(state?.module_data);
+    }
     fetchTemplateDetails();
   }, []);
 
@@ -168,10 +184,25 @@ const UpdatePageContent = () => {
       ) : (
         <div className='px-3 px-md-4 py-1 py-md-3'>
           <form className='row p-4' onSubmit={handleSubmit}>
-            <HeaderWithBackButton
-              title='Update Page Content'
-              path='/website-pages'
-            />
+            <HeaderWithBackButton title={`Update ${title} Data`} path='empty' />
+
+            {/* Input Fields */}
+            {inputAttributes?.map((attribute, index) => (
+              <div key={index} className='col-6'>
+                <FormInput
+                  required={false}
+                  label={
+                    attribute.required
+                      ? `${attribute.attribute_label}*`
+                      : attribute.attribute_label
+                  }
+                  variant='outlined'
+                  name={attribute.attribute_db_name}
+                  value={formData[attribute.attribute_db_name] || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+            ))}
 
             {/* Image Uploads */}
             {imageAttributes?.map((attribute, index) => (
@@ -240,24 +271,6 @@ const UpdatePageContent = () => {
 
             <div className='mb-3'></div>
 
-            {/* Input Fields */}
-            {inputAttributes?.map((attribute, index) => (
-              <div key={index} className='col-6'>
-                <FormInput
-                  required={false}
-                  label={
-                    attribute.required
-                      ? `${attribute.attribute_label}*`
-                      : attribute.attribute_label
-                  }
-                  variant='outlined'
-                  name={attribute.attribute_db_name}
-                  value={formData[attribute.attribute_db_name] || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
-            ))}
-
             {/* Editor Fields */}
             {editorAttributes?.map((attribute, index) => (
               <div
@@ -301,4 +314,4 @@ const UpdatePageContent = () => {
   );
 };
 
-export default UpdatePageContent;
+export default UpdateWebModData;

@@ -12,7 +12,7 @@ import { useSnackbar } from "notistack";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import SaveAsIcon from '@mui/icons-material/SaveAs';
+import SaveAsIcon from "@mui/icons-material/SaveAs";
 
 function WebsitePages() {
   const { enqueueSnackbar } = useSnackbar();
@@ -91,7 +91,7 @@ function WebsitePages() {
     if (response.code === 200) {
       const WebsitePagesAfterDeletion = WebsitePages.filter((user) => {
         if (user._id !== valueForDeleting._id) {
-          return (user.name = user.name);
+          return user;
         }
       });
       setTotalPages((prev) => prev - 1);
@@ -104,15 +104,54 @@ function WebsitePages() {
   };
 
   const handleUpdatePageContent = (value) => {
-    navigate(`/website-pages/update-page-content/${value.template._id}`);
+    navigate(`/website-pages/update-page-content/${value.page_slug}`);
+  };
+
+  const handleClick = (value) =>{
+    const Website_Id = value.module_configuration.find(page => page._id)
+    navigate(`/website-pages/${value._id}/${Website_Id.module_configuration_slug}`, {
+      state: {userData: value.module_configuration, pageId:value._id},
+    })
   }
+
+  const generateMenuOptions = (page) => {
+    let Menu_Options = [
+      {
+        label: "Update Page Content",
+        icon: <SaveAsIcon />,
+        handleClick: () => handleUpdatePageContent(page),
+      },
+      {
+        label: "Edit",
+        icon: <EditIcon />,
+        handleClick: () => HandleEditingWebsitePAges(page),
+      },
+      {
+        label: "Delete",
+        icon: <DeleteForeverIcon className="Delete-Icon" />,
+        handleClick: () => handleDeletingWebsitePages(page),
+      },
+    ];
+
+    // Dynamically add options based on `module_configuration`
+    if (page.module_configuration && Array.isArray(page.module_configuration)) {
+      page.module_configuration.forEach((config) => {
+        Menu_Options.splice(1,0,{
+          label: config.module_configuration_name || "Custom Action",
+          icon: <SaveAsIcon />, 
+          handleClick: handleClick,
+        });
+      });
+    }
+    return Menu_Options;
+  };
 
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
       id: "any",
       label: "Page Title",
-      renderData: (row, index) => {
+      renderData: (row) => {
         return <span>{row.website_page_title}</span>;
       },
     },
@@ -120,24 +159,6 @@ function WebsitePages() {
       id: "status",
       label: "Status",
       type: "row_status",
-    },
-  ];
-
-  const Menu_Options = [
-    {
-      label: "Edit",
-      icon: <EditIcon />,
-      handleClick: HandleEditingWebsitePAges,
-    },
-    {
-      label: "Delete",
-      icon: <DeleteForeverIcon className="Delete-Icon" />,
-      handleClick: handleDeletingWebsitePages,
-    },
-    {
-      label: "Update Page Content",
-      icon: <SaveAsIcon />,
-      handleClick: handleUpdatePageContent,
     },
   ];
 
@@ -176,9 +197,12 @@ function WebsitePages() {
           </div>
         ) : (
           <ReactTable
-            data={WebsitePages}
+            data={WebsitePages.map((page) => ({
+              ...page,
+              menuOptions: generateMenuOptions(page), // Attach dynamic Menu_Options per row
+            }))}
             TABLE_HEAD={TABLE_HEAD}
-            MENU_OPTIONS={Menu_Options}
+            MENU_OPTIONS={(row) => row.menuOptions} // Pass dynamic menu options per row
             custom_pagination={{
               total_count: totalCount,
               rows_per_page: rowsPerPage,
@@ -192,7 +216,6 @@ function WebsitePages() {
               setSearchText: setSearchText,
               handleSubmit: searchFunction,
             }}
-            class_name=""
             theme_config={{
               background: "white",
               color: "black",

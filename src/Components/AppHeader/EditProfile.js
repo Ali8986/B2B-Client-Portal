@@ -82,27 +82,27 @@ const EditProfile = () => {
   }, [setProfileImage, setUser, enqueueSnackbar]);
 
   return (
-    <div className="p-3">
+    <div className='p-3'>
       {/* <HeaderWithBackButton title="Edit Profile" path="/dashboard" /> */}
-      <div className="ProfileContainer">
-        <div className="Position_update">
-          <StyledAvatar alt="Profile Image" src={profileImage || profileimg} />
-          <Typography variant="h5" component="h1" gutterBottom>
+      <div className='ProfileContainer'>
+        <div className='Position_update'>
+          <StyledAvatar alt='Profile Image' src={profileImage || profileimg} />
+          <Typography variant='h5' component='h1' gutterBottom>
             Edit Profile
           </Typography>
           <input
-            accept="image/*"
+            accept='image/*'
             style={{ display: "none" }}
-            id="upload-button"
-            type="file"
+            id='upload-button'
+            type='file'
             onChange={handleImageChange}
           />
-          <label htmlFor="upload-button">
+          <label htmlFor='upload-button'>
             <IconButton
-              className="Profile-Image-Change"
-              color="primary"
-              aria-label="upload picture"
-              component="span"
+              className='Profile-Image-Change'
+              color='primary'
+              aria-label='upload picture'
+              component='span'
             >
               <CameraAltIcon />
             </IconButton>
@@ -111,41 +111,41 @@ const EditProfile = () => {
 
         <form onSubmit={handleSubmit}>
           <TextField
-            label="First Name"
-            variant="standard"
-            size="small"
+            label='First Name'
+            variant='standard'
+            size='small'
             fullWidth
             value={firstName}
-            margin="normal"
+            margin='normal'
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
           <TextField
-            label="Last Name"
-            variant="standard"
-            size="small"
+            label='Last Name'
+            variant='standard'
+            size='small'
             fullWidth
             value={lastName}
-            margin="normal"
+            margin='normal'
             onChange={(e) => setLastName(e.target.value)}
             required
           />
           <TextField
-            label="Contact Number"
-            type="tel"
-            variant="standard"
-            size="small"
+            label='Contact Number'
+            type='tel'
+            variant='standard'
+            size='small'
             fullWidth
             value={contactNumber}
-            margin="normal"
+            margin='normal'
             onChange={(e) => setContactNumber(e.target.value)}
             required
           />
-          <div className="col-12 d-flex justify-content-end">
+          <div className='col-12 d-flex justify-content-end'>
             <Button
-              variant="contained"
-              color="primary"
-              type="submit"
+              variant='contained'
+              color='primary'
+              type='submit'
               sx={{ mt: 2 }}
             >
               Update
