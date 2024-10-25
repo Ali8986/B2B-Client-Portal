@@ -16,10 +16,6 @@ function AddorEditCompany({ type }) {
   const location = useLocation();
   const { state } = location || {};
   const { ModuleData, webPageID, value } = location.state || {};
-  console.log(
-    "state state vstate state state statestate state state state",
-    state
-  );
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,10 +25,6 @@ function AddorEditCompany({ type }) {
     status: true,
   });
 
-  console.log(
-    formData,
-    "formDataformDataformData formDataformData formDataformData formDataformData"
-  );
   const { enqueueSnackbar } = useSnackbar();
   // const navigate = useNavigate();
 

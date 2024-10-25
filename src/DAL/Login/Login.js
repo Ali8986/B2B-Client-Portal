@@ -610,7 +610,6 @@ export const Template_Or_Module_Listing = async (page, limt, data) => {
 };
 
 export const Updating_page_Details = async (id, data) => {
-  console.log(id, "id id did ididiidididi ");
   const requestObj = {
     path: `api/website_page/update_page_details_object/${id}`,
     method: "PUT",
@@ -677,7 +676,6 @@ export const Create_Website_Module = async (data) => {
 };
 
 export const Updating_Website_Module = async (slug, data) => {
-  console.log(data, "slugslugslugslugslugslugslugslug");
   const requestObj = {
     path: `api/website_module/update_website_module/${slug}`,
     method: "PUT",

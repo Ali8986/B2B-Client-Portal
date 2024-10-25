@@ -6,7 +6,6 @@ import DeletingModal from "../../../Components/GeneralComponents/CustomDeletingM
 import DeletionConfirmation from "../../Exhibitors/DeletingUser";
 import {
   Deleting_Web_Mod,
-  Deleting_Website_Pages,
   List_Website_Module_Against_Page,
 } from "../../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
@@ -49,10 +48,6 @@ function ManageWebPageModule() {
           content: value,
         })),
       }));
-      console.log(
-        mappedUsers,
-        "mappedUsersmappedUsersmappedUsersmappedUsersmappedUsers"
-      );
       setWebsiteModules(mappedUsers);
       setTotalCount(total_pages);
       setTotalPages(total_count);
@@ -97,10 +92,6 @@ function ManageWebPageModule() {
 
   const HandleAddingPages = (value) => {
     const isAddingTrue = true;
-    console.log(
-      value,
-      "valuevalue valuevalue valuevalue valuevalue valuevalue valuevalue"
-    );
     navigate(
       `/website-pages/${pageId}/${userData[0].module_configuration_slug}/add`,
       {
@@ -141,7 +132,6 @@ function ManageWebPageModule() {
   };
 
   const handle_Update_Web_Module_Content = (value) => {
-    console.log(value);
     navigate(
       `/website-pages/${value.web_page_id}/${value.module_configuration}/update/${userData[0].module_configuration_slug}`,
       { state: value }
@@ -196,36 +186,13 @@ function ManageWebPageModule() {
       label: "Name",
       type: "row_name",
     },
-    {
-      id: "any",
-      label: "Photo",
-      renderData: (row, index) => {
-        return (
-          <div key={index} className='d-flex align-items-center'>
-            {row.data.map((item, i) => (
-              <div key={i} className='me-2'>
-                {item.field === "media_file_field" ? (
-                  <Avatar
-                    className='img-fluid'
-                    src={item.content}
-                    style={{
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      width: "50px",
-                      height: "50px",
-                      maxWidth: "50px",
-                      maxHeight: "50px",
-                    }}
-                  />
-                ) : (
-                  <h2>{item.content}</h2>
-                )}
-              </div>
-            ))}
-          </div>
-        );
-      },
-    },
+    // {
+    //   id: "any",
+    //   label: "Photo",
+    //   renderData: (row) => Row.data => {
+    //     return <div>{newRow.field}</div>;
+    //   },
+    // },
     {
       id: "status",
       label: "Status",

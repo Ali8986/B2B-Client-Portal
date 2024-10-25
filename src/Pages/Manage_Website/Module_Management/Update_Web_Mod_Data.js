@@ -4,15 +4,12 @@ import {
   Module_Configuration_Details,
   S3ImageDeletion,
   Update_Module_Data,
-  Updating_page_Details,
-  Website_Pages_Details,
 } from "../../../DAL/Login/Login";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import HeaderWithBackButton from "../../../Components/backButton";
 import Avatar from "@mui/material/Avatar";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FormInput from "../../../Components/GeneralComponents/FormInput";
-import { s3baseUrl } from "../../../config/config";
 import { useSnackbar } from "notistack";
 import { Button, CircularProgress } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -28,9 +25,9 @@ const UpdateWebModData = () => {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
-  const [templateData, setTemplateData] = useState([]);
+  const [WebModuleData, setWebModuleData] = useState([]);
   const [formData, setFormData] = useState({});
-  const [pageId, setPageId] = useState("");
+  const [modId, setModId] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -54,11 +51,6 @@ const UpdateWebModData = () => {
     }
     const imageData = new FormData();
     imageData.append("image", file);
-
-    console.log(
-      "formdat formdat formdat formdat formdat formdat formdat for",
-      FormData
-    );
     const response = await ImageUpload(imageData);
     if (response.code === 200) {
     } else {
@@ -93,15 +85,15 @@ const UpdateWebModData = () => {
     }
   };
 
-  const imageAttributes = templateData?.filter(
+  const imageAttributes = WebModuleData?.filter(
     (attribute) => attribute.attribute_type === "file"
   );
 
-  const editorAttributes = templateData?.filter(
+  const editorAttributes = WebModuleData?.filter(
     (attribute) => attribute.attribute_type === "editor"
   );
 
-  const inputAttributes = templateData?.filter(
+  const inputAttributes = WebModuleData?.filter(
     (attribute) => attribute.attribute_type === "input"
   );
 
@@ -140,25 +132,21 @@ const UpdateWebModData = () => {
       module_data: formData,
     };
 
-    const response = await Update_Module_Data(pageId, postData);
+    const response = await Update_Module_Data(modId, postData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      //   navigate(`/website-pages`);
+      navigate(-1);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
     setBtnLoading(false);
   };
 
-  const fetchTemplateDetails = async () => {
+  const FetchWebModuleDetails = async () => {
     const response = await Module_Configuration_Details(id);
     if (response.code === 200) {
-      //   console.log(
-      //     response.module_configuratio,
-      //     "templateDatatemplateDatatemplateDatatemplateData"
-      //   );
-      setPageId(state._id);
-      setTemplateData(
+      setModId(state._id);
+      setWebModuleData(
         response?.module_configuration?.module_configuration_attributes_info
       );
       setTitle(response?.module_configuration?.module_configuration_name);
@@ -172,7 +160,7 @@ const UpdateWebModData = () => {
     if (state.module_data) {
       setFormData(state?.module_data);
     }
-    fetchTemplateDetails();
+    FetchWebModuleDetails();
   }, []);
 
   return (
@@ -209,7 +197,7 @@ const UpdateWebModData = () => {
               <>
                 <div
                   key={index}
-                  className='col-12 d-flex justify-content-between align-items-center py-3'
+                  className='col-12 d-flex justify-content-between align-items-center py-3 mt-4'
                 >
                   <div className='col-12 col-lg-4 pb-2'>
                     <h4 className='h5'>
@@ -265,17 +253,14 @@ const UpdateWebModData = () => {
                     </label>
                   </div>
                 </div>
-                <div className='images_box'></div>
+                <div className='images_box mb-1'></div>
               </>
             ))}
-
-            <div className='mb-3'></div>
-
             {/* Editor Fields */}
             {editorAttributes?.map((attribute, index) => (
               <div
                 key={`${attribute.attribute_db_name}_${index}`}
-                className='col-12 mt-4'
+                className='col-12 mt-3'
               >
                 <ReactEditorComponent
                   value={formData[attribute.attribute_db_name] || ""}
