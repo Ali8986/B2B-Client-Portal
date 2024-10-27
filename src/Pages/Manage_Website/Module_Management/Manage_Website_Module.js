@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
 import { Avatar, Button, CircularProgress } from "@mui/material";
@@ -7,6 +7,7 @@ import DeletionConfirmation from "../../Exhibitors/DeletingUser";
 import {
   Deleting_Web_Mod,
   List_Website_Module_Against_Page,
+  Website_Pages_List,
 } from "../../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import HeaderWithBackButton from "../../../Components/backButton";
@@ -16,9 +17,11 @@ import SaveAsIcon from "@mui/icons-material/SaveAs";
 
 function ManageWebPageModule() {
   const { enqueueSnackbar } = useSnackbar();
+
   const navigate = useNavigate();
+  const { webPageId } = useParams();
   const location = useLocation();
-  const { userData, pageId } = location.state || {};
+  const { state } = location || {};
   const [loading, setLoading] = useState(true);
   const [valueForDeleting, setValueForDeleting] = useState(null);
   const [modelOpen, setModelOpen] = useState(false);
@@ -28,13 +31,15 @@ function ManageWebPageModule() {
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [pageId, setPageId] = useState("");
+  const [userData, setUserData] = useState([]);
 
   const Fetch_Website_Module = async (page, rowsPerPage, SearhPage) => {
     setLoading(true);
     const response = await List_Website_Module_Against_Page(
       page,
       rowsPerPage,
-      pageId,
+      pageId || webPageId,
       SearhPage
     );
     if (response.code === 200) {
@@ -78,26 +83,31 @@ function ManageWebPageModule() {
   };
 
   const HandleEditingWebsiteModules = (value) => {
+    if (!userData || userData.length === 0) return;
     navigate(
-      `/website-pages/${value?.web_page_id}/${value?.module_configuration}/edit/${value?.module_title_slug}`,
+      `/website-pages/${value?.web_page_id}/${value?.module_title_slug}/edit-module/${userData[0]?.module_configuration_slug}`,
       {
         state: {
           webPageID: pageId,
-          ModuleData: userData[0],
+          ModuleData: userData[0] ? userData[0] : "",
           pageData: value,
         },
       }
     );
   };
+  console.log(
+    userData,
+    "userData[0]userData[0]userData[0]userData[0]userData[0]"
+  );
 
-  const HandleAddingPages = (value) => {
+  const HandleAddingWebModule = () => {
     const isAddingTrue = true;
     navigate(
-      `/website-pages/${pageId}/${userData[0].module_configuration_slug}/add`,
+      `/website-pages/${pageId}/add/${userData[0]?.module_configuration_slug}`,
       {
         state: {
           webPageID: pageId,
-          ModuleData: userData[0],
+          ModuleData: userData[0] ? userData[0] : "",
           isAdding: isAddingTrue,
         },
       }
@@ -133,7 +143,7 @@ function ManageWebPageModule() {
 
   const handle_Update_Web_Module_Content = (value) => {
     navigate(
-      `/website-pages/${value.web_page_id}/${value.module_configuration}/update/${userData[0].module_configuration_slug}`,
+      `/website-pages/${value.web_page_id}/${value.module_title_slug}/update/${userData[0]?.module_configuration_slug}`,
       { state: value }
     );
   };
@@ -186,13 +196,32 @@ function ManageWebPageModule() {
       label: "Name",
       type: "row_name",
     },
-    // {
-    //   id: "any",
-    //   label: "Photo",
-    //   renderData: (row) => Row.data => {
-    //     return <div>{newRow.field}</div>;
-    //   },
-    // },
+    {
+      id: "any",
+      label: "Photo",
+      renderData: (row) => {
+        return row.data.map((item, index) => {
+          return (
+            <div key={index}>
+              <div>
+                {item.content.startsWith("http") && (
+                  <Avatar
+                    sx={{ width: 50, height: 50 }}
+                    src={item.content}
+                    alt={item.field}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        });
+      },
+    },
+    {
+      id: "action_by",
+      label: "Action by",
+      type: "action_by",
+    },
     {
       id: "status",
       label: "Status",
@@ -200,34 +229,53 @@ function ManageWebPageModule() {
     },
   ];
 
+  const Get_Web_Pages = async () => {
+    const response = await Website_Pages_List();
+    if (response.code === 200) {
+      const page = response.website_pages.find(
+        (value) => value._id === webPageId
+      );
+      console.log(page, "page page page page page page");
+      setUserData(page.module_configuration);
+      setPageId(page._id);
+      // setUserData(response.data);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+  };
+
   useEffect(() => {
     const savedSearchText = localStorage.getItem(
       "searchText_Website_Module_Pages"
     );
-    const count = localStorage.getItem("rowsPerPage");
-    if (savedSearchText) {
-      setSearchText(savedSearchText);
-      Fetch_Website_Module(page, rowsPerPage, savedSearchText);
-      setTotalPages(count);
+    if (state) {
+      const count = localStorage.getItem("rowsPerPage");
+      if (savedSearchText) {
+        setSearchText(savedSearchText);
+        Fetch_Website_Module(page, rowsPerPage, savedSearchText);
+        setTotalPages(count);
+      } else {
+        Fetch_Website_Module(page, rowsPerPage);
+      }
     } else {
-      Fetch_Website_Module(page, rowsPerPage);
+      Fetch_Website_Module(page, rowsPerPage, savedSearchText);
+      Get_Web_Pages();
     }
   }, [page, rowsPerPage]);
-
   return (
     <div className='row my-4 mx-3'>
       <div className='d-flex justify-content-between align-items-center my-4 '>
         <HeaderWithBackButton
           className='Layout-heading'
-          title={`${userData[0].module_configuration_name}`}
+          title={`${userData[0]?.module_configuration_name}`}
         />
         <Button
           variant='contained'
           size='medium'
-          onClick={HandleAddingPages}
+          onClick={HandleAddingWebModule}
           className='Data-Adding-Btn'
         >
-          {`Add ${userData[0].module_configuration_name}`}
+          {`Add ${userData[0]?.module_configuration_name}`}
         </Button>
       </div>
       <div className='Website_Configuration'>

@@ -37,20 +37,14 @@ const UpdatePageContent = () => {
 
   const handleImageChange = async (event, attribute) => {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prevData) => ({
-          ...prevData,
-          [attribute.attribute_db_name]: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
     const imageData = new FormData();
     imageData.append("image", file);
     const response = await ImageUpload(imageData);
     if (response.code === 200) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [attribute.attribute_db_name]: s3baseUrl + response.path,
+      }));
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }

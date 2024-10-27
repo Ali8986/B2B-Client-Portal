@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  Get_Web_Mod_Detail,
   ImageUpload,
   Module_Configuration_Details,
   S3ImageDeletion,
@@ -15,10 +16,15 @@ import { Button, CircularProgress } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { IconButton } from "@mui/material";
 import ReactEditorComponent from "../../../Components/GeneralComponents/ReactTextEditor";
+import { s3baseUrl } from "../../../config/config";
 
 const UpdateWebModData = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, module_title_slug } = useParams();
+  console.log(
+    useParams(),
+    "navigate navigate vnavigate navigate navigate navigate navigatenavigate navigate"
+  );
   const location = useLocation();
   const { state } = location;
   const { enqueueSnackbar } = useSnackbar();
@@ -39,20 +45,14 @@ const UpdateWebModData = () => {
 
   const handleImageChange = async (event, attribute) => {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prevData) => ({
-          ...prevData,
-          [attribute.attribute_db_name]: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
     const imageData = new FormData();
     imageData.append("image", file);
     const response = await ImageUpload(imageData);
     if (response.code === 200) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [attribute.attribute_db_name]: s3baseUrl + response.path,
+      }));
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -135,7 +135,7 @@ const UpdateWebModData = () => {
     const response = await Update_Module_Data(modId, postData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      navigate(-1);
+      // navigate(-1);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -145,7 +145,6 @@ const UpdateWebModData = () => {
   const FetchWebModuleDetails = async () => {
     const response = await Module_Configuration_Details(id);
     if (response.code === 200) {
-      setModId(state._id);
       setWebModuleData(
         response?.module_configuration?.module_configuration_attributes_info
       );
@@ -156,11 +155,28 @@ const UpdateWebModData = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (state.module_data) {
-      setFormData(state?.module_data);
+  const Web_Mod_detail = async () => {
+    const response = await Get_Web_Mod_Detail(module_title_slug);
+    if (response.code === 200) {
+      setFormData(response?.website_module.module_data);
+      setModId(response?.website_module?._id);
+      setLoading(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
     }
-    FetchWebModuleDetails();
+  };
+
+  useEffect(() => {
+    if (state) {
+      if (state.module_data) {
+        setFormData(state?.module_data);
+      }
+      Web_Mod_detail();
+      FetchWebModuleDetails();
+    } else {
+      FetchWebModuleDetails();
+      Web_Mod_detail();
+    }
   }, []);
 
   return (

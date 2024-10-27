@@ -8,16 +8,18 @@ import HeaderWithBackButton from "../../../Components/backButton";
 import {
   Create_Website_Module,
   Get_Web_Mod_Detail,
+  Module_Configuration_Details,
   Updating_Website_Module,
 } from "../../../DAL/Login/Login";
 
 function AddorEditCompany({ type }) {
-  const { id } = useParams();
+  const { id, module_id, web_page_id } = useParams();
   const location = useLocation();
   const { state } = location || {};
   const { ModuleData, webPageID, value } = location.state || {};
 
   const [loading, setLoading] = useState(false);
+  const [Title, setTitle] = useState("");
   const [formData, setFormData] = useState({
     module_title: "",
     module_configuration: ModuleData?._id || "",
@@ -37,8 +39,8 @@ function AddorEditCompany({ type }) {
     setFormData((prev) => ({
       ...prev,
       module_title: data?.module_title,
-      module_configuration: data?.module_configuration,
-      web_page_id: data?.web_page_id,
+      module_configuration: data?.module_configuration || data._id,
+      web_page_id: data?.web_page_id || web_page_id,
       status: data?.status,
       module_title_slug: data?.module_title_slug,
     }));
@@ -66,23 +68,37 @@ function AddorEditCompany({ type }) {
   };
 
   const Web_Mod_detail = async () => {
-    const response = await Get_Web_Mod_Detail(id);
+    const response = await Get_Web_Mod_Detail(module_id);
     if (response.code === 200) {
       handleFormateData(response.website_module);
-      enqueueSnackbar(response.message, { variant: "success" });
       setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
+  };
+  const FetchWebModuleDetails = async () => {
+    const response = await Module_Configuration_Details(id);
+    if (response.code === 200) {
+      setTitle(response.module_configuration.module_configuration_name);
+      handleFormateData(response.module_configuration);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
     if (state) {
       if (!state.isAdding) {
         handleFormateData(state?.pageData);
+      } else if (type === Updating_Website_Module) {
+        Web_Mod_detail();
       }
-    } else if (type === Updating_Website_Module) {
-      Web_Mod_detail();
+    } else {
+      FetchWebModuleDetails();
+      if (type === Updating_Website_Module) {
+        Web_Mod_detail();
+      }
     }
   }, []);
 
@@ -94,17 +110,19 @@ function AddorEditCompany({ type }) {
             <HeaderWithBackButton
               title={
                 type === Create_Website_Module
-                  ? `Add ${ModuleData?.module_configuration_name}`
-                  : `Editing ${ModuleData?.module_configuration_name}`
+                  ? `Add ${ModuleData?.module_configuration_name || Title}`
+                  : `Editing ${ModuleData?.module_configuration_name || Title}`
               }
               path='empty'
             />
             <div className='col-6 mb-3'>
               <FormInput
-                label={`Enter ${ModuleData?.module_configuration_name} Title`}
+                label={`Enter ${
+                  ModuleData?.module_configuration_name || Title
+                } Title`}
                 variant='outlined'
                 name='module_title'
-                value={formData.module_title}
+                value={formData.module_title || ""}
                 onChange={handleInputChange}
                 type='text'
                 required={true}

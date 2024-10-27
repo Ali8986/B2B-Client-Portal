@@ -153,20 +153,21 @@ const Router = () => {
           element: <UpdatePageContent />,
         },
         {
-          path: "/website-pages/:id/:id",
+          path: "/website-pages/:webPageId/:module_configuration_slug",
           exact: true,
           element: <ManageWebPageModule />,
         },
         {
-          path: "/website-pages/:id/:id/add",
+          path: "/website-pages/:web_page_id/add/:id",
           exact: true,
           element: <AddOrdEditWebModule type={Create_Website_Module} />,
         },
         {
-          path: "/website-pages/:id/:id/edit/:id",
+          path: "/website-pages/:id/:module_id/edit-module/:id",
           exact: true,
           element: <AddOrdEditWebModule type={Updating_Website_Module} />,
         },
+
         {
           path: "/website-pages/:web_page_id/:module_title_slug/update/:id",
           exact: true,
