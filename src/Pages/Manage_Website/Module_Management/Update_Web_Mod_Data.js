@@ -17,10 +17,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { IconButton } from "@mui/material";
 import ReactEditorComponent from "../../../Components/GeneralComponents/ReactTextEditor";
 import { s3baseUrl } from "../../../config/config";
+import BasicBreadcrumbs from "../../../Components/GeneralComponents/BreadCrumbs";
 
 const UpdateWebModData = () => {
   const navigate = useNavigate();
-  const { id, module_title_slug } = useParams();
+  const { id, module_title_slug, web_page_id } = useParams();
   const location = useLocation();
   const { state } = location;
   const { enqueueSnackbar } = useSnackbar();
@@ -164,9 +165,26 @@ const UpdateWebModData = () => {
     }
   };
 
+  const breadcrumbItems = [
+    {
+      navigation: "/website-pages",
+      title: "Website Pages",
+      status: "Inactive",
+    },
+    {
+      title: `${title}`,
+      navigation: `/website-pages/${web_page_id}/${id}`,
+      status: "Inactive",
+    },
+    {
+      title: `Update ${title} Data`,
+      status: "Active",
+    },
+  ];
+
   useEffect(() => {
     if (state) {
-      console.log(state, "state");
+      setModId(state._id);
       if (state?.module_data) {
         setFormData(state?.module_data);
       }
@@ -188,7 +206,9 @@ const UpdateWebModData = () => {
         <div className='px-3 px-md-4 py-1 py-md-3'>
           <form className='row p-4' onSubmit={handleSubmit}>
             <HeaderWithBackButton title={`Update ${title} Data`} path='empty' />
-
+            <div className='col-12 mb-3 ps-3'>
+              <BasicBreadcrumbs items={breadcrumbItems} />
+            </div>
             {/* Input Fields */}
             {inputAttributes?.map((attribute, index) => (
               <div key={index} className='col-6'>

@@ -92,7 +92,6 @@ function ManageWebPageModule() {
   };
 
   const HandleEditingWebsiteModules = (value) => {
-    if (!userData || userData.length === 0) return;
     navigate(
       `/website-pages/${value?.web_page_id}/${userData[0]?.module_configuration_slug}/edit-module/${value?.module_title_slug}`,
       {
@@ -104,10 +103,6 @@ function ManageWebPageModule() {
       }
     );
   };
-  console.log(
-    userData,
-    "userData[0]userData[0]userData[0]userData[0]userData[0]"
-  );
 
   const HandleAddingWebModule = () => {
     const isAddingTrue = true;
@@ -157,47 +152,34 @@ function ManageWebPageModule() {
     );
   };
 
-  const handleClick = (value) => {
-    const Website_Id = value.module_configuration.find((page) => page._id);
-    navigate(
-      `/website-pages/${Website_Id._id}/${Website_Id.module_configuration_slug}`,
-      {
-        state: { userData: value.module_configuration },
-      }
-    );
-  };
+  // const handleClick = (value) => {
+  //   const Website_Id = value.module_configuration.find((page) => page._id);
+  //   navigate(
+  //     `/website-pages/${Website_Id._id}/${Website_Id.module_configuration_slug}`,
+  //     {
+  //       state: { userData: value.module_configuration },
+  //     }
+  //   );
+  // };
 
-  const generateMenuOptions = (page) => {
-    let Menu_Options = [
-      {
-        label: "Update Web Module Content",
-        icon: <EditIcon />,
-        handleClick: () => handle_Update_Web_Module_Content(page),
-      },
-      {
-        label: "Edit",
-        icon: <EditIcon />,
-        handleClick: () => HandleEditingWebsiteModules(page),
-      },
-      {
-        label: "Delete",
-        icon: <DeleteForeverIcon className='Delete-Icon' />,
-        handleClick: () => handleDeletingWebsiteModules(page),
-      },
-    ];
+  const Menu_Options = [
+    {
+      label: "Update Web Module Content",
+      icon: <EditIcon />,
+      handleClick: handle_Update_Web_Module_Content,
+    },
+    {
+      label: "Edit",
+      icon: <EditIcon />,
+      handleClick: HandleEditingWebsiteModules,
+    },
+    {
+      label: "Delete",
+      icon: <DeleteForeverIcon className='Delete-Icon' />,
+      handleClick: handleDeletingWebsiteModules,
+    },
+  ];
 
-    // Dynamically add options based on `module_configuration`
-    if (page.module_configuration && Array.isArray(page.module_configuration)) {
-      page.module_configuration.forEach((config) => {
-        Menu_Options.splice(1, 0, {
-          label: config.module_configuration_name || "Custom Action",
-          icon: <EditIcon />,
-          handleClick: handleClick,
-        });
-      });
-    }
-    return Menu_Options;
-  };
   const TABLE_HEAD = [
     { id: "action", label: "Action", type: "action" },
     {
@@ -310,12 +292,9 @@ function ManageWebPageModule() {
           </div>
           <div className='Website_Configuration'>
             <ReactTable
-              data={WebsiteModules.map((page) => ({
-                ...page,
-                menuOptions: generateMenuOptions(page), // Attach dynamic Menu_Options per row
-              }))}
+              data={WebsiteModules}
               TABLE_HEAD={TABLE_HEAD}
-              MENU_OPTIONS={(row) => row.menuOptions} // Pass dynamic menu options per row
+              MENU_OPTIONS={Menu_Options}
               custom_pagination={{
                 total_count: totalCount,
                 rows_per_page: rowsPerPage,

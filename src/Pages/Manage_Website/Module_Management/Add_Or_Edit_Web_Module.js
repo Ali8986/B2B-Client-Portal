@@ -11,6 +11,8 @@ import {
   Module_Configuration_Details,
   Updating_Website_Module,
 } from "../../../DAL/Login/Login";
+import BasicBreadcrumbs from "../../../Components/GeneralComponents/BreadCrumbs";
+import { Create } from "@mui/icons-material";
 
 function AddorEditCompany({ type }) {
   const { id, module_id, web_page_id } = useParams();
@@ -88,14 +90,36 @@ function AddorEditCompany({ type }) {
     setLoading(false);
   };
 
+  const breadcrumbItems = [
+    {
+      navigation: "/website-pages",
+      title: "Website Pages",
+      status: "Inactive",
+    },
+    {
+      title: `${ModuleData?.module_configuration_name || Title}`,
+      navigation: `/website-pages/${web_page_id}/${ModuleData?.module_configuration_slug}`,
+      status: "Inactive",
+    },
+    {
+      title:
+        type === Create_Website_Module
+          ? `Add ${ModuleData?.module_configuration_name || Title}`
+          : `Edit ${ModuleData?.module_configuration_name || Title}`,
+      status: "Active",
+    },
+  ];
+
   useEffect(() => {
     if (state) {
       if (!state.isAdding) {
         handleFormateData(state?.pageData);
       } else if (type === Updating_Website_Module) {
+        alert("Editing");
         Web_Mod_detail();
       }
     } else {
+      alert("No State");
       FetchWebModuleDetails();
       if (type === Updating_Website_Module) {
         Web_Mod_detail();
@@ -120,6 +144,9 @@ function AddorEditCompany({ type }) {
                   : "empty"
               }
             />
+            <div className='col-12 mb-3 ms-1'>
+              <BasicBreadcrumbs items={breadcrumbItems} />
+            </div>
             <div className='col-6 mb-3'>
               <FormInput
                 label={`Enter ${

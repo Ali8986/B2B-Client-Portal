@@ -639,6 +639,7 @@ export const List_Website_Module = async (page, limt, data) => {
 };
 
 export const Update_Module_Data = async (id, data) => {
+  console.log(id, "ididididid", data, "data data data data data");
   const requestObj = {
     path: `api/website_module/update_module_data_object/${id}`,
     method: "PUT",

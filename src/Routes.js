@@ -163,7 +163,7 @@ const Router = () => {
           element: <AddOrdEditWebModule type={Create_Website_Module} />,
         },
         {
-          path: "/website-pages/:id/:id/edit-module/:module_id",
+          path: "/website-pages/:web_page_id/:id/edit-module/:module_id",
           exact: true,
           element: <AddOrdEditWebModule type={Updating_Website_Module} />,
         },
