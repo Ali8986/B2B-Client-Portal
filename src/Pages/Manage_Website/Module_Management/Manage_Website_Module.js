@@ -227,7 +227,6 @@ function ManageWebPageModule() {
       const page = response.website_pages.find(
         (value) => value._id === webPageId
       );
-      console.log(page, "page page page page page page");
       setUserData(page.module_configuration);
       setPageId(page._id);
       // setUserData(response.data);

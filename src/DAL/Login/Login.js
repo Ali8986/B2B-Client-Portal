@@ -527,11 +527,6 @@ export const Editing_Module = async (slug, data) => {
 };
 
 export const Module_Configuration_Details = async (slug) => {
-  console.log(
-    "Hello World Hello WorldHello WorldHello WorldHello WorldHello World",
-    slug
-  );
-
   const requestObj = {
     path: `api/module_configuration/get_module_configuration_info/${slug}`,
     method: "GET",
@@ -639,7 +634,6 @@ export const List_Website_Module = async (page, limt, data) => {
 };
 
 export const Update_Module_Data = async (id, data) => {
-  console.log(id, "ididididid", data, "data data data data data");
   const requestObj = {
     path: `api/website_module/update_module_data_object/${id}`,
     method: "PUT",
