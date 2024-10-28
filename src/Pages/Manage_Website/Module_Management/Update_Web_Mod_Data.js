@@ -17,11 +17,10 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { IconButton } from "@mui/material";
 import ReactEditorComponent from "../../../Components/GeneralComponents/ReactTextEditor";
 import { s3baseUrl } from "../../../config/config";
-import BasicBreadcrumbs from "../../../Components/GeneralComponents/BreadCrumbs";
 
 const UpdateWebModData = () => {
   const navigate = useNavigate();
-  const { id, module_title_slug, web_page_id } = useParams();
+  const { id, module_title_slug } = useParams();
   const location = useLocation();
   const { state } = location;
   const { enqueueSnackbar } = useSnackbar();
@@ -177,6 +176,7 @@ const UpdateWebModData = () => {
       FetchWebModuleDetails();
       Web_Mod_detail();
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

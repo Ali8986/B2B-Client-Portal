@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { Avatar, Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Exhibitors/DeletingUser";
 import {
@@ -127,6 +127,7 @@ function ManageWebPageModule() {
     e.preventDefault();
     const response = await Deleting_Web_Mod(valueForDeleting.module_title_slug);
     if (response.code === 200) {
+      // eslint-disable-next-line
       const WebsiteModulesAfterDeletion = WebsiteModules.filter((user) => {
         if (user._id !== valueForDeleting._id) {
           return user;
@@ -222,6 +223,7 @@ function ManageWebPageModule() {
       Fetch_Website_Module(page, rowsPerPage, savedSearchText);
       Get_Web_Pages();
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
   return (
     <>

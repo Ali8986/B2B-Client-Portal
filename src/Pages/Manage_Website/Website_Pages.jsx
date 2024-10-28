@@ -88,8 +88,10 @@ function WebsitePages() {
     e.preventDefault();
     const response = await Deleting_Website_Pages(valueForDeleting.page_slug);
     if (response.code === 200) {
+      // eslint-disable-next-line
       const WebsitePagesAfterDeletion = WebsitePages.filter((user) => {
         if (user._id !== valueForDeleting._id) {
+          // eslint-disable-next-line
           return user;
         }
       });
@@ -171,6 +173,7 @@ function WebsitePages() {
     } else {
       FetchWebsitePages(page, rowsPerPage);
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   return (

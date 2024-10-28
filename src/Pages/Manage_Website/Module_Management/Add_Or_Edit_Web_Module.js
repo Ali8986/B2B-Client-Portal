@@ -11,15 +11,13 @@ import {
   Module_Configuration_Details,
   Updating_Website_Module,
 } from "../../../DAL/Login/Login";
-import BasicBreadcrumbs from "../../../Components/GeneralComponents/BreadCrumbs";
-import { Create } from "@mui/icons-material";
 
 function AddorEditCompany({ type }) {
   const { id, module_id, web_page_id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location || {};
-  const { ModuleData, webPageID, value } = location.state || {};
+  const { ModuleData, webPageID } = location.state || {};
 
   const [loading, setLoading] = useState(false);
   const [Title, setTitle] = useState("");
@@ -105,6 +103,7 @@ function AddorEditCompany({ type }) {
         Web_Mod_detail();
       }
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
