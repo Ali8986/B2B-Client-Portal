@@ -56,10 +56,6 @@ function ManageWebPageModule() {
         ...item,
         name: item.module_title || "Unknown",
         status: item.status,
-        // data: Object.entries(item.module_data || {}).map(([key, value]) => ({
-        //   field: key,
-        //   content: value,
-        // })),
       }));
       setWebsiteModules(mappedUsers);
       setTotalCount(total_pages);
@@ -152,16 +148,6 @@ function ManageWebPageModule() {
     );
   };
 
-  // const handleClick = (value) => {
-  //   const Website_Id = value.module_configuration.find((page) => page._id);
-  //   navigate(
-  //     `/website-pages/${Website_Id._id}/${Website_Id.module_configuration_slug}`,
-  //     {
-  //       state: { userData: value.module_configuration },
-  //     }
-  //   );
-  // };
-
   const Menu_Options = [
     {
       label: "Update Web Module Content",
@@ -187,27 +173,6 @@ function ManageWebPageModule() {
       label: "Name",
       type: "row_name",
     },
-    // {
-    //   id: "any",
-    //   label: "Photo",
-    //   renderData: (row) => {
-    //     return row.data.map((item, index) => {
-    //       return (
-    //         <div key={index}>
-    //           <div>
-    //             {item.content.startsWith("http") && (
-    //               <Avatar
-    //                 sx={{ width: 50, height: 50 }}
-    //                 src={item.content}
-    //                 alt={item.field}
-    //               />
-    //             )}
-    //           </div>
-    //         </div>
-    //       );
-    //     });
-    //   },
-    // },
     {
       id: "action_by",
       label: "Action by",

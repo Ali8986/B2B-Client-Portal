@@ -1,7 +1,6 @@
 import * as React from "react";
-import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { Link } from "react-router-dom"; // Use react-router-dom Link for in-app navigation
+import { Link } from "react-router-dom";
 
 function BasicBreadcrumbs({ items = [] }) {
   return (
@@ -10,7 +9,7 @@ function BasicBreadcrumbs({ items = [] }) {
         return (
           <Link
             key={index}
-            to={item.navigation} // Use `to` instead of `href`
+            to={item.navigation} 
             className={item.status === "Active" ? "nav_active" : "nav_inactive"}
           >
             {item.title}

@@ -674,7 +674,15 @@ body {
 }
 
 .nav_inactive {
+    transition: all 0.2s ease-in-out !important;
     color: #aaa !important;
+}
+
+.nav_inactive:hover {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #7c97c1 !important;
+    text-decoration: underline !important;
 }
 
 .nav_inactive, .nav_active {
