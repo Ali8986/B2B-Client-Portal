@@ -257,6 +257,40 @@ export const DeletingEvent = async (id) => {
   return invokeApi(requestObj);
 };
 
+// export const Update_Speaker_In_Event = async (id) => {
+//   const requestObj = {
+//     path: `api/event/detail_event/${id}`,
+//     method: "GET",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//   };
+//   return invokeApi(requestObj);
+// };
+
+// export const Update_Exhibitor_In_Event = async (id) => {
+//   const requestObj = {
+//     path: `api/event/detail_event/${id}`,
+//     method: "GET",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//   };
+//   return invokeApi(requestObj);
+// };
+
+// export const Update_Company_In_Event = async (id, data) => {
+//   const requestObj = {
+//     path: `api/event/add_speaker_to_event/${id}`,
+//     method: "POST",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//     postData: data,
+//   };
+//   return invokeApi(requestObj);
+// };
+
 export const SpeakerDetails = async (id) => {
   const requestObj = {
     path: `api/speaker/detail_speaker/${id}`,

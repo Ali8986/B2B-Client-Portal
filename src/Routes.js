@@ -41,6 +41,9 @@ import UpdatePageContent from "./Pages/Manage_Website/UpdatePageContent";
 import ManageWebPageModule from "./Pages/Manage_Website/Module_Management/Manage_Website_Module";
 import AddOrdEditWebModule from "./Pages/Manage_Website/Module_Management/Add_Or_Edit_Web_Module";
 import UpdateWebModData from "./Pages/Manage_Website/Module_Management/Update_Web_Mod_Data";
+import UpdateEventsSpeaker from "./Components/Events/UpdateSpeaker";
+import UpdateEventsExhibitor from "./Components/Events/UpdateExhibitor";
+import UpdateEventsCompany from "./Components/Events/UpdateCompany";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -81,6 +84,21 @@ const Router = () => {
           path: "/events/editevent/:id",
           exact: true,
           element: <AddOrEditEvent type={EditingEvent} />,
+        },
+        {
+          path: "/events/update-events-speaker",
+          exact: true,
+          element: <UpdateEventsSpeaker />,
+        },
+        {
+          path: "/events/update-events-exhibitor",
+          exact: true,
+          element: <UpdateEventsExhibitor />,
+        },
+        {
+          path: "/events/update-events-companies",
+          exact: true,
+          element: <UpdateEventsCompany />,
         },
         { path: "/edit-profile", exact: true, element: <EditProfile /> },
         {

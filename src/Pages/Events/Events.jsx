@@ -86,8 +86,11 @@ function Exhibitors() {
     const response = await DeletingEvent(ValueForDeleting);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
+      // eslint-disable-next-line
       const EventsAfterDeletion = users.filter((user) => {
+        // eslint-disable-next-line
         if (user._id !== ValueForDeleting) {
+          // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
@@ -107,12 +110,38 @@ function Exhibitors() {
     setPage(0); // Reset to the first page
     await FetchEvnetsList(0, rowsPerPage, searchText); // Fetch the speaker list with the new search text
   };
+  const Handle_Update_Speaker =()=>{
+    navigate(`/events/update-events-speaker`);
+  }
+
+  const Handle_Update_Exhibitor =()=>{
+    navigate(`/events/update-events-exhibitor`);
+  }
+
+  const Handle_Update_Company =()=>{
+    navigate(`/events/update-events-companies`);
+  }
 
   const MENU_OPTIONS = [
     {
       label: "Edit",
       icon: <EditIcon />,
       handleClick: handleEdit,
+    },
+    {
+      label: "Update Speaker",
+      icon: <EditIcon />,
+      handleClick: Handle_Update_Speaker,
+    },
+    {
+      label: "Update Company",
+      icon: <EditIcon />,
+      handleClick: Handle_Update_Company,
+    },
+    {
+      label: "Update Exhibitor",
+      icon: <EditIcon />,
+      handleClick: Handle_Update_Exhibitor,
     },
     {
       label: "Delete",
@@ -124,6 +153,7 @@ function Exhibitors() {
       icon: <ContactPageIcon />,
       handleClick: handleDetails,
     },
+
   ];
   function formatDateTime(dateString, timeString) {
     const combinedString = `${dateString.replace(/:/g, "-")}T${timeString}`;
@@ -171,9 +201,8 @@ function Exhibitors() {
       },
     },
     {
+      // eslint-disable-next-line
       id: "status",
-      label: "Status",
-      id: "any",
       label: "Status",
       renderData: (row) => {
         return (
@@ -229,6 +258,7 @@ function Exhibitors() {
     } else {
       FetchEvnetsList(page, rowsPerPage); // Fetch the default speaker list
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]); // Run on page or rows per page change
 
   return (
