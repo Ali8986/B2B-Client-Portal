@@ -9,8 +9,8 @@ function BasicBreadcrumbs({ items = [] }) {
         return (
           <Link
             key={index}
-            to={item.navigation} 
-            className={item.status === "Active" ? "nav_active" : "nav_inactive"}
+            to={item?.navigation} 
+            className={item?.status === "Active" ? "nav_active" : "nav_inactive"}
           >
             {item.title}
           </Link>

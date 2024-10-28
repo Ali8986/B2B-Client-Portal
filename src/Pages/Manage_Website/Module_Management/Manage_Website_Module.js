@@ -231,12 +231,13 @@ function ManageWebPageModule() {
         </div>
       ) : (
         <div className='row my-4 mx-3'>
-          <div className='d-flex justify-content-between align-items-center my-4 ps-1'>
+          <div className='col-12 ms-1 mt-2 '>
+            <BasicBreadcrumbs items={breadcrumbItems} />
+          </div>
+          <div className='d-flex justify-content-between align-items-center my-4 ps-1 ms-1'>
             <div className='col-6'>
               <HeaderWithBackButton
                 className='Layout-heading'
-                main={true}
-                path='/website-pages'
                 title={`${userData[0]?.module_configuration_name}`}
               />
             </div>
@@ -250,9 +251,6 @@ function ManageWebPageModule() {
                 {`Add ${userData[0]?.module_configuration_name}`}
               </Button>
             </div>
-          </div>
-          <div className='col-12 mb-3 ms-4 ps-4'>
-            <BasicBreadcrumbs items={breadcrumbItems} />
           </div>
           <div className='Website_Configuration'>
             <ReactTable
