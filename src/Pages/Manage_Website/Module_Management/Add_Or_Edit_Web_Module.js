@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, MenuItem, Select } from "@mui/material";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import FormInput from "../../../Components/GeneralComponents/FormInput";
@@ -14,6 +14,7 @@ import {
 
 function AddorEditCompany({ type }) {
   const { id, module_id, web_page_id } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
   const { state } = location || {};
   const { ModuleData, webPageID, value } = location.state || {};
@@ -60,7 +61,7 @@ function AddorEditCompany({ type }) {
         : await Updating_Website_Module(slug, formData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      // navigate("/company");
+      navigate(-1);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -113,7 +114,11 @@ function AddorEditCompany({ type }) {
                   ? `Add ${ModuleData?.module_configuration_name || Title}`
                   : `Editing ${ModuleData?.module_configuration_name || Title}`
               }
-              path='empty'
+              path={
+                type === Create_Website_Module
+                  ? `/website-pages/${web_page_id}/${ModuleData?.module_configuration_slug}`
+                  : "empty"
+              }
             />
             <div className='col-6 mb-3'>
               <FormInput

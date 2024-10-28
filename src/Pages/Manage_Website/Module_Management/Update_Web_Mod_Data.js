@@ -21,10 +21,6 @@ import { s3baseUrl } from "../../../config/config";
 const UpdateWebModData = () => {
   const navigate = useNavigate();
   const { id, module_title_slug } = useParams();
-  console.log(
-    useParams(),
-    "navigate navigate vnavigate navigate navigate navigate navigatenavigate navigate"
-  );
   const location = useLocation();
   const { state } = location;
   const { enqueueSnackbar } = useSnackbar();
@@ -135,7 +131,7 @@ const UpdateWebModData = () => {
     const response = await Update_Module_Data(modId, postData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
-      // navigate(-1);
+      navigate(-1);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -158,8 +154,10 @@ const UpdateWebModData = () => {
   const Web_Mod_detail = async () => {
     const response = await Get_Web_Mod_Detail(module_title_slug);
     if (response.code === 200) {
-      setFormData(response?.website_module.module_data);
-      setModId(response?.website_module?._id);
+      if (response.website_module.module_data) {
+        setFormData(response?.website_module?.module_data);
+        setModId(response?.website_module?._id);
+      }
       setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
@@ -168,7 +166,8 @@ const UpdateWebModData = () => {
 
   useEffect(() => {
     if (state) {
-      if (state.module_data) {
+      console.log(state, "state");
+      if (state?.module_data) {
         setFormData(state?.module_data);
       }
       Web_Mod_detail();

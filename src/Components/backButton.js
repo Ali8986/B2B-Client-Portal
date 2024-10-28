@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // Importing the back arrow icon
 
-const HeaderWithBackButton = ({ title, path }) => {
+const HeaderWithBackButton = ({ title, path, main = false }) => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -16,7 +16,13 @@ const HeaderWithBackButton = ({ title, path }) => {
 
   return (
     <>
-      <div className={path ? "col-12 ps-1 d-flex align-items-center mb-4" : ""}>
+      <div
+        className={
+          path && !main
+            ? "col-12 ps-1 d-flex align-items-center mb-4"
+            : "d-flex"
+        }
+      >
         {path ? (
           <IconButton
             onClick={handleBackClick}

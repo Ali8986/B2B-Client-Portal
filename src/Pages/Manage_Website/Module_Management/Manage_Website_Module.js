@@ -13,7 +13,7 @@ import { useSnackbar } from "notistack";
 import HeaderWithBackButton from "../../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import SaveAsIcon from "@mui/icons-material/SaveAs";
+import BasicBreadcrumbs from "../../../Components/GeneralComponents/BreadCrumbs";
 
 function ManageWebPageModule() {
   const { enqueueSnackbar } = useSnackbar();
@@ -33,6 +33,14 @@ function ManageWebPageModule() {
   const [totalPages, setTotalPages] = useState(0);
   const [pageId, setPageId] = useState("");
   const [userData, setUserData] = useState([]);
+  const breadcrumbItems = [
+    {
+      navigation: "/website-pages",
+      title: "Website Pages",
+      status: "Inactive",
+    },
+    { title: `${userData[0]?.module_configuration_name}`, status: "Active" },
+  ];
 
   const Fetch_Website_Module = async (page, rowsPerPage, SearhPage) => {
     setLoading(true);
@@ -48,15 +56,16 @@ function ManageWebPageModule() {
         ...item,
         name: item.module_title || "Unknown",
         status: item.status,
-        data: Object.entries(item.module_data || {}).map(([key, value]) => ({
-          field: key,
-          content: value,
-        })),
+        // data: Object.entries(item.module_data || {}).map(([key, value]) => ({
+        //   field: key,
+        //   content: value,
+        // })),
       }));
       setWebsiteModules(mappedUsers);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);
+      setLoading(false);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -85,7 +94,7 @@ function ManageWebPageModule() {
   const HandleEditingWebsiteModules = (value) => {
     if (!userData || userData.length === 0) return;
     navigate(
-      `/website-pages/${value?.web_page_id}/${value?.module_title_slug}/edit-module/${userData[0]?.module_configuration_slug}`,
+      `/website-pages/${value?.web_page_id}/${userData[0]?.module_configuration_slug}/edit-module/${value?.module_title_slug}`,
       {
         state: {
           webPageID: pageId,
@@ -103,7 +112,7 @@ function ManageWebPageModule() {
   const HandleAddingWebModule = () => {
     const isAddingTrue = true;
     navigate(
-      `/website-pages/${pageId}/add/${userData[0]?.module_configuration_slug}`,
+      `/website-pages/${pageId}/${userData[0]?.module_configuration_slug}/add-module`,
       {
         state: {
           webPageID: pageId,
@@ -143,7 +152,7 @@ function ManageWebPageModule() {
 
   const handle_Update_Web_Module_Content = (value) => {
     navigate(
-      `/website-pages/${value.web_page_id}/${value.module_title_slug}/update/${userData[0]?.module_configuration_slug}`,
+      `/website-pages/${value.web_page_id}/${userData[0]?.module_configuration_slug}/update/${value.module_title_slug}`,
       { state: value }
     );
   };
@@ -162,7 +171,7 @@ function ManageWebPageModule() {
     let Menu_Options = [
       {
         label: "Update Web Module Content",
-        icon: <SaveAsIcon />,
+        icon: <EditIcon />,
         handleClick: () => handle_Update_Web_Module_Content(page),
       },
       {
@@ -182,7 +191,7 @@ function ManageWebPageModule() {
       page.module_configuration.forEach((config) => {
         Menu_Options.splice(1, 0, {
           label: config.module_configuration_name || "Custom Action",
-          icon: <SaveAsIcon />,
+          icon: <EditIcon />,
           handleClick: handleClick,
         });
       });
@@ -196,27 +205,27 @@ function ManageWebPageModule() {
       label: "Name",
       type: "row_name",
     },
-    {
-      id: "any",
-      label: "Photo",
-      renderData: (row) => {
-        return row.data.map((item, index) => {
-          return (
-            <div key={index}>
-              <div>
-                {item.content.startsWith("http") && (
-                  <Avatar
-                    sx={{ width: 50, height: 50 }}
-                    src={item.content}
-                    alt={item.field}
-                  />
-                )}
-              </div>
-            </div>
-          );
-        });
-      },
-    },
+    // {
+    //   id: "any",
+    //   label: "Photo",
+    //   renderData: (row) => {
+    //     return row.data.map((item, index) => {
+    //       return (
+    //         <div key={index}>
+    //           <div>
+    //             {item.content.startsWith("http") && (
+    //               <Avatar
+    //                 sx={{ width: 50, height: 50 }}
+    //                 src={item.content}
+    //                 alt={item.field}
+    //               />
+    //             )}
+    //           </div>
+    //         </div>
+    //       );
+    //     });
+    //   },
+    // },
     {
       id: "action_by",
       label: "Action by",
@@ -230,6 +239,7 @@ function ManageWebPageModule() {
   ];
 
   const Get_Web_Pages = async () => {
+    setLoading(true);
     const response = await Website_Pages_List();
     if (response.code === 200) {
       const page = response.website_pages.find(
@@ -239,7 +249,9 @@ function ManageWebPageModule() {
       setUserData(page.module_configuration);
       setPageId(page._id);
       // setUserData(response.data);
+      setLoading(false);
     } else {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
@@ -249,6 +261,9 @@ function ManageWebPageModule() {
       "searchText_Website_Module_Pages"
     );
     if (state) {
+      const { userData, pageId } = state;
+      setUserData(userData);
+      setPageId(pageId);
       const count = localStorage.getItem("rowsPerPage");
       if (savedSearchText) {
         setSearchText(savedSearchText);
@@ -263,71 +278,82 @@ function ManageWebPageModule() {
     }
   }, [page, rowsPerPage]);
   return (
-    <div className='row my-4 mx-3'>
-      <div className='d-flex justify-content-between align-items-center my-4 '>
-        <HeaderWithBackButton
-          className='Layout-heading'
-          title={`${userData[0]?.module_configuration_name}`}
-        />
-        <Button
-          variant='contained'
-          size='medium'
-          onClick={HandleAddingWebModule}
-          className='Data-Adding-Btn'
-        >
-          {`Add ${userData[0]?.module_configuration_name}`}
-        </Button>
-      </div>
-      <div className='Website_Configuration'>
-        {loading ? (
-          <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
-            <CircularProgress />
+    <>
+      {loading ? (
+        <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className='row my-4 mx-3'>
+          <div className='d-flex justify-content-between align-items-center my-4 ps-1'>
+            <div className='col-6'>
+              <HeaderWithBackButton
+                className='Layout-heading'
+                main={true}
+                path='/website-pages'
+                title={`${userData[0]?.module_configuration_name}`}
+              />
+            </div>
+            <div className='col-4 d-flex justify-content-end'>
+              <Button
+                variant='contained'
+                size='medium'
+                onClick={HandleAddingWebModule}
+                className='Data-Adding-Btn'
+              >
+                {`Add ${userData[0]?.module_configuration_name}`}
+              </Button>
+            </div>
           </div>
-        ) : (
-          <ReactTable
-            data={WebsiteModules.map((page) => ({
-              ...page,
-              menuOptions: generateMenuOptions(page), // Attach dynamic Menu_Options per row
-            }))}
-            TABLE_HEAD={TABLE_HEAD}
-            MENU_OPTIONS={(row) => row.menuOptions} // Pass dynamic menu options per row
-            custom_pagination={{
-              total_count: totalCount,
-              rows_per_page: rowsPerPage,
-              page: page,
-              total_pages: totalPages,
-              handleChangePage: handleChangePage,
-              handleRowsPerPageChange: handleRowsPerPageChange,
-            }}
-            custom_search={{
-              searchText: searchText,
-              setSearchText: setSearchText,
-              handleSubmit: searchFunction,
-            }}
-            theme_config={{
-              background: "white",
-              color: "black",
-              iconColor: "#7396CC",
-            }}
-            is_sticky_header={false}
-            is_hide_footer_pagination={false}
-            is_hide_header_pagination={false}
-            is_hide_search={false}
+          <div className='col-12 mb-3 ms-4 ps-4'>
+            <BasicBreadcrumbs items={breadcrumbItems} />
+          </div>
+          <div className='Website_Configuration'>
+            <ReactTable
+              data={WebsiteModules.map((page) => ({
+                ...page,
+                menuOptions: generateMenuOptions(page), // Attach dynamic Menu_Options per row
+              }))}
+              TABLE_HEAD={TABLE_HEAD}
+              MENU_OPTIONS={(row) => row.menuOptions} // Pass dynamic menu options per row
+              custom_pagination={{
+                total_count: totalCount,
+                rows_per_page: rowsPerPage,
+                page: page,
+                total_pages: totalPages,
+                handleChangePage: handleChangePage,
+                handleRowsPerPageChange: handleRowsPerPageChange,
+              }}
+              custom_search={{
+                searchText: searchText,
+                setSearchText: setSearchText,
+                handleSubmit: searchFunction,
+              }}
+              theme_config={{
+                background: "white",
+                color: "black",
+                iconColor: "#7396CC",
+              }}
+              is_sticky_header={false}
+              is_hide_footer_pagination={false}
+              is_hide_header_pagination={false}
+              is_hide_search={false}
+            />
+          </div>
+          <DeletingModal
+            className='Deleting-modal'
+            open={modelOpen}
+            handleClose={() => setModelOpen(false)}
+            component={
+              <DeletionConfirmation
+                onConfirm={(e) => onConfirm(e)}
+                onCancel={onCancel}
+              />
+            }
           />
-        )}
-      </div>
-      <DeletingModal
-        className='Deleting-modal'
-        open={modelOpen}
-        handleClose={() => setModelOpen(false)}
-        component={
-          <DeletionConfirmation
-            onConfirm={(e) => onConfirm(e)}
-            onCancel={onCancel}
-          />
-        }
-      />
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

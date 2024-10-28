@@ -663,3 +663,20 @@ body {
 .editir_label {
     font-size: 18px !important;
 }
+
+.margin {
+    margin-bottom: 0px !important;
+}
+
+.nav_active {
+    color: #7c97c1 !important;
+    pointer-events: none !important;
+}
+
+.nav_inactive {
+    color: #aaa !important;
+}
+
+.nav_inactive, .nav_active {
+    text-decoration: none !important;
+}

@@ -12,7 +12,6 @@ import { useSnackbar } from "notistack";
 import HeaderWithBackButton from "../../Components/backButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import SaveAsIcon from "@mui/icons-material/SaveAs";
 
 function WebsitePages() {
   const { enqueueSnackbar } = useSnackbar();
@@ -118,7 +117,7 @@ function WebsitePages() {
     let Menu_Options = [
       {
         label: "Update Page Content",
-        icon: <SaveAsIcon />,
+        icon: <EditIcon />,
         handleClick: () => handleUpdatePageContent(page),
       },
       {
@@ -138,7 +137,7 @@ function WebsitePages() {
       page.module_configuration.forEach((config) => {
         Menu_Options.splice(1,0,{
           label: config.module_configuration_name || "Custom Action",
-          icon: <SaveAsIcon />, 
+          icon: <EditIcon />, 
           handleClick: handleClick,
         });
       });

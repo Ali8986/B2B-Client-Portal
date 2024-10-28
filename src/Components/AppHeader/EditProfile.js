@@ -9,7 +9,11 @@ import {
 import { styled } from "@mui/system";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { ProfileImageContext } from "../../Hooks/createContext";
-import { profileDetail, updateProfile } from "../../DAL/Login/Login";
+import {
+  ImageUpload,
+  profileDetail,
+  updateProfile,
+} from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
 import "../../Assets/Styles/EditProfile.css";
@@ -52,13 +56,16 @@ const EditProfile = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileImage(reader.result);
-    };
-    reader.readAsDataURL(file);
+    const imageData = new FormData();
+    imageData.append("image", file);
+    const response = await ImageUpload(imageData);
+    if (response.code === 200) {
+      setProfileImage(s3baseUrl + response.path);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
   };
   const profileimg = localStorage.getItem("profileImage");
   useEffect(() => {

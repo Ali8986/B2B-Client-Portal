@@ -158,18 +158,17 @@ const Router = () => {
           element: <ManageWebPageModule />,
         },
         {
-          path: "/website-pages/:web_page_id/add/:id",
+          path: "/website-pages/:web_page_id/:id/add-module",
           exact: true,
           element: <AddOrdEditWebModule type={Create_Website_Module} />,
         },
         {
-          path: "/website-pages/:id/:module_id/edit-module/:id",
+          path: "/website-pages/:id/:id/edit-module/:module_id",
           exact: true,
           element: <AddOrdEditWebModule type={Updating_Website_Module} />,
         },
-
         {
-          path: "/website-pages/:web_page_id/:module_title_slug/update/:id",
+          path: "/website-pages/:web_page_id/:id/update/:module_title_slug",
           exact: true,
           element: <UpdateWebModData />,
         },
