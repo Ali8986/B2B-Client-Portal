@@ -86,16 +86,16 @@ const Router = () => {
           element: <AddOrEditEvent type={EditingEvent} />,
         },
         {
-          path: "/events/:id/update/:eventslug's-speaker",
+          path: "/events/:id/update-speaker",
           element: <UpdateEventsSpeaker />,
         },
         {
-          path: "/events/:id/update/:eventslug's-exhibitor",
+          path: "/events/:id/update-exhibitor",
           exact: true,
           element: <UpdateEventsExhibitor />,
         },
         {
-          path: "/events/:id/update/:eventslug's-company",
+          path: "/events/:id/update-company",
           exact: true,
           element: <UpdateEventsCompany />,
         },

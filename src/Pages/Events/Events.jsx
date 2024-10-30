@@ -105,47 +105,33 @@ function Exhibitors() {
   const onCancel = () => {
     setModelOpen(false);
   };
-  const searchFunction = async (e) => {
+  const searchFunction = (e) => {
     e.preventDefault();
     localStorage.setItem("searchText_events_page", searchText);
     setPage(0); // Reset to the first page
-    await FetchEvnetsList(0, rowsPerPage, searchText); // Fetch the speaker list with the new search text
+    FetchEvnetsList(0, rowsPerPage, searchText); // Fetch the speaker list with the new search text
   };
 
-  const slugMaker= (value)=>{
-    const createSlug = name => name
-    .toLowerCase() // Convert to lowercase
-    .replace(/[&{}]/g, '') // Remove special characters like & and {}
-    .replace(/\s+/g, '-') // Replace spaces with dashes
-    .replace(/-{2,}/g, '-') // Replace multiple dashes with a single dash
-    .replace(/^[\-]+|[\-]+$/g, ''); // Trim dashes from the start and end;
-    return createSlug(value.name)
-  }
-
-  const Handle_Update_Speaker =(value)=>{
-    const slug = slugMaker(value)
-    navigate(`/events/${value._id}/update/${slug}'s-speaker`,
-      { state: {
-        value:value.speakers,
-        speaker_name:`${value.name}`
-      } }
-    );
-  }
-
-  const Handle_Update_Exhibitor =(value)=>{
-    const slug = slugMaker(value)
-    navigate(`/events/${value._id}/update/${slug}'s-exhibitor`,{
-      state:value.exhibitors,
+  const Handle_Update_Speaker = (value) => {
+    navigate(`/events/${value._id}/update-speaker`, {
+      state: {
+        value: value.speakers,
+        speaker_name: `${value.name}`,
+      },
     });
-  }
+  };
 
-  const Handle_Update_Company =(value)=>{
-    console.log(value,"value for comapnies");
-    const slug = slugMaker(value)
-    navigate(`/events/${value._id}/update/${slug}'s-company`,{
-      state:value.company,
+  const Handle_Update_Exhibitor = (value) => {
+    navigate(`/events/${value._id}/update-exhibitor`, {
+      state: value.exhibitors,
     });
-  }
+  };
+
+  const Handle_Update_Company = (value) => {
+    navigate(`/events/${value._id}/update-company`, {
+      state: value.company,
+    });
+  };
 
   const MENU_OPTIONS = [
     {
@@ -164,13 +150,13 @@ function Exhibitors() {
       handleClick: Handle_Update_Company,
     },
     {
-      label: "Managee Event`s Exhibitor",
+      label: "Manage Event`s Exhibitor",
       icon: <EditIcon />,
       handleClick: Handle_Update_Exhibitor,
     },
     {
       label: "Delete",
-      icon: <DeleteForeverIcon className="Delete-Icon" />,
+      icon: <DeleteForeverIcon className='Delete-Icon' />,
       handleClick: handleDelete,
     },
     {
@@ -178,7 +164,6 @@ function Exhibitors() {
       icon: <ContactPageIcon />,
       handleClick: handleDetails,
     },
-
   ];
   function formatDateTime(dateString, timeString) {
     const combinedString = `${dateString.replace(/:/g, "-")}T${timeString}`;
@@ -196,7 +181,7 @@ function Exhibitors() {
       className: "cursor-pointer",
       renderData: (row, index) => {
         return (
-          <ToolTip key={index} title="View Details" arrow className="Tooltip">
+          <ToolTip key={index} title='View Details' arrow className='Tooltip'>
             <span onClick={() => handleDetails(row)}>{row.name}</span>
           </ToolTip>
         );
@@ -208,7 +193,7 @@ function Exhibitors() {
       label: "Start Date/Time",
       renderData: (row) => {
         return (
-          <div className="d-flex align-items-center">
+          <div className='d-flex align-items-center'>
             <div>{formatDateTime(row.start_date, row.start_time)}</div>
           </div>
         );
@@ -219,7 +204,7 @@ function Exhibitors() {
       label: "End Date/Time",
       renderData: (row) => {
         return (
-          <div className="d-flex align-items-center">
+          <div className='d-flex align-items-center'>
             <div>{formatDateTime(row.end_date, row.end_time)}</div>
           </div>
         );
@@ -287,10 +272,10 @@ function Exhibitors() {
   }, [page, rowsPerPage]); // Run on page or rows per page change
 
   return (
-    <div className="row my-4 mx-3">
-      <div className="d-flex justify-content-between align-items-center my-4 ">
+    <div className='row my-4 mx-3'>
+      <div className='d-flex justify-content-between align-items-center my-4 '>
         <h2
-          className="Layout-heading"
+          className='Layout-heading'
           style={{
             fontSize: 32,
             margin: 0,
@@ -302,20 +287,20 @@ function Exhibitors() {
           Events
         </h2>
         <Button
-          variant="contained"
-          size="medium"
+          variant='contained'
+          size='medium'
           onClick={handleAddingMember}
-          className="Data-Adding-Btn"
+          className='Data-Adding-Btn'
         >
           ADD Event
         </Button>
       </div>
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
+        <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
           <CircularProgress />
         </div>
       ) : (
-        <div className="Exhibitors-Table">
+        <div className='Exhibitors-Table'>
           <ReactTable
             data={users} // required
             TABLE_HEAD={TABLE_HEAD} // required
@@ -333,7 +318,7 @@ function Exhibitors() {
               setSearchText: setSearchText,
               handleSubmit: searchFunction,
             }} // required
-            class_name=""
+            class_name=''
             theme_config={{
               background: "white",
               color: "black",
@@ -358,7 +343,7 @@ function Exhibitors() {
         }
       />
       <DeletingModal
-        className="Deleting-modal"
+        className='Deleting-modal'
         open={modelOpen}
         handleClose={handleCloseModal}
         component={

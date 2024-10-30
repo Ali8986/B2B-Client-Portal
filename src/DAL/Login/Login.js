@@ -1,25 +1,26 @@
 import { invokeApi } from "../../bl_libs/invokeApi";
 
-export const dashboardApi = async (data) => {
-  const requestObj = {
-    path: `/admin_users/dashboard?start_date=${data.start_date}&end_date=${data.end_date}`,
-    method: "GET",
-    headers: {
-      "x-sh-auth": localStorage.getItem("token"),
-    },
-  };
-  return invokeApi(requestObj);
-};
-export const adminInitApi = async () => {
-  const requestObj = {
-    path: `/admin_users/init_api`,
-    method: "GET",
-    headers: {
-      "x-sh-auth": localStorage.getItem("token"),
-    },
-  };
-  return invokeApi(requestObj);
-};
+// export const dashboardApi = async (data) => {
+//   const requestObj = {
+//     path: `/admin_users/dashboard?start_date=${data.start_date}&end_date=${data.end_date}`,
+//     method: "GET",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//   };
+//   return invokeApi(requestObj);
+// };
+// export const adminInitApi = async () => {
+//   const requestObj = {
+//     path: `/admin_users/init_api`,
+//     method: "GET",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//   };
+//   return invokeApi(requestObj);
+// };
+
 export const login = async (data) => {
   const requestObj = {
     path: `api/app_api/login`,
@@ -36,7 +37,7 @@ export const changePasswordApi = async (data) => {
     path: `api/app_api/email_verification`,
     method: "POST",
     headers: {
-      // "x-sh-auth": localStorage.getItem("token"),
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -60,7 +61,7 @@ export const register = async (data) => {
     path: `api/user_registor.php`,
     method: "POST",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -72,7 +73,7 @@ export const confirmEmail = async (data) => {
     path: `/admin_users/email_confirmation`,
     method: "POST",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -84,7 +85,7 @@ export const confirmPinCode = async (data) => {
     path: `api/app_api/code_verification`,
     method: "POST",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -96,7 +97,7 @@ export const updatePassword = async (data) => {
     path: `api/app_api/reset_password`,
     method: "POST",
     headers: {
-      // 'x-sh-auth': localStorage.getItem('token')
+      "x-sh-auth": localStorage.getItem("token"),
     },
     postData: data,
   };
@@ -273,12 +274,13 @@ export const List_Company_EXhibitor_Speaker = async (
   page,
   limit,
   searchText,
-  type
+  type,
+  id
 ) => {
   const requestObj = {
-    path: `api/event/list_of_company_speaker_exhibitor?&page=${page}&limit=${limit}&search=${
-      searchText || ""
-    }&type=${type || ""}`,
+    path: `api/event/list_of_company_speaker_exhibitor/${id}?&page=${
+      page ? page : 0
+    }&limit=${limit ? limit : 0}&search=${searchText || ""}&type=${type || ""}`,
     method: "GET",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),

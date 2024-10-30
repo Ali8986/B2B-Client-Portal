@@ -8,28 +8,16 @@ import { Avatar } from "@mui/material";
 import HeaderWithBackButton from "../../Components/backButton";
 import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
-import Tooltip from "@mui/material/Tooltip";
 import BasicBreadcrumbs from "../GeneralComponents/BreadCrumbs";
 import {
-  EventDetails,
   List_Company_EXhibitor_Speaker,
   Update_Speaker_In_Event,
 } from "../../DAL/Login/Login";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ToolTip from "../GeneralComponents/ToolTip";
 
 function UpdateEventsSpeaker() {
-  const location = useLocation();
   const { id } = useParams();
-  const { state } = location;
-  const breadcrumbItems = [
-    {
-      navigation: "/events",
-      title: "Events",
-      status: "Inactive",
-    },
-    { title: `Update ${state.speaker_name}'s Speaker`, status: "Active" },
-  ];
 
   const { enqueueSnackbar } = useSnackbar();
   const [selected, setSelected] = useState([]);
@@ -42,6 +30,7 @@ function UpdateEventsSpeaker() {
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [eventName, setEventName] = useState("");
 
   const FetchSpeakerList = async (page, rowsPerPage, savedSearchText) => {
     setLoading(true);
@@ -49,10 +38,11 @@ function UpdateEventsSpeaker() {
       page,
       rowsPerPage,
       savedSearchText,
-      "speaker"
+      "speaker",
+      id
     );
     if (response.code === 200) {
-      const { list, total_speakers, total_pages } = response;
+      const { list, event, total_speakers, total_pages } = response;
       const mappedUsers = list?.map((item) => ({
         ...item,
         name: `${item.first_name} ${item.last_name}` || "Unknown",
@@ -62,11 +52,23 @@ function UpdateEventsSpeaker() {
       setTotalCount(total_pages);
       setTotalPages(total_speakers);
       localStorage.setItem("rowsPerPage", totalCount);
+      setSelected(event.speakers);
+      setEventName(event.name);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
     setLoading(false);
   };
+
+  const breadcrumbItems = [
+    {
+      navigation: "/events",
+      title: `${eventName}`,
+      status: "Inactive",
+    },
+    { title: `Update Speaker`, status: "Active" },
+  ];
+
   const handleChangePage = (newPage) => {
     setPage(newPage);
     FetchSpeakerList(newPage, rowsPerPage);
@@ -93,18 +95,17 @@ function UpdateEventsSpeaker() {
       expertise: user?.expertise || [],
     }));
 
-    console.log(
-      SelectedSpeakers,
-      "SelectedSpeakers SelectedSpeakers vSelectedSpeakers SelectedSpeakers SelectedSpeakers SelectedSpeakers SelectedSpeakers"
-    );
     const formData = {
       speakers: SelectedSpeakers,
     };
 
+    setLoading(true);
     const response = await Update_Speaker_In_Event(formData, id);
     if (response.code === 200) {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "success" });
     } else {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
@@ -191,14 +192,6 @@ function UpdateEventsSpeaker() {
     setShowDetails(false);
     setSelectedObject(null);
   };
-  const FetchSelectedSpeakersList = async () => {
-    const response = await EventDetails(id);
-    if (response.code === 200) {
-      setSelected(response.event.speakers);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
-  };
 
   useEffect(() => {
     const savedSearchText = localStorage.getItem("searchText_speaker_page");
@@ -213,22 +206,15 @@ function UpdateEventsSpeaker() {
     // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
-  useEffect(() => {
-    if (state) {
-      setSelected(state.value);
-    } else {
-      FetchSelectedSpeakersList();
-    }
-    // eslint-disable-next-line
-  }, []);
-
   return (
     <div className='row my-4 mx-3'>
       <div className='col-12 mt-3'>
-        <BasicBreadcrumbs items={breadcrumbItems} />
+        {loading ? null : <BasicBreadcrumbs items={breadcrumbItems} />}
       </div>
       <div className='d-flex justify-content-between align-items-center my-4 '>
-        <HeaderWithBackButton className='Layout-heading' title='Speakers' />
+        {loading ? null : (
+          <HeaderWithBackButton className='Layout-heading' title='Speakers' />
+        )}
       </div>
       <div className='Speakers_Table'>
         {loading ? (

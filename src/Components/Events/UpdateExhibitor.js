@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { Avatar, Button, Tooltip } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import {
   Update_Exhibitor_In_Event,
-  EventDetails,
   List_Company_EXhibitor_Speaker,
 } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
@@ -15,30 +14,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import ExhibitorDetailsModal from "../../Components/Exhibitors/ExhibitorDetails";
 import BasicBreadcrumbs from "../GeneralComponents/BreadCrumbs";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ToolTip from "../GeneralComponents/ToolTip";
 
 function UpdateEventsExhibitor() {
-  const location = useLocation();
-  const { state } = location;
-  const { id, eventslug } = useParams();
-  const convertSlugToReadable = (slug) => {
-    return slug
-      .split("-") // Split the slug by dashes
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
-      .join(" "); // Join the words back with spaces
-  };
-  const breadcrumbItems = [
-    {
-      navigation: "/events",
-      title: "Events",
-      status: "Inactive",
-    },
-    {
-      title: `Update ${convertSlugToReadable(eventslug)}'s Exhibitor`,
-      status: "Active",
-    },
-  ];
+  const { id } = useParams();
 
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -51,6 +31,18 @@ function UpdateEventsExhibitor() {
   const [rowsPerPage, setRowsPerPage] = useState(50);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [eventName, setEventName] = useState("");
+  const breadcrumbItems = [
+    {
+      navigation: "/events",
+      title: `${eventName}`,
+      status: "Inactive",
+    },
+    {
+      title: `Update Exhibitor`,
+      status: "Active",
+    },
+  ];
 
   const FetchExhibitorsList = async (
     page,
@@ -62,10 +54,11 @@ function UpdateEventsExhibitor() {
       page,
       rowsPerPage,
       SearchUserOrFilterUser,
-      "exhibitor"
+      "exhibitor",
+      id
     );
     if (response.code === 200) {
-      const { list, total_exhibitors, total_pages } = response;
+      const { list, event, total_exhibitors, total_pages } = response;
       const mappedUsers = list?.map((item) => ({
         ...item,
         name: item.name || "Unknown",
@@ -76,6 +69,8 @@ function UpdateEventsExhibitor() {
       setTotalPages(total_exhibitors);
       localStorage.setItem("rowsPerPage", totalCount);
       setLoading(false);
+      setSelected(event.exhibitors);
+      setEventName(event.name);
     } else {
       setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
@@ -99,11 +94,13 @@ function UpdateEventsExhibitor() {
     const formData = {
       exhibitors: SelectedExhibitors,
     };
-
+    setLoading(true);
     const response = await Update_Exhibitor_In_Event(formData, id);
     if (response.code === 200) {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "success" });
     } else {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
@@ -113,15 +110,6 @@ function UpdateEventsExhibitor() {
     setRowsPerPage(newRowsPerPage);
     setPage(0);
     FetchExhibitorsList(0, newRowsPerPage);
-  };
-
-  const FetchSelectedExhibitorList = async () => {
-    const response = await EventDetails(id);
-    if (response.code === 200) {
-      setSelected(response.event.exhibitors);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
   };
 
   const searchFunction = (e) => {
@@ -252,24 +240,18 @@ function UpdateEventsExhibitor() {
     } else {
       FetchExhibitorsList(page, rowsPerPage);
     }
-  }, [page, rowsPerPage]);
-
-  useEffect(() => {
-    if (state) {
-      setSelected(state);
-    } else {
-      FetchSelectedExhibitorList();
-    }
     // eslint-disable-next-line
-  }, []);
+  }, [page, rowsPerPage]);
 
   return (
     <div className='row mt-5 mb-0 mx-3'>
       <div className='col-12 mt-2 mb-4 ms-1'>
-        <BasicBreadcrumbs items={breadcrumbItems} />
+        {!loading && <BasicBreadcrumbs items={breadcrumbItems} />}
       </div>
       <div className='d-flex justify-content-between align-items-center flex-wrap mb-4'>
-        <HeaderWithBackButton className='Layout-heading' title='Exhibitors' />
+        {!loading && (
+          <HeaderWithBackButton className='Layout-heading' title='Exhibitors' />
+        )}
       </div>
       <div className='Exhibitors_table'>
         {loading ? (

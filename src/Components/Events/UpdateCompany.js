@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
 import { Button, CircularProgress } from "@mui/material";
 import {
-  CompanyList,
-  EventDetails,
   List_Company_EXhibitor_Speaker,
   Update_Company_In_Event,
 } from "../../DAL/Login/Login";
@@ -16,27 +14,20 @@ import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import Tooltip from "@mui/material/Tooltip";
 import CompanyDetailsModal from "../../Components/company/CompanyDetailsModal";
 import BasicBreadcrumbs from "../GeneralComponents/BreadCrumbs";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ToolTip from "../GeneralComponents/ToolTip";
 
 function UpdateEventsCompany() {
-  const location = useLocation();
-  const { state } = location;
-  const { id, eventslug } = useParams();
-  const convertSlugToReadable = (slug) => {
-    return slug
-      .split("-") // Split the slug by dashes
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
-      .join(" "); // Join the words back with spaces
-  };
+  const [eventName, setEventName] = useState("");
+  const { id } = useParams();
   const breadcrumbItems = [
     {
       navigation: "/events",
-      title: "Events",
+      title: `${eventName}`,
       status: "Inactive",
     },
     {
-      title: `Update ${convertSlugToReadable(eventslug)}'s Company`,
+      title: `Update Company`,
       status: "Active",
     },
   ];
@@ -59,9 +50,11 @@ function UpdateEventsCompany() {
       page,
       rowsPerPage,
       savedSearchText,
-      "company"
+      "company",
+      id
     );
     if (response.code === 200) {
+      const { event } = response;
       const mappedUsers = response.list.map((item) => ({
         ...item,
         name: item.name || "Unknown",
@@ -72,6 +65,8 @@ function UpdateEventsCompany() {
       setTotalCount(response.total_pages);
       setTotalPages(response.total_companies);
       localStorage.setItem("rowsPerPage", totalCount);
+      setSelected([event.company]);
+      setEventName(event.name);
     } else {
       enqueueSnackbar(response.message, { variant: "error" });
     }
@@ -95,14 +90,16 @@ function UpdateEventsCompany() {
     const formData = {
       company: selected[0],
     };
-
+    setLoading(true);
     const response = await Update_Company_In_Event(formData, id);
     if (response.code === 200) {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "success" });
       // setShowDetails(false);
       // setSelected([]);
       // FetchSpeakerList(page, rowsPerPage, searchText);
     } else {
+      setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
   };
@@ -230,15 +227,6 @@ function UpdateEventsCompany() {
     await FetchCompnayList(0, rowsPerPage, searchText);
   };
 
-  const FetchSelectedCompanyList = async () => {
-    const response = await EventDetails(id);
-    if (response.code === 200) {
-      setSelected((prev) => [...prev, response.event.company]);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
-  };
-
   const showCompanyDetailsModal = (e) => {
     e.preventDefault();
     setShowDetails(true);
@@ -261,28 +249,18 @@ function UpdateEventsCompany() {
     } else {
       FetchCompnayList(page, rowsPerPage);
     }
-  }, [page, rowsPerPage]);
-
-  useEffect(() => {
-    if (state) {
-      console.log(
-        state,
-        "statestatestatestatestatestatestatestatestatestatestate"
-      );
-      setSelected([state]);
-    } else {
-      FetchSelectedCompanyList();
-    }
     // eslint-disable-next-line
-  }, []);
+  }, [page, rowsPerPage]);
 
   return (
     <div className='row my-4 mx-3'>
       <div className='col-12 mt-2 '>
-        <BasicBreadcrumbs items={breadcrumbItems} />
+        {!loading && <BasicBreadcrumbs items={breadcrumbItems} />}
       </div>
       <div className='d-flex justify-content-between align-items-center my-4 '>
-        <HeaderWithBackButton className='Layout-heading' title='Company' />
+        {!loading && (
+          <HeaderWithBackButton className='Layout-heading' title='Company' />
+        )}
       </div>
       <div className='Speakers_Table'>
         {loading ? (
@@ -308,7 +286,7 @@ function UpdateEventsCompany() {
               setSearchText: setSearchText,
               handleSubmit: searchFunction,
             }}
-            class_name=''
+            class_name={!loading ? "slide-in" : ""}
             theme_config={{
               background: "white",
               color: "black",
