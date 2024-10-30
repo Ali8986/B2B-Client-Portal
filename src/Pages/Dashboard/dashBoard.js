@@ -6,7 +6,7 @@ const userData = [
     id: 1,
     name: "John Doe",
     greeting: "Hello",
-    description: "I am a Software Developer",
+    description: "I am Soft Dev",
     title: "Frontend Developer",
     location: "San Francisco, CA",
     avatarUrl: "https://i.pravatar.cc/150?img=1",
@@ -25,7 +25,7 @@ const userData = [
     name: "Alex Johnson",
     greeting: "Hey",
     description: "I am a Data Scientist",
-    title: "Machine Learning Engineer",
+    title: "Machine Learning",
     location: "Austin, TX",
     avatarUrl: "https://i.pravatar.cc/150?img=3",
   },
@@ -33,7 +33,7 @@ const userData = [
     id: 4,
     name: "Emily Davis",
     greeting: "Welcome!",
-    description: "I am a Marketing Specialist",
+    description: "I am a Marketer",
     title: "Digital Marketer",
     location: "Chicago, IL",
     avatarUrl: "https://i.pravatar.cc/150?img=4",
@@ -52,7 +52,7 @@ const userData = [
     name: "Sarah Wilson",
     greeting: "Hi!",
     description: "I am a Software Tester",
-    title: "Quality Assurance Engineer",
+    title: "QA Engineer",
     location: "Seattle, WA",
     avatarUrl: "https://i.pravatar.cc/150?img=6",
   },
@@ -70,7 +70,7 @@ const userData = [
     name: "Sophia Martinez",
     greeting: "Greetings!",
     description: "I am a Data Analyst",
-    title: "Business Intelligence Analyst",
+    title: "Business Intel Analyst",
     location: "Miami, FL",
     avatarUrl: "https://i.pravatar.cc/150?img=8",
   },
@@ -79,21 +79,37 @@ const userData = [
 function HomePage() {
   return (
     <div className='container'>
-      <div className='row p-5'>
+      <div className='row p-3'>
         {userData.map((user) => (
           <div key={user.id} className='col-3'>
             <div
-              className='my-4 bg-black d-flex justify-content-center flex-column align-items-center text-white rounded-5 p-3 text-center'
+              className='my-4 bg-black d-flex justify-content-center flex-column align-items-center text-white rounded-5 p-3 text-center text_Color'
               style={{
                 height: "90%",
               }}
             >
-              <Avatar src={user.avatarUrl} className='my-4' />
-              <h2>{user.greeting}</h2>
-              <p>{user.name}</p>
-              <p>{user.title}</p>
-              <p>{user.location}</p>
-              <p>{user.description}</p>
+              <div className='col-12 d-flex justify-content-center'>
+                <Avatar
+                  src={user.avatarUrl}
+                  className='my-4'
+                  sx={{ width: 100, height: 100 }}
+                />
+              </div>
+              <div className='col-12'>
+                <h2 className='text_Color'>{user.greeting}</h2>
+              </div>
+              <div className='col-12'>
+                <p>{user.name}</p>
+              </div>
+              <div className='col-12'>
+                <p>{user.title}</p>
+              </div>
+              <div className='col-12'>
+                <p>{user.location}</p>
+              </div>
+              <div className='col-12'>
+                <p>{user.description}</p>
+              </div>
             </div>
           </div>
         ))}

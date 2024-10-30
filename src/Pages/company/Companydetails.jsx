@@ -18,11 +18,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomModal from "../../Components/GeneralComponents/CustomModal";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
-import Tooltip from "@mui/material/Tooltip";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import CompanyDetailsModal from "../../Components/company/CompanyDetailsModal";
 import ChangeCompanyPassword from "../../Components/company/changeCompanyPassword";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import ToolTip from "../../Components/GeneralComponents/ToolTip";
 
 function CompanyDetails() {
   const [showDetails, setShowDetails] = useState(false);
@@ -176,9 +176,9 @@ function CompanyDetails() {
       className: "cursor-pointer",
       renderData: (row, index) => {
         return (
-          <Tooltip key={index} title="View Details" arrow>
+          <ToolTip key={index} title="View Details" arrow>
             <span onClick={() => handleDetails(row)}>{row.name}</span>
-          </Tooltip>
+          </ToolTip>
         );
       },
     },

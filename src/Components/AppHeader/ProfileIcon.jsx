@@ -32,15 +32,11 @@ export default function ProfileIcon() {
   const getData = async () => {
     const response = await updateProfile();
     if (response.code === 200) {
-      setData(response.admin);
+      setData(response?.admin);
       localStorage.setItem("profileImage", response.admin.profile_image);
       setProfileImage(response.admin.profile_image);
     }
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -101,6 +97,10 @@ export default function ProfileIcon() {
       }
     }, 1000);
   }, [pathname]);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="Profile-DropDown">

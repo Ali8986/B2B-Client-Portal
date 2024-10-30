@@ -688,3 +688,19 @@ body {
 .nav_inactive, .nav_active {
     text-decoration: none !important;
 }
+
+.text_Color {
+    color: white !important;
+}
+
+.rowCheckbox {
+    border: none !important;
+    cursor: pointer;
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.disabled_checkbox:hover {
+    cursor: not-allowed;
+    background-color: red !important;
+}

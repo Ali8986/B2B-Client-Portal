@@ -34,9 +34,9 @@ const HeaderWithBackButton = ({ title, path, main = false }) => {
         <h2
           style={{
             color: "#7396cc",
-            marginBottom: "5px",
+            marginBottom: "0px",
           }}
-          className='ms-0 ms-md-2'
+          className='ms-0'
         >
           {title}
         </h2>

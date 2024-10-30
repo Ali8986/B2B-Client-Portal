@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { Avatar, Button, Tooltip } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "./DeletingUser";
@@ -25,6 +25,7 @@ import FilterAltRoundedIcon from "@mui/icons-material/FilterAltRounded";
 import CustomDrawer from "../../Components/GeneralComponents/CustomDrawer";
 import ReactFilterChips from "react-filter-chips";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import ToolTip from "../../Components/GeneralComponents/ToolTip";
 
 function Exhibitors() {
   const EMPTY_FILTER = {
@@ -283,9 +284,9 @@ function Exhibitors() {
       className: "cursor-pointer",
       renderData: (row, index) => {
         return (
-          <Tooltip key={index} title="View Details" arrow>
+          <ToolTip key={index} title="View Details" arrow>
             <span onClick={() => handleDetails(row)}>{row.name}</span>
-          </Tooltip>
+          </ToolTip>
         );
       },
     },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { Button, Chip, CircularProgress, Tooltip } from "@mui/material";
+import { Button, Chip, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../Exhibitors/DeletingUser";
@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import EventDetailModal from "../../Components/Events/EventsDetails";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import ToolTip from "../../Components/GeneralComponents/ToolTip";
 function Exhibitors() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -34,7 +35,7 @@ function Exhibitors() {
     const response = await EventList(page, rowsPerPage, postData);
     if (response.code === 200) {
       const { events, total_events, total_pages } = response;
-      const mappedUsers = events.map((item) => ({
+      const mappedUsers = events?.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
@@ -110,16 +111,40 @@ function Exhibitors() {
     setPage(0); // Reset to the first page
     await FetchEvnetsList(0, rowsPerPage, searchText); // Fetch the speaker list with the new search text
   };
-  const Handle_Update_Speaker =()=>{
-    navigate(`/events/update-events-speaker`);
+
+  const slugMaker= (value)=>{
+    const createSlug = name => name
+    .toLowerCase() // Convert to lowercase
+    .replace(/[&{}]/g, '') // Remove special characters like & and {}
+    .replace(/\s+/g, '-') // Replace spaces with dashes
+    .replace(/-{2,}/g, '-') // Replace multiple dashes with a single dash
+    .replace(/^[\-]+|[\-]+$/g, ''); // Trim dashes from the start and end;
+    return createSlug(value.name)
   }
 
-  const Handle_Update_Exhibitor =()=>{
-    navigate(`/events/update-events-exhibitor`);
+  const Handle_Update_Speaker =(value)=>{
+    const slug = slugMaker(value)
+    navigate(`/events/${value._id}/update/${slug}'s-speaker`,
+      { state: {
+        value:value.speakers,
+        speaker_name:`${value.name}`
+      } }
+    );
   }
 
-  const Handle_Update_Company =()=>{
-    navigate(`/events/update-events-companies`);
+  const Handle_Update_Exhibitor =(value)=>{
+    const slug = slugMaker(value)
+    navigate(`/events/${value._id}/update/${slug}'s-exhibitor`,{
+      state:value.exhibitors,
+    });
+  }
+
+  const Handle_Update_Company =(value)=>{
+    console.log(value,"value for comapnies");
+    const slug = slugMaker(value)
+    navigate(`/events/${value._id}/update/${slug}'s-company`,{
+      state:value.company,
+    });
   }
 
   const MENU_OPTIONS = [
@@ -129,17 +154,17 @@ function Exhibitors() {
       handleClick: handleEdit,
     },
     {
-      label: "Update Speaker",
+      label: "Manage Event`s Speaker",
       icon: <EditIcon />,
       handleClick: Handle_Update_Speaker,
     },
     {
-      label: "Update Company",
+      label: "Manage Event`s Company",
       icon: <EditIcon />,
       handleClick: Handle_Update_Company,
     },
     {
-      label: "Update Exhibitor",
+      label: "Managee Event`s Exhibitor",
       icon: <EditIcon />,
       handleClick: Handle_Update_Exhibitor,
     },
@@ -171,9 +196,9 @@ function Exhibitors() {
       className: "cursor-pointer",
       renderData: (row, index) => {
         return (
-          <Tooltip key={index} title="View Details" arrow className="Tooltip">
+          <ToolTip key={index} title="View Details" arrow className="Tooltip">
             <span onClick={() => handleDetails(row)}>{row.name}</span>
-          </Tooltip>
+          </ToolTip>
         );
       },
     },
