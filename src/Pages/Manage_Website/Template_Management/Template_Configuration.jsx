@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Exhibitors/DeletingUser";
@@ -96,8 +96,10 @@ function TemplateConfiguration() {
       valueForDeleting._id
     );
     if (response.code === 200) {
+      // eslint-disable-next-line
       const TemplatesAfterDeletion = Templates.filter((user) => {
         if (user._id !== valueForDeleting._id) {
+          // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
@@ -157,6 +159,7 @@ function TemplateConfiguration() {
     } else {
       FetchTemplateConfig(page, rowsPerPage);
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   return (

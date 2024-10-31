@@ -49,7 +49,6 @@ export default function ProfileIcon() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const prflImg = localStorage.getItem("profileImage");
 
   const confirmLogout = async () => {
     setShowLogoutModal(false);
@@ -83,16 +82,15 @@ export default function ProfileIcon() {
         localStorage.removeItem("searchText_company_page");
       }
       if (!is_path_includes("/template-configuration")) {
-        localStorage.setItem("inboxOpen", JSON.stringify(true));
-
+        localStorage.setItem("inboxOpen", JSON.stringify(false));
         localStorage.removeItem("searchText_Template_Config_page");
       }
       if (!is_path_includes("/module-configuration")) {
-        localStorage.setItem("inboxOpen", JSON.stringify(true));
+        localStorage.setItem("inboxOpen", JSON.stringify(false));
         localStorage.removeItem("searchText_Module_Config_page");
       }
       if (!is_path_includes("/website-pages")) {
-        localStorage.setItem("inboxOpen", JSON.stringify(true));
+        localStorage.setItem("inboxOpen", JSON.stringify(false));
         localStorage.removeItem("searchText_Website_Pages");
       }
     }, 1000);
@@ -100,6 +98,7 @@ export default function ProfileIcon() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line
   }, []);
 
   return (

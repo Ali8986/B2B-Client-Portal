@@ -2,7 +2,6 @@ import { AppBar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import ProfileIcon from "../../Components/AppHeader/ProfileIcon";
-import { Button } from "@mui/material";
 
 const AppHeader = ({ handleDrawerToggle, drawerWidth }) => {
   return (

@@ -18,6 +18,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import XIcon from "@mui/icons-material/X";
 import PinterestIcon from "@mui/icons-material/Pinterest";
+import TagsInputField from "../../Components/GeneralComponents/React_Input_Tags_Field";
 
 function AddEditSpeaker({ type }) {
   const platformIcons = {
@@ -40,7 +41,7 @@ function AddEditSpeaker({ type }) {
     phone: "",
     bio: "",
     status: true,
-    expertise: "",
+    expertise: [],
     social_links: [
       { platform: "Facebook", url: "" },
       { platform: "LinkedIn", url: "" },
@@ -97,6 +98,10 @@ function AddEditSpeaker({ type }) {
     }
   };
 
+  const handleTagsChange = (tags) => {
+    setFormData((prev) => ({ ...prev, expertise: tags })); // Update expertise as tags
+  };
+
   const handleSocialLinkChange = (index, url) => {
     const updatedLinks = [...formData.social_links];
     updatedLinks[index].url = url; // Update the URL for the specific index
@@ -106,6 +111,7 @@ function AddEditSpeaker({ type }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // eslint-disable-next-line
     formData.social_links.map((social_link) => {
       if (social_link.url === "") {
         delete social_link.url;
@@ -148,8 +154,10 @@ function AddEditSpeaker({ type }) {
       handleFormateData(state);
       // const result = extractPhoneParts(state.phone);
     } else if (type === EditingSpeaker) {
+      // eslint-disable-next-line
       GetSpeakerDetails();
     }
+    // eslint-disable-next-line
   }, [type, state]);
   return (
     <>
@@ -209,7 +217,7 @@ function AddEditSpeaker({ type }) {
                   enableSearch={true}
                 />
               </div>
-              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
+              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center mt-2">
                 <Select
                   name="status"
                   value={formData.status ?? true}
@@ -221,16 +229,12 @@ function AddEditSpeaker({ type }) {
                   <MenuItem value={false}>Inactive</MenuItem>
                 </Select>
               </div>
-              <div className="col-12 col-lg-6">
-                <FormInput
-                  label="Expertise (comma separated)"
-                  variant="outlined"
-                  name="expertise"
-                  value={formData.expertise}
-                  onChange={handleInputChange}
-                  placeholder="e.g. Software Engineering, Public Speaking"
-                  required
-                />
+              <div className="col-12 mt-3">
+              <TagsInputField
+                value={formData.expertise}
+                onChange={handleTagsChange}
+                placeholder="Add expertise"
+              />
               </div>
               <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2">
                 <div className="col-12 col-lg-4 pb-3 pb-lg-0">

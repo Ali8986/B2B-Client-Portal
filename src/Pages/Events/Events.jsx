@@ -128,7 +128,7 @@ function Exhibitors() {
   };
 
   const Handle_Update_Company = (value) => {
-    navigate(`/events/${value._id}/update-company`, {
+    navigate(`/events/${value._id}/update-companies`, {
       state: value.company,
     });
   };

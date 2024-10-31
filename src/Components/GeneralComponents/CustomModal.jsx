@@ -1,6 +1,5 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
-import { Avatar, TextField } from "@mui/material";
 
 const style = {
   position: "absolute",

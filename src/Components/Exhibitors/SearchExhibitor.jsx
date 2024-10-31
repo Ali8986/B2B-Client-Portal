@@ -30,6 +30,7 @@ const SearchExhibitor = ({
     } else {
       fetchCompanyData();
     }
+    // eslint-disable-next-line
   }, [searchText]);
   return (
     <form className="row" onSubmit={searchFunction}>

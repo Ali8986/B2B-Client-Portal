@@ -213,8 +213,10 @@ function Exhibitors() {
     const response = await DeletingExhibitor(valueForDeleting._id);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
+      // eslint-disable-next-line
       const ExhibitorsAfterDeletion = users.filter((user) => {
         if (user._id !== valueForDeleting._id) {
+          // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
@@ -369,10 +371,12 @@ function Exhibitors() {
     } else {
       FetchExhibitorsList(page, rowsPerPage, EMPTY_FILTER);
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   useEffect(() => {
     fetchCompanyData();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

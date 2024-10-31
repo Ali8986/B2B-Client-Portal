@@ -3,7 +3,6 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Button, IconButton, TextField } from "@mui/material";
 import {
-  updateAdminPassword,
   UpdateCompanyPassword,
 } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";

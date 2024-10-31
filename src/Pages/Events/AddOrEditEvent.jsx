@@ -4,7 +4,6 @@ import {
   CircularProgress,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FormInput from "../../Components/GeneralComponents/FormInput";
@@ -67,7 +66,6 @@ function AddOrEditEvent({ type }) {
     const results = await ImageUpload(formData);
     if (results.code === 200) {
       return `${s3baseUrl}${results.path}`;
-      enqueueSnackbar(results.message, { variant: "success" });
     } else {
       enqueueSnackbar(results.message, { variant: "error" });
     }
@@ -136,6 +134,7 @@ function AddOrEditEvent({ type }) {
     } else if (type === EditingEvent) {
       getEventDetail();
     }
+    // eslint-disable-next-line
   }, [type, state]);
 
   return (

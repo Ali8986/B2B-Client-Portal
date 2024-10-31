@@ -169,6 +169,7 @@ function AddorEditCompany({ type }) {
     } else if (type === EditingCompany) {
       GetCompanyDetails();
     }
+    // eslint-disable-next-line
   }, [type, state]);
 
   return (

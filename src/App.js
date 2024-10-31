@@ -1,13 +1,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { SnackbarProvider } from "notistack";
 import Router from "./Routes";
 import { ProfileImageProvider } from "./Hooks/createContext";
-import { IconButton, Slide } from "@mui/material";
+import { Slide } from "@mui/material";
 import styled from "@emotion/styled/macro";
 import { MaterialDesignContent } from "notistack";
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 import { UserProvider } from "./Hooks/adminUser";
-import WarningIcon from "@mui/icons-material/Warning";
+// import WarningIcon from "@mui/icons-material/Warning";
 
 function App() {
   const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
@@ -49,7 +49,7 @@ function App() {
         }}
       >
         <UserProvider>
-          <div className="App">
+          <div className='App'>
             <Router />
           </div>
         </UserProvider>

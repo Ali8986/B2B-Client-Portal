@@ -4,7 +4,7 @@ import { baseUri } from "../config/config";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-const _url = "https://cors-anywhere.herokuapp.com/";
+// const _url = "https://cors-anywhere.herokuapp.com/";
 export async function invokeApi({
   path,
   method = "GET",

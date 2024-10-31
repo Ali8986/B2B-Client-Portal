@@ -89,7 +89,7 @@ const AppSidebar = ({
                 <SidebarSubMenu
                   key={option.title}
                   option={option}
-                  inboxOpen={inboxOpen}
+                  inboxOpen={!inboxOpen}
                   handleInboxOpen={handleInboxOpen}
                   handleMobileViewChange={handleMobileViewChange}
                 />
@@ -111,7 +111,7 @@ const AppSidebar = ({
     if (storedInboxOpen !== null) {
       setInboxopen(JSON.parse(storedInboxOpen));
     }
-  }, []);
+  }, [inboxOpen]);
   return (
     <div
       className="drawer-container"

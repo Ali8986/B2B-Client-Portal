@@ -26,6 +26,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import XIcon from "@mui/icons-material/X";
 import PinterestIcon from "@mui/icons-material/Pinterest";
+import TagsInputField from "../../Components/GeneralComponents/React_Input_Tags_Field";
 function EditOrAddExhibitor({ type }) {
   const platformIcons = {
     Facebook: FacebookIcon,
@@ -93,6 +94,10 @@ function EditOrAddExhibitor({ type }) {
   const handlePhoneChange = (value, country) => {
     setPhoneNumber(value);
     setFormData((prev) => ({ ...prev, phone: value })); // Form data update
+  };
+
+  const handleTagsChange = (tags) => {
+    setFormData((prev) => ({ ...prev, products_services: tags })); // Update expertise as tags
   };
 
   const handleSocialLinkChange = (index, url) => {
@@ -204,10 +209,12 @@ function EditOrAddExhibitor({ type }) {
     } else if (type === EditingExhibitor) {
       GetExhibitorDetails();
     }
+    // eslint-disable-next-line
   }, [type, state]);
 
   useEffect(() => {
     fetchCompanyData();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -220,8 +227,10 @@ function EditOrAddExhibitor({ type }) {
     } else {
       formData.company.website = "";
       fetchCompanyData();
+      // eslint-disable-next-line
       setSearchCompanyData([]);
     }
+    // eslint-disable-next-line
   }, [searchText]);
 
   return (
@@ -274,15 +283,6 @@ function EditOrAddExhibitor({ type }) {
               onChange={handleInputChange}
             />
           </div>
-          <div className="col-12 col-lg-6">
-            <FormInput
-              label="Products and Services"
-              name="products_services"
-              type="text"
-              value={formData.products_services}
-              onChange={handleInputChange}
-            />
-          </div>
           <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
             <AutoComplete
               isMultiple={false}
@@ -309,7 +309,7 @@ function EditOrAddExhibitor({ type }) {
               }
             />
           </div>
-          <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
+          <div className="col-12 col-lg-6 d-flex flex-column justify-content-center mt-2">
             <FormControl required={true}>
               <Select
                 required={true}
@@ -326,6 +326,13 @@ function EditOrAddExhibitor({ type }) {
                 <MenuItem value="Cancelled">Cancelled</MenuItem>
               </Select>
             </FormControl>
+          </div>
+          <div className="col-12 mt-3">
+          <TagsInputField
+                value={formData.products_services}
+                onChange={handleTagsChange}
+                placeholder="Products and Services"
+              />
           </div>
           <div className="col-12 flex-wrap d-flex justify-content-between align-items-center my-3">
             <div className="col-12 col-lg-4 pb-3 pb-lg-0">

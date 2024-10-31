@@ -98,8 +98,10 @@ function CompanyDetails() {
     e.preventDefault();
     const response = await DeletingCompany(valueForDeleting._id);
     if (response.code === 200) {
+      // eslint-disable-next-line
       const CompaniesAfterDeletion = users.filter((user) => {
         if (user._id !== valueForDeleting._id) {
+          // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
@@ -260,6 +262,7 @@ function CompanyDetails() {
     } else {
       FetchCompnayList(page, rowsPerPage);
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   return (

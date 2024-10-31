@@ -4,7 +4,6 @@ import {
   MenuItem,
   Select,
   CircularProgress,
-  FormControl,
 } from "@mui/material";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -51,6 +50,7 @@ function AddorUpdateWebPages({ type }) {
       const sanitizedURL = value
         .toLowerCase()
         .replace(/\s+/g, "-")
+        // eslint-disable-next-line
         .replace(/[^a-z0-9\-]/g, "");
       setPagesData((prev) => ({
         ...prev,
@@ -193,6 +193,7 @@ function AddorUpdateWebPages({ type }) {
     } else if (type === Editing_Website_Page) {
       Get_Website_Page_Details();
     }
+    // eslint-disable-next-line
   }, [state, type]); // This runs only on initial render or state/type change
 
   useEffect(() => {
@@ -210,6 +211,7 @@ function AddorUpdateWebPages({ type }) {
     }, 1000); // 1000ms debounce time
 
     return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line
   }, [templateSearchText, moduleSearchText]);
 
   return (

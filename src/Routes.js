@@ -95,7 +95,7 @@ const Router = () => {
           element: <UpdateEventsExhibitor />,
         },
         {
-          path: "/events/:id/update-company",
+          path: "/events/:id/update-companies",
           exact: true,
           element: <UpdateEventsCompany />,
         },

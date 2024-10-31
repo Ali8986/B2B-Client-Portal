@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactTable from "@meta-dev-zone/react-table";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
 import DeletionConfirmation from "../../Pages/Exhibitors/DeletingUser";
@@ -77,8 +77,10 @@ function Speaker() {
     e.preventDefault();
     const response = await DeletingSpeaker(valueForDeleting._id);
     if (response.code === 200) {
+      // eslint-disable-next-line
       const SpeakersAfterDeletion = users.filter((user) => {
         if (user._id !== valueForDeleting._id) {
+          // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
@@ -214,6 +216,7 @@ function Speaker() {
     } else {
       FetchSpeakerList(page, rowsPerPage);
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   return (

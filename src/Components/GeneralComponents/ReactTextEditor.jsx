@@ -29,7 +29,6 @@ const ReactEditorComponent = ({
     const results = await ImageUpload(formData);
     if (results.code === 200) {
       return `${s3baseUrl}${results.path}`;
-      enqueueSnackbar(results.message, { variant: "success" });
     } else {
       enqueueSnackbar(results.message, { variant: "error" });
     }

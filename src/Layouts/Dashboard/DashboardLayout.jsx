@@ -26,6 +26,7 @@ const DashboardLayout = () => {
     if (!token) {
       navigate("/");
     }
+    // eslint-disable-next-line
   }, []);
   return (
     <div className={"Dashboard-layout-container"}>

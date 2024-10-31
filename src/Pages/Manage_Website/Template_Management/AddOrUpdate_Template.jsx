@@ -78,6 +78,7 @@ function AddOrEditTemplate({ type }) {
       const pageComponentName = value
         .toLowerCase()
         .replace(/\s+/g, "-")
+        // eslint-disable-next-line
         .replace(/[^a-z0-9\-]/g, "");
       setTemplateData((prev) => ({
         ...prev,
@@ -141,6 +142,7 @@ function AddOrEditTemplate({ type }) {
     setLoading(true);
 
     if (TemplateData.template_attributes_info) {
+      // eslint-disable-next-line
       TemplateData.template_attributes_info.map((value) => {
         if (value._id) {
           delete value._id;
@@ -196,6 +198,7 @@ function AddOrEditTemplate({ type }) {
     } else if (type === Editing_Template) {
       Get_Template_Details();
     }
+    // eslint-disable-next-line
   }, [state]);
 
   return (

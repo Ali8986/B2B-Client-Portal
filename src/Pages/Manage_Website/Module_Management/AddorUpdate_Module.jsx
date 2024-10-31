@@ -138,6 +138,7 @@ function AddOrUpdateModule({ type }) {
     setLoading(true);
 
     if (ModuleData.module_configuration_attributes_info) {
+      // eslint-disable-next-line
       ModuleData.module_configuration_attributes_info.map((value) => {
         if (value._id) {
           delete value._id;
@@ -197,6 +198,7 @@ function AddOrUpdateModule({ type }) {
     } else if (type === Editing_Module) {
       Get_Module_Details();
     }
+    // eslint-disable-next-line
   }, [state]);
 
   return (

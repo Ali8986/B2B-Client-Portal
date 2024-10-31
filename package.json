@@ -27,6 +27,7 @@
     "react-phone-number-validation": "^1.2.0",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
+    "react-tagsinput": "^3.20.3",
     "react-text-editor-kit": "^1.5.2",
     "web-vitals": "^2.1.4"
   },

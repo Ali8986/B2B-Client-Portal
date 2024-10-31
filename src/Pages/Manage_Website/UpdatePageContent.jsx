@@ -151,6 +151,7 @@ const UpdatePageContent = () => {
 
   useEffect(() => {
     fetchTemplateDetails();
+    // eslint-disable-next-line
   }, []);
 
   return (

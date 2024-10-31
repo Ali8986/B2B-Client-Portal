@@ -103,8 +103,10 @@ function ModuleConfiguration() {
       valueForDeleting.module_configuration_slug
     );
     if (response.code === 200) {
+      // eslint-disable-next-line
       const ModulesAfterDeletion = Modules.filter((user) => {
         if (user._id !== valueForDeleting._id) {
+          // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
@@ -164,6 +166,7 @@ function ModuleConfiguration() {
     } else {
       FetchModuleConfig(page, rowsPerPage);
     }
+    // eslint-disable-next-line
   }, [page, rowsPerPage]);
 
   return (

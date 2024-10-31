@@ -39,7 +39,7 @@ function UpdateEventsExhibitor() {
       status: "Inactive",
     },
     {
-      title: `Update Exhibitor`,
+      title: `Update Exhibitors`,
       status: "Active",
     },
   ];
@@ -136,20 +136,12 @@ function UpdateEventsExhibitor() {
           <div key={index} className='d-flex align-items-center'>
             <div className='me-2'>
               <Avatar
-                className='img-fluid'
+                className='img-fluid React_Table_image'
                 src={
                   row.image && row.image.thumbnail_1
                     ? s3baseUrl + row.image.thumbnail_1
                     : defaultimg
                 }
-                style={{
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  width: "50px",
-                  height: "50px",
-                  maxWidth: "50px",
-                  maxHeight: "50px",
-                }}
               />
             </div>
           </div>
@@ -281,7 +273,6 @@ function UpdateEventsExhibitor() {
               setSearchText: setSearchText,
               handleSubmit: searchFunction,
             }}
-            class_name=''
             theme_config={{
               background: "white",
               color: "black",
