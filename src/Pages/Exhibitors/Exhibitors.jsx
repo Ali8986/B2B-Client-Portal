@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactTable from "@meta-dev-zone/react-table";
 import { Avatar, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";

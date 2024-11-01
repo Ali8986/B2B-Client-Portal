@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactTable from "@meta-dev-zone/react-table";
 import { Button, Chip, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
@@ -128,11 +127,11 @@ function Exhibitors() {
     });
   };
 
-  const Handle_Update_Company = (value) => {
-    navigate(`/events/${value._id}/update-companies`, {
-      state: value.company,
-    });
-  };
+  // const Handle_Update_Company = (value) => {
+  //   navigate(`/events/${value._id}/update-companies`, {
+  //     state: value.company,
+  //   });
+  // };
 
   const MENU_OPTIONS = [
     {

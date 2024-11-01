@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactTable from "@meta-dev-zone/react-table";
 import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress } from "@mui/material";
 import DeletingModal from "../../Components/GeneralComponents/CustomDeletingModal";
