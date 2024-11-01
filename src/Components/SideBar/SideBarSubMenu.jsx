@@ -13,8 +13,8 @@ import { Link, useLocation } from "react-router-dom";
 
 const SidebarSubMenu = ({
   option,
-  inboxOpen,
-  handleInboxOpen,
+  isOpen,
+  handleToggle,
   handleMobileViewChange,
 }) => {
   const location = useLocation();
@@ -25,10 +25,10 @@ const SidebarSubMenu = ({
         disablePadding
         className={location.pathname.includes(option.path) ? "active-tab" : ""}
       >
-        <ListItemButton className="side-bar-btn" onClick={handleInboxOpen}>
+        <ListItemButton className="side-bar-btn" onClick={handleToggle}>
           <ListItemIcon>{option.icon}</ListItemIcon>
           <ListItemText primary={option.title} />
-          {inboxOpen ? (
+          {isOpen ? (
             <ExpandMoreIcon style={{ transform: "rotate(180deg)" }} />
           ) : (
             <ExpandMoreIcon style={{ transform: "rotate(0deg)" }} />
@@ -36,7 +36,7 @@ const SidebarSubMenu = ({
           {/* <ExpandMoreIcon /> */}
         </ListItemButton>
       </ListItem>
-      <Collapse in={inboxOpen} timeout="auto" unmountOnExit>
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {option.children.map((childOption) => (
             <ListItem

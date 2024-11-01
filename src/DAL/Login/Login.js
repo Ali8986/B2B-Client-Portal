@@ -764,3 +764,120 @@ export const Deleting_Web_Mod = async (slug) => {
   };
   return invokeApi(requestObj);
 };
+
+export const Departments_List = async (searchText, page, limit) => {
+  const requestObj = {
+    path: `api/department/list_all_department?text=${searchText || ""}&page=${
+      page || ""
+    }&limit=${limit}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Delete_Department = async (id) => {
+  const requestObj = {
+    path: `api/department/delete_department_by_id/${id}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Add_Department = async (data) => {
+  const requestObj = {
+    path: `api/department/add_department`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Update_Department = async (id, data) => {
+  const requestObj = {
+    path: `api/department/update_department/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const Department_details = async (id) => {
+  const requestObj = {
+    path: `api/department/get_department_by_id/${id}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const AutoResponder_Message_List = async (searchText, page, limit) => {
+  const requestObj = {
+    path: `api/autoresponder_message/list_all_autoresponder_message?text=${
+      searchText || ""
+    }&page=${page || ""}&limit=${limit}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Delete_AutoResponder = async (id) => {
+  const requestObj = {
+    path: `api/autoresponder_message/delete_autoresponder_message_by_id/${id}`,
+    method: "DELETE",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};
+
+export const Add_AutoResponder_Message = async (data) => {
+  const requestObj = {
+    path: `api/autoresponder_message/add_autoresponder_message`,
+    method: "POST",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+export const Update_AutoResponder_Message = async (id, data) => {
+  const requestObj = {
+    path: `api/autoresponder_message/updated_autoresponder_message/${id}`,
+    method: "PUT",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+    postData: data,
+  };
+  return invokeApi(requestObj);
+};
+
+export const AutoResponder_Message_details = async (id) => {
+  const requestObj = {
+    path: `api/autoresponder_message/get_autoresponder_message_by_id/${id}`,
+    method: "GET",
+    headers: {
+      "x-sh-auth": localStorage.getItem("token"),
+    },
+  };
+  return invokeApi(requestObj);
+};

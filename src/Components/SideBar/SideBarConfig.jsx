@@ -5,6 +5,7 @@ import {
   CalendarMonthOutlinedIcon,
   BusinessIcon,
   CalendarMonthIcon,
+  SupportAgentIcon,
 } from "../GeneralComponents/SideBarIcons";
 
 export const options = [
@@ -51,6 +52,22 @@ export const options = [
         title: "Website Pages",
         path: "website-pages",
         icon: <CalendarMonthIcon />,
+      },
+    ],
+  },
+  {
+    title: "Support Ticket",
+    icon: <SupportAgentIcon />,
+    children: [
+      {
+        title: "Departments",
+        path: "departments",
+        icon: <SupportAgentIcon />,
+      },
+      {
+        title: "AutoResponder Message",
+        path: "autoresponder-message",
+        icon: <SupportAgentIcon />,
       },
     ],
   },

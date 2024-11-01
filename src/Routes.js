@@ -14,6 +14,8 @@ import ProtectedRoute from "./Components/GeneralComponents/ProtectedRoute";
 import TemplateConfiguration from "./Pages/Manage_Website/Template_Management/Template_Configuration";
 import AddOrEditTemplate from "./Pages/Manage_Website/Template_Management/AddOrUpdate_Template";
 import {
+  Add_AutoResponder_Message,
+  Add_Department,
   AddingCompany,
   AddingEvent,
   AddingExhibitor,
@@ -29,6 +31,8 @@ import {
   EditingEvent,
   EditingExhibitor,
   EditingSpeaker,
+  Update_AutoResponder_Message,
+  Update_Department,
   Updating_Website_Module,
 } from "./DAL/Login/Login";
 import AddorEditCompany from "./Pages/company/AddOrEditCompany";
@@ -44,6 +48,10 @@ import UpdateWebModData from "./Pages/Manage_Website/Module_Management/Update_We
 import UpdateEventsSpeaker from "./Components/Events/UpdateSpeaker";
 import UpdateEventsExhibitor from "./Components/Events/UpdateExhibitor";
 import UpdateEventsCompany from "./Components/Events/UpdateCompany";
+import Departments from "./Pages/Support_Ticket/Departments/departments";
+import AddOrUpdateDepartment from "./Pages/Support_Ticket/Departments/Add_Update_Department";
+import AutoResponderMessageList from "./Pages/Support_Ticket/Auto_Responder_Message/AutoResponder_Message_List";
+import AddOrUpdateAutoResponder from "./Pages/Support_Ticket/Auto_Responder_Message/Add_Or_Update_AutoResponder";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -188,6 +196,40 @@ const Router = () => {
           path: "/website-pages/:web_page_id/:id/update/:module_title_slug",
           exact: true,
           element: <UpdateWebModData />,
+        },
+        {
+          path: "/departments",
+          exact: true,
+          element: <Departments />,
+        },
+        {
+          path: "/departments/add-department",
+          exact: true,
+          element: <AddOrUpdateDepartment type={Add_Department} />,
+        },
+        {
+          path: "/departments/Update/:id",
+          exact: true,
+          element: <AddOrUpdateDepartment type={Update_Department} />,
+        },
+        {
+          path: "/autoresponder-message",
+          exact: true,
+          element: <AutoResponderMessageList />,
+        },
+        {
+          path: "/autoresponder-message/add-autoresponder-message",
+          exact: true,
+          element: (
+            <AddOrUpdateAutoResponder type={Add_AutoResponder_Message} />
+          ),
+        },
+        {
+          path: "/autoresponder-message/Update/:id",
+          exact: true,
+          element: (
+            <AddOrUpdateAutoResponder type={Update_AutoResponder_Message} />
+          ),
         },
       ],
     },

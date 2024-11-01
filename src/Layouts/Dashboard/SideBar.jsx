@@ -12,12 +12,13 @@ const AppSidebar = ({
   mobileOpen,
   handleDrawerClose,
 }) => {
-  const [inboxOpen, setInboxopen] = useState(() => {
-    const storedValue = localStorage.getItem("inboxOpen");
-    return storedValue ? JSON.parse(storedValue) : true;
+  const [openSubmenus, setOpenSubmenus] = useState(() => {
+    const storedValue = localStorage.getItem("openSubmenus");
+    return storedValue ? JSON.parse(storedValue) : {};
   });
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
+
   const handleSearchChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchInput(query);
@@ -30,11 +31,6 @@ const AppSidebar = ({
           child.title.toLowerCase().includes(query)
         );
         if (filteredChildren && filteredChildren.length > 0) {
-          if (filteredResults) {
-            setInboxopen(true);
-          } else {
-            setInboxopen(false);
-          }
           return { ...item, children: filteredChildren };
         }
         return null;
@@ -42,14 +38,22 @@ const AppSidebar = ({
       .filter(Boolean);
     setFilteredResults(results);
   };
-  const handleInboxOpen = () => {
-    const newInboxOpen = !inboxOpen;
-    setInboxopen(newInboxOpen);
-    localStorage.setItem("inboxOpen", JSON.stringify(newInboxOpen));
+
+  const handleSubmenuToggle = (key) => {
+    setOpenSubmenus((prevOpenSubmenus) => {
+      const newOpenSubmenus = {
+        ...prevOpenSubmenus,
+        [key]: !prevOpenSubmenus[key],
+      };
+      localStorage.setItem("openSubmenus", JSON.stringify(newOpenSubmenus));
+      return newOpenSubmenus;
+    });
   };
+
   const handleMobileViewChange = () => {
     if (mobileOpen) handleDrawerClose();
   };
+
   const drawerContent = (
     <>
       <Logo />
@@ -61,57 +65,36 @@ const AppSidebar = ({
         />
       </div>
       <Divider className="divider" />
-      <>
-        {filteredResults.length === 0 ? (
-          <List className="Main-Menu-list">
-            {options.map((option) =>
-              option.children ? (
-                <SidebarSubMenu
-                  key={option.title}
-                  option={option}
-                  inboxOpen={inboxOpen}
-                  handleInboxOpen={handleInboxOpen}
-                  handleMobileViewChange={handleMobileViewChange}
-                />
-              ) : (
-                <SidebarOption
-                  key={option.title}
-                  option={option}
-                  handleMobileViewChange={handleMobileViewChange}
-                />
-              )
-            )}
-          </List>
-        ) : (
-          <List className="Main-Menu-list">
-            {filteredResults.map((option) =>
-              option.children && option.children.length > 0 ? (
-                <SidebarSubMenu
-                  key={option.title}
-                  option={option}
-                  inboxOpen={!inboxOpen}
-                  handleInboxOpen={handleInboxOpen}
-                  handleMobileViewChange={handleMobileViewChange}
-                />
-              ) : (
-                <SidebarOption
-                  key={option.title}
-                  option={option}
-                  handleMobileViewChange={handleMobileViewChange}
-                />
-              )
-            )}
-          </List>
+      <List className="Main-Menu-list">
+        {(filteredResults.length === 0 ? options : filteredResults).map(
+          (option) =>
+            option.children ? (
+              <SidebarSubMenu
+                key={option.title}
+                option={option}
+                isOpen={!!openSubmenus[option.title]}
+                handleToggle={() => handleSubmenuToggle(option.title)}
+                handleMobileViewChange={handleMobileViewChange}
+              />
+            ) : (
+              <SidebarOption
+                key={option.title}
+                option={option}
+                handleMobileViewChange={handleMobileViewChange}
+              />
+            )
         )}
-      </>
+      </List>
     </>
   );
+
   useEffect(() => {
-    const storedInboxOpen = localStorage.getItem("inboxOpen");
-    if (storedInboxOpen !== null) {
-      setInboxopen(JSON.parse(storedInboxOpen));
+    const storedOpenSubmenus = localStorage.getItem("openSubmenus");
+    if (storedOpenSubmenus !== null) {
+      setOpenSubmenus(JSON.parse(storedOpenSubmenus));
     }
-  }, [inboxOpen]);
+  }, []);
+
   return (
     <div
       className="drawer-container"

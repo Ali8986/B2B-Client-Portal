@@ -152,6 +152,7 @@ body {
 }
 
 .App-header-icon-menu svg {
+    cursor: pointer !important;
     text-align: center;
     color: white !important;
 }

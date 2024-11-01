@@ -6,6 +6,7 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import BusinessIcon from "@mui/icons-material/Business";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 export {
   DashboardCustomizeOutlined,
@@ -16,4 +17,5 @@ export {
   PersonRemoveIcon,
   BusinessIcon,
   CalendarMonthIcon,
+  SupportAgentIcon,
 };

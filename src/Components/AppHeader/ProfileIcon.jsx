@@ -82,16 +82,19 @@ export default function ProfileIcon() {
         localStorage.removeItem("searchText_company_page");
       }
       if (!is_path_includes("/template-configuration")) {
-        localStorage.setItem("inboxOpen", JSON.stringify(false));
         localStorage.removeItem("searchText_Template_Config_page");
       }
       if (!is_path_includes("/module-configuration")) {
-        localStorage.setItem("inboxOpen", JSON.stringify(false));
         localStorage.removeItem("searchText_Module_Config_page");
       }
       if (!is_path_includes("/website-pages")) {
-        localStorage.setItem("inboxOpen", JSON.stringify(false));
         localStorage.removeItem("searchText_Website_Pages");
+      }
+      if (!is_path_includes("/departments")) {
+        localStorage.removeItem("searchText_Departments_page");
+      }
+      if (!is_path_includes("/autoresponder-message")) {
+        localStorage.removeItem("searchText_AutoResponder_page");
       }
     }, 1000);
   }, [pathname]);
