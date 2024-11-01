@@ -59,12 +59,12 @@ function UpdateEventsExhibitor() {
     );
     if (response.code === 200) {
       const { list, event, total_exhibitors, total_pages } = response;
-      const mappedUsers = list?.map((item) => ({
+      const processedExhibitorlist = list?.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
       }));
-      setUsers(mappedUsers);
+      setUsers(processedExhibitorlist);
       setTotalCount(total_pages);
       setTotalPages(total_exhibitors);
       localStorage.setItem("rowsPerPage", totalCount);

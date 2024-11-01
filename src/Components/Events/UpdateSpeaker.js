@@ -42,12 +42,12 @@ function UpdateEventsSpeaker() {
     );
     if (response.code === 200) {
       const { list, event, total_speakers, total_pages } = response;
-      const mappedUsers = list?.map((item) => ({
+      const processedSpeakerList = list?.map((item) => ({
         ...item,
         name: `${item.first_name} ${item.last_name}` || "Unknown",
         status: item.status,
       }));
-      setUsers(mappedUsers);
+      setUsers(processedSpeakerList);
       setTotalCount(total_pages);
       setTotalPages(total_speakers);
       localStorage.setItem("rowsPerPage", totalCount);

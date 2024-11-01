@@ -40,12 +40,12 @@ function ModuleConfiguration() {
     );
     if (response.code === 200) {
       const { module_configuration, total_count, total_pages } = response;
-      const mappedUsers = module_configuration.map((item) => ({
+      const proccessedData = module_configuration.map((item) => ({
         ...item,
         name: item.module_configuration_name || "Unknown",
         status: item.module_configuration_status,
       }));
-      setModules(mappedUsers);
+      setModules(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);

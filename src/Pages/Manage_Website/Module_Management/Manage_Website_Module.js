@@ -52,12 +52,12 @@ function ManageWebPageModule() {
     );
     if (response.code === 200) {
       const { website_module, total_count, total_pages } = response;
-      const mappedUsers = website_module.map((item) => ({
+      const proccessedData = website_module.map((item) => ({
         ...item,
         name: item.module_title || "Unknown",
         status: item.status,
       }));
-      setWebsiteModules(mappedUsers);
+      setWebsiteModules(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);

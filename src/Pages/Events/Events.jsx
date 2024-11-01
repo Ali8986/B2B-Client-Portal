@@ -12,6 +12,7 @@ import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import EventDetailModal from "../../Components/Events/EventsDetails";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import ToolTip from "../../Components/GeneralComponents/ToolTip";
+import ReactDataTable from "../../Components/GeneralComponents/React_Table";
 function Exhibitors() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -35,12 +36,12 @@ function Exhibitors() {
     const response = await EventList(page, rowsPerPage, postData);
     if (response.code === 200) {
       const { events, total_events, total_pages } = response;
-      const mappedUsers = events?.map((item) => ({
+      const proccessedData = events?.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
       }));
-      setUsers(mappedUsers);
+      setUsers(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_events);
       localStorage.setItem("rowsPerPage", totalCount);
@@ -144,11 +145,11 @@ function Exhibitors() {
       icon: <EditIcon />,
       handleClick: Handle_Update_Speaker,
     },
-    {
-      label: "Manage Event`s Company",
-      icon: <EditIcon />,
-      handleClick: Handle_Update_Company,
-    },
+    // {
+    //   label: "Manage Event`s Company",
+    //   icon: <EditIcon />,
+    //   handleClick: Handle_Update_Company,
+    // },
     {
       label: "Manage Event`s Exhibitor",
       icon: <EditIcon />,
@@ -301,34 +302,24 @@ function Exhibitors() {
         </div>
       ) : (
         <div className='Exhibitors-Table'>
-          <ReactTable
-            data={users} // required
-            TABLE_HEAD={TABLE_HEAD} // required
-            MENU_OPTIONS={MENU_OPTIONS}
-            custom_pagination={{
-              total_count: totalCount,
-              rows_per_page: rowsPerPage,
-              page: page,
-              total_pages: totalPages,
-              handleChangePage: handleChangePage,
-              handleRowsPerPageChange: handleRowsPerPageChange,
-            }}
-            custom_search={{
-              searchText: searchText,
-              setSearchText: setSearchText,
-              handleSubmit: searchFunction,
-            }} // required
-            class_name=''
-            theme_config={{
-              background: "white",
-              color: "black",
-              iconColor: "#7396CC",
-            }}
-            is_sticky_header={false}
-            is_hide_footer_pagination={false}
-            is_hide_header_pagination={false}
-            is_hide_search={false}
-          />
+            <ReactDataTable
+              data={users}
+              header={TABLE_HEAD}
+              Menu={MENU_OPTIONS}
+              pagination={{
+                total_count: totalCount,
+                rows_per_page: rowsPerPage,
+                page: page,
+                total_pages: totalPages,
+                handleChangePage: handleChangePage,
+                handleRowsPerPageChange: handleRowsPerPageChange,
+              }}
+              search={{
+                searchText: searchText,
+                setSearchText: setSearchText,
+                handleSubmit: searchFunction,
+              }}
+            />
         </div>
       )}
       <DetailsModal

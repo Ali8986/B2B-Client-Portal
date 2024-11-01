@@ -26,6 +26,7 @@ import CustomDrawer from "../../Components/GeneralComponents/CustomDrawer";
 import ReactFilterChips from "react-filter-chips";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import ToolTip from "../../Components/GeneralComponents/ToolTip";
+import ReactDataTable from "../../Components/GeneralComponents/React_Table";
 
 function Exhibitors() {
   const EMPTY_FILTER = {
@@ -68,12 +69,12 @@ function Exhibitors() {
     const response = await ExhibitorList(page, rowsPerPage, postData);
     if (response.code === 200) {
       const { exhibitors, total_exhibitors, total_pages } = response;
-      const mappedUsers = exhibitors.map((item) => ({
+      const proccessedData = exhibitors.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
       }));
-      setUsers(mappedUsers);
+      setUsers(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_exhibitors);
       localStorage.setItem("rowsPerPage", totalCount);
@@ -240,7 +241,7 @@ function Exhibitors() {
     },
     {
       label: "Delete",
-      icon: <DeleteForeverIcon className="Delete-Icon" />,
+      icon: <DeleteForeverIcon className='Delete-Icon' />,
       handleClick: handleDelete,
     },
     {
@@ -257,10 +258,10 @@ function Exhibitors() {
       label: "Profile",
       renderData: (row, index) => {
         return (
-          <div key={index} className="d-flex align-items-center">
-            <div className="me-2">
+          <div key={index} className='d-flex align-items-center'>
+            <div className='me-2'>
               <Avatar
-                className="img-fluid"
+                className='img-fluid'
                 src={
                   row.image && row.image.thumbnail_1
                     ? s3baseUrl + row.image.thumbnail_1
@@ -286,7 +287,7 @@ function Exhibitors() {
       className: "cursor-pointer",
       renderData: (row, index) => {
         return (
-          <ToolTip key={index} title="View Details" arrow>
+          <ToolTip key={index} title='View Details' arrow>
             <span onClick={() => handleDetails(row)}>{row.name}</span>
           </ToolTip>
         );
@@ -388,75 +389,67 @@ function Exhibitors() {
   }, []);
 
   return (
-    <div className="row mt-5 mb-0 mx-3">
-      <div className="d-flex justify-content-between align-items-center flex-wrap">
-        <HeaderWithBackButton className="Layout-heading" title="Exhibitors" />
+    <div className='row mt-5 mb-0 mx-3'>
+      <div className='d-flex justify-content-between align-items-center flex-wrap'>
+        <HeaderWithBackButton className='Layout-heading' title='Exhibitors' />
         <div>
           <Button
-            variant="contained"
-            size="medium"
+            variant='contained'
+            size='medium'
             onClick={handleOpenDrawer}
-            className="Data-Adding-Btn"
+            className='Data-Adding-Btn'
             endIcon={<FilterAltRoundedIcon />}
           >
             Filter
           </Button>
           <Button
-            variant="contained"
-            size="medium"
+            variant='contained'
+            size='medium'
             onClick={handleAddingMember}
-            className="Data-Adding-Btn mx-2"
+            className='Data-Adding-Btn mx-2'
           >
             ADD Exhibitor
           </Button>
         </div>
       </div>
-      <div className="mb-4 mt-2 ms-2">
+      <div className='mb-4 mt-2 ms-2'>
         <ReactFilterChips
           filterData={filterState}
           tempState={filterStateTem}
           emptyFilter={EMPTY_FILTER}
-          clearLabel="Clear All"
-          filterLabel="Filtered By:"
+          clearLabel='Clear All'
+          filterLabel='Filtered By:'
           onDeleteChip={onDeleteChip}
           onClear={onClear}
-          customIcon={<CloseRoundedIcon className="Filter_Chip_ICon" />}
+          customIcon={<CloseRoundedIcon className='Filter_Chip_ICon' />}
         />
       </div>
-      <div className="Exhibitors_table">
+      <div className='Exhibitors_table'>
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
+          <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
             <CircularProgress />
           </div>
         ) : (
-          <ReactTable
-            data={users}
-            TABLE_HEAD={TABLE_HEAD}
-            MENU_OPTIONS={MENU_OPTIONS}
-            custom_pagination={{
-              total_count: totalCount,
-              rows_per_page: rowsPerPage,
-              page: page,
-              total_pages: totalPages,
-              handleChangePage: handleChangePage,
-              handleRowsPerPageChange: handleRowsPerPageChange,
-            }}
-            custom_search={{
-              searchText: searchText,
-              setSearchText: setSearchText,
-              handleSubmit: searchFunction,
-            }}
-            class_name=""
-            theme_config={{
-              background: "white",
-              color: "black",
-              iconColor: "#7396CC",
-            }}
-            is_sticky_header={false}
-            is_hide_footer_pagination={false}
-            is_hide_header_pagination={false}
-            is_hide_search={false}
-          />
+          <>
+            <ReactDataTable
+              data={users}
+              header={TABLE_HEAD}
+              Menu={MENU_OPTIONS}
+              pagination={{
+                total_count: totalCount,
+                rows_per_page: rowsPerPage,
+                page: page,
+                total_pages: totalPages,
+                handleChangePage: handleChangePage,
+                handleRowsPerPageChange: handleRowsPerPageChange,
+              }}
+              search={{
+                searchText: searchText,
+                setSearchText: setSearchText,
+                handleSubmit: searchFunction,
+              }}
+            />
+          </>
         )}
       </div>
 
@@ -472,7 +465,7 @@ function Exhibitors() {
         }
       />
       <DeletingModal
-        className="Deleting-modal"
+        className='Deleting-modal'
         open={modelOpen}
         handleClose={() => setModelOpen(false)}
         component={

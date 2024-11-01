@@ -41,12 +41,12 @@ function AutoResponderMessageList() {
     console.log(response, "response");
     if (response.code === 200) {
       const { autoresponder_message_list, total_count, total_pages } = response;
-      const mappedUsers = autoresponder_message_list.map((item) => ({
+      const proccessedData = autoresponder_message_list.map((item) => ({
         ...item,
         name: item.name || "name not found",
         status: item.status,
       }));
-      setAutoResponderList(mappedUsers);
+      setAutoResponderList(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);

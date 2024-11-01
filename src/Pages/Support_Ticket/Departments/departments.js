@@ -35,12 +35,12 @@ function Departments() {
     console.log(response, "response");
     if (response.code === 200) {
       const { department, total_count, total_pages } = response;
-      const mappedUsers = department.map((item) => ({
+      const proccessedData = department.map((item) => ({
         ...item,
         name: item.name || "name not found",
         status: item.status,
       }));
-      setDepartments(mappedUsers);
+      setDepartments(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);

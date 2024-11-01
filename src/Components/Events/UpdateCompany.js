@@ -55,13 +55,13 @@ function UpdateEventsCompany() {
     );
     if (response.code === 200) {
       const { event } = response;
-      const mappedUsers = response.list.map((item) => ({
+      const processedCompanyList = response.list.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
       }));
 
-      setUsers(mappedUsers);
+      setUsers(processedCompanyList);
       setTotalCount(response.total_pages);
       setTotalPages(response.total_companies);
       localStorage.setItem("rowsPerPage", totalCount);

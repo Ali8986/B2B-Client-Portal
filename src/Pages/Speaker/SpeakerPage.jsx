@@ -16,6 +16,7 @@ import SpeakerDetailsModal from "../../Components/Speaker/SpeakerDetails";
 import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import ToolTip from "../../Components/GeneralComponents/ToolTip";
+import ReactDataTable from "../../Components/GeneralComponents/React_Table";
 
 function Speaker() {
   const { enqueueSnackbar } = useSnackbar();
@@ -39,12 +40,12 @@ function Speaker() {
     const response = await SpeakersList(page, rowsPerPage, postData);
     if (response.code === 200) {
       const { speakers, total_speakers, total_pages } = response;
-      const mappedUsers = speakers.map((item) => ({
+      const proccessedData = speakers.map((item) => ({
         ...item,
         name: `${item.first_name} ${item.last_name}` || "Unknown",
         status: item.status,
       }));
-      setUsers(mappedUsers);
+      setUsers(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_speakers);
       localStorage.setItem("rowsPerPage", totalCount);
@@ -238,34 +239,24 @@ function Speaker() {
             <CircularProgress />
           </div>
         ) : (
-          <ReactTable
-            data={users}
-            TABLE_HEAD={TABLE_HEAD}
-            MENU_OPTIONS={Menu_Options}
-            custom_pagination={{
-              total_count: totalCount,
-              rows_per_page: rowsPerPage,
-              page: page,
-              total_pages: totalPages,
-              handleChangePage: handleChangePage,
-              handleRowsPerPageChange: handleRowsPerPageChange,
-            }}
-            custom_search={{
-              searchText: searchText,
-              setSearchText: setSearchText,
-              handleSubmit: searchFunction,
-            }}
-            class_name=""
-            theme_config={{
-              background: "white",
-              color: "black",
-              iconColor: "#7396CC",
-            }}
-            is_sticky_header={false}
-            is_hide_footer_pagination={false}
-            is_hide_header_pagination={false}
-            is_hide_search={false}
-          />
+          <ReactDataTable
+          data={users}
+          header={TABLE_HEAD}
+          Menu={Menu_Options}
+          pagination={{
+            total_count: totalCount,
+            rows_per_page: rowsPerPage,
+            page: page,
+            total_pages: totalPages,
+            handleChangePage: handleChangePage,
+            handleRowsPerPageChange: handleRowsPerPageChange,
+          }}
+          search={{
+            searchText: searchText,
+            setSearchText: setSearchText,
+            handleSubmit: searchFunction,
+          }}
+        />
         )}
       </div>
       <DetailsModal

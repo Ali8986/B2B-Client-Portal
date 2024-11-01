@@ -23,13 +23,14 @@ import CompanyDetailsModal from "../../Components/company/CompanyDetailsModal";
 import ChangeCompanyPassword from "../../Components/company/changeCompanyPassword";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import ToolTip from "../../Components/GeneralComponents/ToolTip";
+import ReactDataTable from "../../Components/GeneralComponents/React_Table";
 
 function CompanyDetails() {
   const [showDetails, setShowDetails] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedObject, setSelectedObject] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [Companies, setCompanies] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(50);
@@ -50,13 +51,13 @@ function CompanyDetails() {
 
     const response = await CompanyList(page, rowsPerPage, postData);
     if (response.code === 200) {
-      const mappedUsers = response.companies.map((item) => ({
+      const mappedCompanies = response.companies.map((item) => ({
         ...item,
         name: item.name || "Unknown",
         status: item.status,
       }));
 
-      setUsers(mappedUsers);
+      setCompanies(mappedCompanies);
       setTotalCount(response.total_pages);
       setTotalPages(response.total_companies);
       localStorage.setItem("rowsPerPage", totalCount);
@@ -80,7 +81,7 @@ function CompanyDetails() {
   };
 
   const handlePasswordChange = (row) => {
-    const selectedObj = users.find((item) => item._id === row._id);
+    const selectedObj = Companies.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
     setShowChangePassword(true);
   };
@@ -99,14 +100,14 @@ function CompanyDetails() {
     const response = await DeletingCompany(valueForDeleting._id);
     if (response.code === 200) {
       // eslint-disable-next-line
-      const CompaniesAfterDeletion = users.filter((user) => {
+      const CompaniesAfterDeletion = Companies.filter((user) => {
         if (user._id !== valueForDeleting._id) {
           // eslint-disable-next-line
           return (user.name = user.name);
         }
       });
       setTotalPages((prev) => prev - 1);
-      setUsers(CompaniesAfterDeletion);
+      setCompanies(CompaniesAfterDeletion);
       const keys = [
         { Key: valueForDeleting.image.thumbnail_1 },
         { Key: valueForDeleting.image.thumbnail_2 },
@@ -133,7 +134,7 @@ function CompanyDetails() {
   };
 
   const handleDetails = (row) => {
-    const selectedObj = users.find((item) => item._id === row._id);
+    const selectedObj = Companies.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
     setShowDetails(true);
   };
@@ -284,35 +285,26 @@ function CompanyDetails() {
             <CircularProgress />
           </div>
         ) : (
-          <ReactTable
-            data={users}
-            TABLE_HEAD={TABLE_HEAD}
-            MENU_OPTIONS={Menu_Options}
-            custom_pagination={{
-              total_count: totalCount,
-              rows_per_page: rowsPerPage,
-              page: page,
-              total_pages: totalPages,
-              handleChangePage: handleChangePage,
-              handleRowsPerPageChange: handleRowsPerPageChange,
-            }}
-            custom_search={{
-              searchText: searchText,
-              setSearchText: setSearchText,
-              handleSubmit: searchFunction,
-            }}
-            // custom-scrollbar
-            class_name=""
-            theme_config={{
-              background: "white",
-              color: "black",
-              iconColor: "#7396CC",
-            }}
-            is_sticky_header={false}
-            is_hide_footer_pagination={false}
-            is_hide_header_pagination={false}
-            is_hide_search={false}
-          />
+          <>
+            <ReactDataTable
+              data={Companies}
+              header={TABLE_HEAD}
+              Menu={Menu_Options}
+              pagination={{
+                total_count: totalCount,
+                rows_per_page: rowsPerPage,
+                page: page,
+                total_pages: totalPages,
+                handleChangePage: handleChangePage,
+                handleRowsPerPageChange: handleRowsPerPageChange,
+              }}
+              search={{
+                searchText: searchText,
+                setSearchText: setSearchText,
+                handleSubmit: searchFunction,
+              }}
+            />
+          </>
         )}
       </div>
       <DetailsModal

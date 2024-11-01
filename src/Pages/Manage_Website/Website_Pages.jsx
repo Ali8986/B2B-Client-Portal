@@ -31,12 +31,12 @@ function WebsitePages() {
     const response = await Website_Pages_List(page, rowsPerPage, SearhPage);
     if (response.code === 200) {
       const { website_pages, total_count, total_pages } = response;
-      const mappedUsers = website_pages.map((item) => ({
+      const proccessedData = website_pages.map((item) => ({
         ...item,
         name: item.website_page_title || "Unknown",
         status: item.status,
       }));
-      setWebsitePages(mappedUsers);
+      setWebsitePages(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);

@@ -1,73 +1,73 @@
 import {
-  DashboardCustomizeOutlined,
-  PersonOutlineOutlinedIcon,
-  InterpreterModeOutlinedIcon,
-  CalendarMonthOutlinedIcon,
-  BusinessIcon,
-  CalendarMonthIcon,
-  SupportAgentIcon,
+  SupportIcon,
+  DashboardIcon,
+  ExhibitorIcon,
+  SpeakerIcon,
+  EventIcon,
+  CompanyIcon,
+  ManagerIcon,
 } from "../GeneralComponents/SideBarIcons";
 
 export const options = [
   {
     title: "Dashboard",
     path: "dashboard",
-    icon: <DashboardCustomizeOutlined />,
+    icon: <DashboardIcon />,
   },
   {
     title: "Exhibitors",
     path: "exhibitors",
-    icon: <PersonOutlineOutlinedIcon />,
+    icon: <ExhibitorIcon />,
   },
   {
     title: "Speakers",
     path: "speakers",
-    icon: <InterpreterModeOutlinedIcon />,
+    icon: <SpeakerIcon />,
   },
   {
     title: "Events",
     path: "events",
-    icon: <CalendarMonthOutlinedIcon />,
+    icon: <EventIcon />,
   },
   {
     title: "Company",
     path: "company",
-    icon: <BusinessIcon />,
+    icon: <CompanyIcon />,
   },
   {
     title: "Manage Website",
-    icon: <CalendarMonthIcon />,
+    icon: <ManagerIcon />,
     children: [
       {
         title: "Template Configuration",
         path: "template-configuration",
-        icon: <CalendarMonthIcon />,
+        icon: <ManagerIcon />,
       },
       {
         title: "Module Configuration",
         path: "module-configuration",
-        icon: <CalendarMonthIcon />,
+        icon: <ManagerIcon />,
       },
       {
         title: "Website Pages",
         path: "website-pages",
-        icon: <CalendarMonthIcon />,
+        icon: <ManagerIcon />,
       },
     ],
   },
   {
-    title: "Support Ticket",
-    icon: <SupportAgentIcon />,
+    title: "Get Support",
+    icon: <SupportIcon />,
     children: [
       {
         title: "Departments",
         path: "departments",
-        icon: <SupportAgentIcon />,
+        icon: <SupportIcon />,
       },
       {
         title: "AutoResponder Message",
         path: "autoresponder-message",
-        icon: <SupportAgentIcon />,
+        icon: <SupportIcon />,
       },
     ],
   },

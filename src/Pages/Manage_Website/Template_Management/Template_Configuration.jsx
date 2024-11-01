@@ -37,12 +37,12 @@ function TemplateConfiguration() {
     );
     if (response.code === 200) {
       const { template_configuration, total_count, total_pages } = response;
-      const mappedUsers = template_configuration.map((item) => ({
+      const proccessedData = template_configuration.map((item) => ({
         ...item,
         name: item.template_name || "Unknown",
         status: item.template_status,
       }));
-      setTemplates(mappedUsers);
+      setTemplates(proccessedData);
       setTotalCount(total_pages);
       setTotalPages(total_count);
       localStorage.setItem("rowsPerPage", totalCount);
