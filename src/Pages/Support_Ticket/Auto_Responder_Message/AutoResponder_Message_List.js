@@ -81,6 +81,7 @@ function AutoResponderMessageList() {
     if (response.code === 200) {
       // eslint-disable-next-line
       const AutoResponderAfterDel = AutoResponderList?.filter(
+        //eslint-disable-next-line
         (AutoResponder) => {
           if (AutoResponder._id !== valueForDeleting._id) {
             // eslint-disable-next-line
@@ -100,6 +101,7 @@ function AutoResponderMessageList() {
   const onCancel = () => {
     setModelOpen(false);
   };
+
   const handleDetails = (row) => {
     const selectedObj = AutoResponderList.find((item) => item._id === row._id);
     setSelectedObject(selectedObj);
@@ -172,11 +174,11 @@ function AutoResponderMessageList() {
     setPage(0);
     await FetchAutoResponderList(0, rowsPerPage, searchText);
   };
-  const showSpeakerDetailsModal = (e) => {
+  const showAutoResponderMessageList = (e) => {
     e.preventDefault();
     setShowDetails(true);
   };
-  const hideSpeakerDetailsModal = (e) => {
+  const hideAutoResponderMessageList = (e) => {
     e.preventDefault();
     setShowDetails(false);
     setSelectedObject(null);
@@ -213,7 +215,7 @@ function AutoResponderMessageList() {
           add auto responder message
         </Button>
       </div>
-      <div className='Speakers_Table'>
+      <div className='AutoResponder_Message_Table'>
         {loading ? (
           <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
             <CircularProgress />
@@ -243,11 +245,11 @@ function AutoResponderMessageList() {
       </div>
       <DetailsModal
         open={showDetails}
-        handleClose={hideSpeakerDetailsModal}
+        handleClose={hideAutoResponderMessageList}
         component={
           <AutoResponderDetails
-            handleOpen={showSpeakerDetailsModal}
-            handleClose={hideSpeakerDetailsModal}
+            handleOpen={showAutoResponderMessageList}
+            handleClose={hideAutoResponderMessageList}
             selectedObject={selectedObject}
           />
         }

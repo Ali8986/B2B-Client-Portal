@@ -28,10 +28,10 @@ function Departments() {
   const [modelOpen, setModelOpen] = useState(false);
   const [valueForDeleting, setValueForDeleting] = useState(null);
   const navigate = useNavigate();
+
   const FetchDepartmentsList = async (page, rowsPerPage, savedSearchText) => {
     setLoading(true);
     const response = await Departments_List(savedSearchText, page, rowsPerPage);
-    console.log(response, "response");
     if (response.code === 200) {
       const { department, total_count, total_pages } = response;
       const proccessedData = department.map((item) => ({
@@ -163,11 +163,11 @@ function Departments() {
     setPage(0);
     await FetchDepartmentsList(0, rowsPerPage, searchText);
   };
-  const showSpeakerDetailsModal = (e) => {
+  const showDepartmentDetails = (e) => {
     e.preventDefault();
     setShowDetails(true);
   };
-  const hideSpeakerDetailsModal = (e) => {
+  const hideDepartmentDetails = (e) => {
     e.preventDefault();
     setShowDetails(false);
     setSelectedObject(null);
@@ -199,7 +199,7 @@ function Departments() {
           ADD Department
         </Button>
       </div>
-      <div className='Speakers_Table'>
+      <div className='Departments_Table'>
         {loading ? (
           <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
             <CircularProgress />
@@ -229,11 +229,11 @@ function Departments() {
       </div>
       <DetailsModal
         open={showDetails}
-        handleClose={hideSpeakerDetailsModal}
+        handleClose={hideDepartmentDetails}
         component={
           <DepartmentDetails
-            handleOpen={showSpeakerDetailsModal}
-            handleClose={hideSpeakerDetailsModal}
+            handleOpen={showDepartmentDetails}
+            handleClose={hideDepartmentDetails}
             selectedObject={selectedObject}
           />
         }

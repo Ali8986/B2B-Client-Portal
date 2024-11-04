@@ -13,7 +13,6 @@ import {
   CompanyList,
   EditingEvent,
   EventDetails,
-  ImageUpload,
 } from "../../DAL/Login/Login";
 import { useSnackbar } from "notistack";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -21,18 +20,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import ReactEditor from "react-text-editor-kit";
-import { s3baseUrl } from "../../config/config";
 import AutoComplete from "../../Components/GeneralComponents/AutoComplete";
 import ReactEditorComponent from "../../Components/GeneralComponents/ReactTextEditor";
-import { Description } from "@mui/icons-material";
 
 function AddOrEditEvent({ type }) {
-  const array = [
-    {_id:1,name:"aliosama"},
-    {_id:2,name:"rehman"},
-    {_id:3,name:"kareem Ali"}
-  ]
+  
   const navigate = useNavigate();
   const [value, setValue] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -281,6 +273,7 @@ function AddOrEditEvent({ type }) {
               type="number"
               value={formData.capacity}
               onChange={handleChange}
+              InputProps={{ inputProps: { min: 0, max: 100 } }}
             />
           </div>
           <div className="col-6">

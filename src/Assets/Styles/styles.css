@@ -466,6 +466,8 @@ body {
 }
 
 .Close_btn {
+    transition: all 0.3s ease !important;
+    transform: scale(1) !important;
     background-color: #7396cc !important;
 }
 
@@ -474,7 +476,8 @@ body {
 }
 
 .Close_btn:hover {
-    background-color: rgba(128, 128, 128, 0.452) !important;
+    transform: scale(1.1) !important;
+    background-color: #d32f2f !important;
     color: white !important;
 }
 
@@ -749,14 +752,20 @@ body {
 }
 
 .react-tagsinput-remove {
+    border-radius: 50%;
+    text-align: center;
+    width: 20px;
+    line-height: 20px;
+    background-color: white;
     transition: all 0.3s ease-in-out;
     color: #d32f2f !important;
     text-decoration: none !important;
-    margin: 0px 4px !important;
+    margin: 0px 0px 0px 10px !important;
 }
 
 .react-tagsinput-remove:hover {
-    color: white !important;
+    width: 25px;
+    line-height: 25px;
     font-size: 20px !important;
 }
 

@@ -24,6 +24,7 @@ function AddOrUpdateAutoResponder({ type }) {
     description: "",
     status: true,
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -38,10 +39,50 @@ function AddOrUpdateAutoResponder({ type }) {
     }));
   };
 
+  const handleEditorChange = (value) => {
+    setFormData((prev) => ({ ...prev, description: value }));
+  };
+
+  const GetAutoResponderDetails = async () => {
+    const response = await AutoResponder_Message_details(id);
+    if (response.code === 200) {
+      handleFormateData(response.autoresponder_message);
+      setLoading(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Initialize an array to hold error messages
+    const errors = [];
+
+    // Check each required field and add to errors if empty
+    if (!formData.name) {
+      errors.push("Name");
+    }
+    if (!formData.status) {
+      errors.push("Status");
+    }
+    if (!formData.description) {
+      errors.push("Description");
+    }
+    if (formData.description === "<br>") {
+      errors.push("Description");
+    }
+
+    // If there are any errors, show a message with the empty fields
+    if (errors.length > 0) {
+      enqueueSnackbar(
+        `Please fill in the following required fields: ${errors.join(", ")}`,
+        { variant: "error" }
+      );
+      return;
+    }
     setLoading(true);
-    const DepartmentData = {
+    const AutoResponderData = {
       name: formData.name,
       description: formData.description,
       status: formData.status,
@@ -49,8 +90,8 @@ function AddOrUpdateAutoResponder({ type }) {
 
     const response =
       type === Update_AutoResponder_Message
-        ? await Update_AutoResponder_Message(id, DepartmentData)
-        : await Add_AutoResponder_Message(DepartmentData);
+        ? await Update_AutoResponder_Message(id, AutoResponderData)
+        : await Add_AutoResponder_Message(AutoResponderData);
     if (response.code === 200) {
       enqueueSnackbar(response.message, { variant: "success" });
       navigate("/autoresponder-message");
@@ -59,24 +100,13 @@ function AddOrUpdateAutoResponder({ type }) {
     }
     setLoading(false);
   };
-  const handleEditorChange = (value) => {
-    setFormData((prev) => ({ ...prev, description: value }));
-  };
-  const GetDepartmentDetails = async () => {
-    const response = await AutoResponder_Message_details(id);
-    if (response.code === 200) {
-      handleFormateData(response.department);
-      setLoading(false);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
-  };
+
   useEffect(() => {
     if (state) {
       handleFormateData(state);
     } else if (type === Update_AutoResponder_Message) {
       // eslint-disable-next-line
-      GetDepartmentDetails();
+      GetAutoResponderDetails();
     }
     // eslint-disable-next-line
   }, [type, state]);
@@ -100,12 +130,12 @@ function AddOrUpdateAutoResponder({ type }) {
               />
               <div className='col-6 col-lg-6'>
                 <FormInput
-                  label='Department Name'
+                  label='Auto Responder Message*'
                   variant='outlined'
                   name='name'
                   value={formData.name}
                   onChange={handleInputChange}
-                  required
+                  required={false}
                 />
               </div>
               <div className='col-12 col-lg-6 d-flex flex-column justify-content-center'>

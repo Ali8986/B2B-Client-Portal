@@ -38,8 +38,52 @@ function AddOrUpdateDepartment({ type }) {
     }));
   };
 
+  const handleEditorChange = (value) => {
+    setFormData((prev) => ({ ...prev, description: value }));
+  };
+  const GetDepartmentDetails = async () => {
+    const response = await Department_details(id);
+    if (response.code === 200) {
+      handleFormateData(response.department);
+      setLoading(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Initialize an array to hold error messages
+    const errors = [];
+
+    // Check each required field and add to errors if empty
+    if (!formData.name) {
+      errors.push("Name");
+    }
+    if (!formData.status) {
+      errors.push("Status");
+    }
+    console.log(
+      formData.description,
+      "formData.descriptionformData.descriptionformData.description"
+    );
+    if (!formData.description) {
+      errors.push("Description");
+    }
+    if (formData.description === "<br>") {
+      errors.push("Description");
+    }
+
+    // If there are any errors, show a message with the empty fields
+    if (errors.length > 0) {
+      enqueueSnackbar(
+        `Please fill in the following required fields: ${errors.join(", ")}`,
+        { variant: "error" }
+      );
+      return;
+    }
+
     setLoading(true);
     const DepartmentData = {
       name: formData.name,
@@ -59,18 +103,7 @@ function AddOrUpdateDepartment({ type }) {
     }
     setLoading(false);
   };
-  const handleEditorChange = (value) => {
-    setFormData((prev) => ({ ...prev, description: value }));
-  };
-  const GetDepartmentDetails = async () => {
-    const response = await Department_details(id);
-    if (response.code === 200) {
-      handleFormateData(response.department);
-      setLoading(false);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
-  };
+
   useEffect(() => {
     if (state) {
       console.log(state, "State is active sakldsakjlksjlk");
@@ -101,12 +134,12 @@ function AddOrUpdateDepartment({ type }) {
               />
               <div className='col-6 col-lg-6'>
                 <FormInput
-                  label='Department Name'
+                  label='Department Name*'
                   variant='outlined'
                   name='name'
                   value={formData.name}
                   onChange={handleInputChange}
-                  required
+                  required={false}
                 />
               </div>
               <div className='col-12 col-lg-6 d-flex flex-column justify-content-center'>

@@ -12,62 +12,62 @@ export const options = [
   {
     title: "Dashboard",
     path: "dashboard",
-    icon: <DashboardIcon />,
+    icon: DashboardIcon,
   },
   {
     title: "Exhibitors",
     path: "exhibitors",
-    icon: <ExhibitorIcon />,
+    icon:  ExhibitorIcon,
   },
   {
     title: "Speakers",
     path: "speakers",
-    icon: <SpeakerIcon />,
+    icon: SpeakerIcon,
   },
   {
     title: "Events",
     path: "events",
-    icon: <EventIcon />,
+    icon: EventIcon,
   },
   {
     title: "Company",
     path: "company",
-    icon: <CompanyIcon />,
+    icon: CompanyIcon,
   },
   {
     title: "Manage Website",
-    icon: <ManagerIcon />,
+    icon:  ManagerIcon,
     children: [
       {
         title: "Template Configuration",
         path: "template-configuration",
-        icon: <ManagerIcon />,
+        icon: ManagerIcon,
       },
       {
         title: "Module Configuration",
         path: "module-configuration",
-        icon: <ManagerIcon />,
+        icon: ManagerIcon,
       },
       {
         title: "Website Pages",
         path: "website-pages",
-        icon: <ManagerIcon />,
+        icon: ManagerIcon,
       },
     ],
   },
   {
     title: "Get Support",
-    icon: <SupportIcon />,
+    icon: SupportIcon,
     children: [
       {
         title: "Departments",
         path: "departments",
-        icon: <SupportIcon />,
+        icon: SupportIcon,
       },
       {
         title: "AutoResponder Message",
         path: "autoresponder-message",
-        icon: <SupportIcon />,
+        icon: SupportIcon,
       },
     ],
   },
