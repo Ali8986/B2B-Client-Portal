@@ -41,7 +41,7 @@ const LoginForm = ({ Forget }) => {
     const response = await dispatch(Login(formData));
 
     if (Login.fulfilled.match(response)) {
-      console.log(response,"response");
+      console.log(response, "response");
       const { user, token, message } = response.payload;
       localStorage.setItem("id", user._id);
       localStorage.setItem("token", token);
