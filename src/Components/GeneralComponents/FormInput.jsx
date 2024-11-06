@@ -8,10 +8,12 @@ const FormInput = ({
   onChange,
   required = true,
   multline,
+  disabled = false,
 }) => {
   const autoComplete = type === "password" ? "current-password" : "on";
   return (
     <TextField
+      disabled={disabled}
       className={`my-2`}
       multiline={multline}
       rows={3}

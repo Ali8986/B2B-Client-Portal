@@ -15,7 +15,7 @@ const ErrorPage = () => {
           The page you are looking for might have been removed or is temporarily
           unavailable.
         </p>
-        <Link to="/">
+        <Link to="/dashboard">
           <Button
             variant="contained"
             className="back-home-btn"

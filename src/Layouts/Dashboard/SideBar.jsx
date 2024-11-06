@@ -22,6 +22,11 @@ const AppSidebar = ({
   const handleSearchChange = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchInput(query);
+    if (query === "") {
+      setOpenSubmenus({});
+      setFilteredResults([]);
+      return;
+    }
     const results = options
       .map((item) => {
         if (item.title.toLowerCase().includes(query)) {
@@ -31,6 +36,11 @@ const AppSidebar = ({
           child.title.toLowerCase().includes(query)
         );
         if (filteredChildren && filteredChildren.length > 0) {
+          // Open the submenu when its child is found
+          setOpenSubmenus((prevOpenSubmenus) => ({
+            ...prevOpenSubmenus,
+            [item.title]: true, // open the parent submenu
+          }));
           return { ...item, children: filteredChildren };
         }
         return null;
@@ -57,15 +67,15 @@ const AppSidebar = ({
   const drawerContent = (
     <>
       <Logo />
-      <div className="Search-Bar">
+      <div className='Search-Bar'>
         <SearchAppBar
           handleSearchChange={handleSearchChange}
           searchInput={searchInput}
           filteredResults={filteredResults}
         />
       </div>
-      <Divider className="divider" />
-      <List className="Main-Menu-list">
+      <Divider className='divider' />
+      <List className='Main-Menu-list'>
         {(filteredResults.length === 0 ? options : filteredResults).map(
           (option) =>
             option.children ? (
@@ -97,27 +107,27 @@ const AppSidebar = ({
 
   return (
     <div
-      className="drawer-container"
+      className='drawer-container'
       style={{ "--drawer-width": `${drawerWidth}px` }}
     >
       <Drawer
         container={container}
-        variant="temporary"
+        variant='temporary'
         open={mobileOpen}
         onClose={handleDrawerClose}
         sx={{
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
-        className="drawer-temporary"
+        className='drawer-temporary'
       >
         {drawerContent}
       </Drawer>
       <Drawer
-        variant="permanent"
+        variant='permanent'
         sx={{
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
-        className="drawer-permanent"
+        className='drawer-permanent'
         open
       >
         {drawerContent}

@@ -162,54 +162,54 @@ function AddEditSpeaker({ type }) {
   return (
     <>
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
+        <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
           <CircularProgress />
         </div>
       ) : (
-        <div className="px-3 px-md-4 py-1 py-md-3">
+        <div className='px-3 px-md-4 py-1 py-md-3'>
           <form onSubmit={handleSubmit}>
-            <div className="row p-0 p-lg-3 mt-5 mt-md-2">
+            <div className='row p-0 p-lg-3 mt-5 mt-md-2'>
               <HeaderWithBackButton
                 title={type === EditingSpeaker ? "Edit Speaker" : "Add Speaker"}
-                path="/speakers"
+                path='/speakers'
               />
-              <div className="col-6 col-lg-6">
+              <div className='col-6 col-lg-6'>
                 <FormInput
-                  label="First Name"
-                  variant="outlined"
-                  name="first_name"
+                  label='First Name'
+                  variant='outlined'
+                  name='first_name'
                   value={formData.first_name}
                   onChange={handleInputChange}
                   required
                 />
               </div>
-              <div className="col-6 col-lg-6">
+              <div className='col-6 col-lg-6'>
                 <FormInput
-                  label="Last Name"
-                  variant="outlined"
-                  name="last_name"
+                  label='Last Name'
+                  variant='outlined'
+                  name='last_name'
                   value={formData.last_name}
                   onChange={handleInputChange}
                   required
                 />
               </div>
-              <div className="col-6">
+              <div className='col-6'>
                 <FormInput
-                  label="Email"
-                  variant="outlined"
-                  name="email"
+                  label='Email'
+                  variant='outlined'
+                  name='email'
                   value={formData.email}
                   onChange={handleInputChange}
-                  type="email"
+                  type='email'
                   required
                 />
               </div>
-              <div className="col-6 d-flex flex-column justify-content-center">
+              <div className='col-6 d-flex flex-column justify-content-center'>
                 <PhoneInput
                   countryCodeEditable={false}
                   autoSelectCountry={true}
-                  dropdownClass="select-div2"
-                  country="pk"
+                  dropdownClass='select-div2'
+                  country='pk'
                   required={true}
                   value={phoneNumber}
                   onChange={handlePhoneChange}
@@ -217,9 +217,9 @@ function AddEditSpeaker({ type }) {
                   enableSearch={true}
                 />
               </div>
-              <div className="col-12 col-lg-6 d-flex flex-column justify-content-center mt-2">
+              <div className='col-12 col-lg-6 d-flex flex-column justify-content-center mt-2'>
                 <Select
-                  name="status"
+                  name='status'
                   value={formData.status ?? true}
                   onChange={handleInputChange}
                 >
@@ -229,21 +229,22 @@ function AddEditSpeaker({ type }) {
                   <MenuItem value={false}>Inactive</MenuItem>
                 </Select>
               </div>
-              <div className="col-12 mt-3">
-              <TagsInputField
-                value={formData.expertise}
-                onChange={handleTagsChange}
-                placeholder="Add expertise"
-              />
+              <div className='col-12 mt-3'>
+                <TagsInputField
+                  label='Expertise'
+                  value={formData.expertise}
+                  onChange={handleTagsChange}
+                  placeholder='Enter Expertise Here...'
+                />
               </div>
-              <div className="col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2">
-                <div className="col-12 col-lg-4 pb-3 pb-lg-0">
-                  <h4 className="h5">Upload Image</h4>
-                  <p className="h6">
+              <div className='col-12 flex-wrap d-flex justify-content-between align-items-center pb-3 pt-5 mb-2'>
+                <div className='col-12 col-lg-4 pb-3 pb-lg-0'>
+                  <h4 className='h5'>Upload Image</h4>
+                  <p className='h6'>
                     Image Size (670 X 1000) ("JPG", "JPEG", "PNG", "WEBP","GIF")
                   </p>
                 </div>
-                <div className="col-4 col-lg-4 pb-3 pb-lg-0">
+                <div className='col-4 col-lg-4 pb-3 pb-lg-0'>
                   {formData.image ? (
                     <Avatar
                       sx={{ width: 70, height: 70, borderRadius: 0 }}
@@ -259,29 +260,29 @@ function AddEditSpeaker({ type }) {
                     <div>{null}</div>
                   )}
                 </div>
-                <div className="Upload-input-field">
+                <div className='Upload-input-field'>
                   <input
-                    accept="image/*"
+                    accept='image/*'
                     style={{ display: "none" }}
-                    id="upload-button"
-                    type="file"
+                    id='upload-button'
+                    type='file'
                     onChange={handleImageChange}
                   />
                   <label
-                    htmlFor="upload-button"
-                    className="User_Image_Edit d-flex align-items-center"
+                    htmlFor='upload-button'
+                    className='User_Image_Edit d-flex align-items-center'
                   >
-                    <FileUploadIcon className="Upload-btn" />
-                    <div className="ps-1">upload</div>
+                    <FileUploadIcon className='Upload-btn' />
+                    <div className='ps-1'>upload</div>
                   </label>
                 </div>
               </div>
-              <div className="images_box px-0"></div>
+              <div className='images_box px-0'></div>
               {formData.social_links.map((link, index) => (
-                <div className="col-6 mt-3" key={index}>
+                <div className='col-6 mt-3' key={index}>
                   <SocialLinksField
                     label={`${link.platform}`}
-                    variant="outlined"
+                    variant='outlined'
                     value={link.url}
                     icon={platformIcons[link.platform]}
                     onChange={(e) =>
@@ -291,42 +292,42 @@ function AddEditSpeaker({ type }) {
                   />
                 </div>
               ))}{" "}
-              <div className="col-12 mt-2">
+              <div className='col-12 mt-2'>
                 {type === EditingSpeaker && formData.bio === "" ? null : (
-                  <div className="col-12 mt-2">
+                  <div className='col-12 mt-2'>
                     <TextField
                       fullWidth
-                      label="Bio"
+                      label='Bio'
                       multiline
                       rows={3}
-                      variant="outlined"
-                      name="bio"
+                      variant='outlined'
+                      name='bio'
                       value={formData.bio}
                       onChange={handleInputChange}
-                      placeholder="Enter your bio Here.."
+                      placeholder='Enter your bio Here..'
                     />
                   </div>
                 )}
               </div>
-              <div className="col-12 d-flex flex-wrap justify-content-end mt-3">
+              <div className='col-12 d-flex flex-wrap justify-content-end mt-3'>
                 <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  size='large'
                   disabled={loading}
                   style={{ backgroundColor: "#7396CC" }}
                 >
                   {loading ? (
                     type === EditingSpeaker ? (
-                      <div className="d-flex align-items-center">
-                        <CircularProgress size={15} className="color" />
-                        <p className="ms-2 mb-0 font-size">Update</p>
+                      <div className='d-flex align-items-center'>
+                        <CircularProgress size={15} className='color' />
+                        <p className='ms-2 mb-0 font-size'>Update</p>
                       </div>
                     ) : (
-                      <div className="d-flex align-items-center">
-                        <CircularProgress size={15} className="color" />
-                        <p className="ms-2 mb-0 font-size">Submit</p>
+                      <div className='d-flex align-items-center'>
+                        <CircularProgress size={15} className='color' />
+                        <p className='ms-2 mb-0 font-size'>Submit</p>
                       </div>
                     )
                   ) : type === EditingSpeaker ? (

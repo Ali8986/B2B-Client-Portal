@@ -41,7 +41,7 @@ const DashboardLayout = () => {
 
       <AppSidebar
         drawerWidth={drawerWidth}
-        className="drawer-main-sidebar"
+        className='drawer-main-sidebar'
         mobileOpen={mobileOpen}
         handleDrawerClose={handleDrawerClose}
       />

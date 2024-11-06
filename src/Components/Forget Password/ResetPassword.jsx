@@ -7,17 +7,20 @@ import LoadingButton from "../GeneralComponents/buttonLoadingState";
 import { useSnackbar } from "notistack";
 
 const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
+  const Email = localStorage.getItem("email");
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    email: "aliusama.vectorcoder@gmail.com",
-    user_type: "admin",
+    email: Email,
+    user_type: "company",
     password: "",
     confirm_password: "",
   });
+
   const handleChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (event.target.checkValidity()) {
@@ -34,6 +37,7 @@ const ResetPassword = ({ size, Default, onChange, handleSnackbarClose }) => {
       enqueueSnackbar("Fields Cannot be Empty", { variant: "error" });
     }
   };
+  
   return (
     <FormBox>
       <LogoBox />

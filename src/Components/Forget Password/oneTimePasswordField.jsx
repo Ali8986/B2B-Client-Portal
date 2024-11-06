@@ -10,19 +10,19 @@ const OTP = ({ Default, Confirm }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
-  const [email] = useState("aliusama.vectorcoder@gmail.com");
   const handleClick = () => {
     Default();
   };
   const handleChange = (newValue) => {
     setOtp(newValue);
   };
+  const Email = localStorage.getItem("email");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      email,
+      email:Email,
       verification_code: otp,
-      user_type: "admin",
+      user_type: "company",
     };
     setLoading(true);
     const response = await confirmPinCode(formData);

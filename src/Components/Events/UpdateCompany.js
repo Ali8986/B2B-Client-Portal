@@ -10,9 +10,7 @@ import defaultimg from "../../Assets/Images/Default.jpg";
 import { s3baseUrl } from "../../config/config";
 import { Avatar } from "@mui/material";
 import HeaderWithBackButton from "../../Components/backButton";
-import DetailsModal from "../../Components/GeneralComponents/detailsModal";
 import Tooltip from "@mui/material/Tooltip";
-import CompanyDetailsModal from "../../Components/company/CompanyDetailsModal";
 import BasicBreadcrumbs from "../GeneralComponents/BreadCrumbs";
 import { useParams } from "react-router-dom";
 import ToolTip from "../GeneralComponents/ToolTip";
@@ -32,9 +30,7 @@ function UpdateEventsCompany() {
     },
   ];
   const [selected, setSelected] = useState([]);
-  const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedObject, setSelectedObject] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(0);
@@ -95,9 +91,6 @@ function UpdateEventsCompany() {
     if (response.code === 200) {
       setLoading(false);
       enqueueSnackbar(response.message, { variant: "success" });
-      // setShowDetails(false);
-      // setSelected([]);
-      // FetchSpeakerList(page, rowsPerPage, searchText);
     } else {
       setLoading(false);
       enqueueSnackbar(response.message, { variant: "error" });
@@ -114,12 +107,6 @@ function UpdateEventsCompany() {
     ]);
   };
 
-  const handleDetails = (row) => {
-    const selectedObj = users.find((item) => item._id === row._id);
-    setSelectedObject(selectedObj);
-    setShowDetails(true);
-  };
-  console.log(selected, "selectedObject");
   const TABLE_HEAD = [
     {
       id: "checkbox",
@@ -179,7 +166,7 @@ function UpdateEventsCompany() {
       renderData: (row, index) => {
         return (
           <Tooltip key={index} title='View Details' arrow>
-            <span onClick={() => handleDetails(row)}>{row.name}</span>
+            <span>{row.name}</span>
           </Tooltip>
         );
       },
@@ -217,17 +204,6 @@ function UpdateEventsCompany() {
     localStorage.setItem("searchText_company_page", searchText);
     setPage(0);
     await FetchCompnayList(0, rowsPerPage, searchText);
-  };
-
-  const showCompanyDetailsModal = (e) => {
-    e.preventDefault();
-    setShowDetails(true);
-  };
-
-  const hideCompanyDetailsModal = (e) => {
-    e.preventDefault();
-    setShowDetails(false);
-    setSelectedObject(null);
   };
 
   useEffect(() => {
@@ -290,17 +266,6 @@ function UpdateEventsCompany() {
           />
         )}
       </div>
-      <DetailsModal
-        open={showDetails}
-        handleClose={hideCompanyDetailsModal}
-        component={
-          <CompanyDetailsModal
-            handleOpen={showCompanyDetailsModal}
-            handleClose={hideCompanyDetailsModal}
-            selectedObject={selectedObject}
-          />
-        }
-      />
       <div className='d-flex justify-content-end mb-3 mt-4'>
         <Button
           variant='contained'

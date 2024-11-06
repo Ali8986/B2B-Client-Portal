@@ -10,7 +10,6 @@ import FormInput from "../../Components/GeneralComponents/FormInput";
 import HeaderWithBackButton from "../../Components/backButton";
 import {
   AddingEvent,
-  CompanyList,
   EditingEvent,
   EventDetails,
 } from "../../DAL/Login/Login";
@@ -20,19 +19,15 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import AutoComplete from "../../Components/GeneralComponents/AutoComplete";
 import ReactEditorComponent from "../../Components/GeneralComponents/ReactTextEditor";
 
 function AddOrEditEvent({ type }) {
-  
+  const Company = JSON.parse(localStorage.getItem('company'))
   const navigate = useNavigate();
-  const [value, setValue] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const { id } = useParams();
   const location = useLocation();
   const { state } = location;
-  const [searchText, setSearchText] = useState("");
-  const [searchCompanyData, setSearchCompanyData] = useState([]);
   const [loading, setLoading] = useState(false);
   const currentTime = dayjs(new Date().getTime());
   const endTime = currentTime.add(1, "hour");
@@ -46,7 +41,11 @@ function AddOrEditEvent({ type }) {
     status: "completed",
     capacity: "",
     number_of_attendees: "",
-    company: {},
+    company: {
+      _id: Company?._id,
+      name: Company?.name,
+      website: Company?.website,
+    },
     event_type: "",
     description: "",
   });
@@ -54,31 +53,15 @@ function AddOrEditEvent({ type }) {
     setFormData({ ...formData, [name]: date });
   };
 
-  const handleSearchInputChange = (event, newValue) => {
-    setSearchText(newValue);
-  };
-
-  const handleCompanyNameChange = (event, newValue) => {
-    setValue(newValue);
-    setFormData((prevData) => ({
-      ...prevData,
-      company: {
-        _id: newValue?._id,
-        name: newValue?.name,
-        website: newValue?.website,
-      },
-    }));
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleEditorChange = (value, attributeName) => {
+  const handleEditorChange = (value) => {
     setFormData((prevData) => ({
       ...prevData,
-      [attributeName]: value.trim() === "<br>" ? "" : value,
+      description: value.trim() === "<br>" ? "" : value,
     }));
   };
   
@@ -91,16 +74,30 @@ function AddOrEditEvent({ type }) {
       end_date: dayjs(data.end_date, "YYYY:MM:DD"), // Parsing end date
       end_time: dayjs(data.end_time, "HH:mm:ss"), // Parsing end time
       status: data.status,
+      company: {
+        _id: data.company._id,
+        name: data?.company.name,
+        website: data?.company.website,
+      },
       capacity: data.capacity,
       number_of_attendees: data.number_of_attendees,
       event_type: data.event_type,
       description: data.description,
     });
-    setValue(data.company)
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const error = []
+    if (!formData.description) {
+      error.push("Event description is required");
+    }
+    
+    if(error.length > 0){
+      enqueueSnackbar(error[0], { variant: "error" });
+      setLoading(false);
+      return;
+    }
 
     const formattedFormData = {
       ...formData,
@@ -122,17 +119,6 @@ function AddOrEditEvent({ type }) {
     }
     setLoading(false);
   };
-  const fetchCompanyData = async (SearchText) => {
-    const postData = {
-      search: SearchText,
-    };
-    const response = await CompanyList(0, 50, postData);
-    if (response.code === 200) {
-      setSearchCompanyData(response.companies);
-    } else {
-      enqueueSnackbar("Failed to fetch companies", { variant: "error" });
-    }
-  };
 
   const getEventDetail = async () => {
     const response = await EventDetails(id);
@@ -151,22 +137,6 @@ function AddOrEditEvent({ type }) {
     }
     // eslint-disable-next-line
   }, [type, state]);
-
-  useEffect(() => {
-    if (searchText) {
-      const timeoutId = setTimeout(() => {
-        fetchCompanyData(searchText);
-      }, 1000);
-
-      return () => clearTimeout(timeoutId);
-    } else {
-      formData.company.website = "";
-      fetchCompanyData();
-      // eslint-disable-next-line
-      setSearchCompanyData([]);
-    }
-    // eslint-disable-next-line
-  }, [searchText]);
 
   return (
     <div className="px-3 px-md-4 py-1 py-md-3">
@@ -298,14 +268,13 @@ function AddOrEditEvent({ type }) {
             />
           </div>
           <div className="col-12 mt-2">
-          <AutoComplete
-              isMultiple={false}
-              value={value}
-              searchCompanyData={searchCompanyData}
-              handleCompanyNameChange={handleCompanyNameChange}
-              onInputChange={handleSearchInputChange}
-              DataNotFound="Not a company name"
-              label="Select Company"
+          <FormInput
+              className="form-control"
+              label="Company Name"
+              name="company_name"
+              variant="outlined"
+              value={formData.company.name}
+              disabled={true}
             />
           </div>
           <div
@@ -314,7 +283,7 @@ function AddOrEditEvent({ type }) {
                 <ReactEditorComponent
                   value={formData.description}
                   onChange={(value) =>
-                    handleEditorChange(value, formData.description)
+                    handleEditorChange(value)
                   }
                   attributeLabel="Description"
                   attributeState={false}

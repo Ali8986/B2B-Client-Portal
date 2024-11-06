@@ -13,15 +13,15 @@ import CustomModal from "../GeneralComponents/CustomModal";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import ChangePassword from "./changePassword";
 import { ProfileImageContext } from "../../Hooks/createContext"; // Import context
-import { logout, updateProfile } from "../../DAL/Login/Login";
+import { logout } from "../../DAL/Login/Login";
 import LogoutComponent from "./Logout";
-import { useUser } from "../../Hooks/adminUser"; // Correct path to your UserContext
 
 export default function ProfileIcon() {
-  const { user } = useUser(); // Get user data from context
   const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState({});
   const email = JSON.parse(localStorage.getItem("Email"));
+  const companyName = localStorage.getItem("name");
+  const companyLogo = localStorage.getItem("image");
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -30,11 +30,12 @@ export default function ProfileIcon() {
   const { profileImage, setProfileImage } = useContext(ProfileImageContext);
 
   const getData = async () => {
-    const response = await updateProfile();
-    if (response.code === 200) {
-      setData(response?.admin);
-      localStorage.setItem("profileImage", response.admin.profile_image);
-      setProfileImage(response.admin.profile_image);
+    if(email&&companyName&&companyLogo){
+      setProfileImage(companyLogo)
+      setData({
+        name: companyName,
+        email: email,
+      });
     }
   };
 
@@ -55,6 +56,9 @@ export default function ProfileIcon() {
     const response = await logout();
     if (response.code === 200) {
       localStorage.removeItem("token");
+      localStorage.removeItem("name");
+      localStorage.removeItem("Email");
+      localStorage.removeItem("email");
       enqueueSnackbar(response.message, { variant: "success" });
       navigate("/");
     } else {
@@ -163,7 +167,7 @@ export default function ProfileIcon() {
           onClick={handleClose}
           sx={{ fontWeight: "600" }}
         >
-          {user || `${data.first_name} ${data.last_name}`}
+          {data ? data.name :""}
         </MenuItem>
         <MenuItem
           className="Profile-Icon-Link"

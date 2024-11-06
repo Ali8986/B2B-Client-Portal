@@ -16,18 +16,18 @@ const style = {
 const DetailsModal = ({ open, handleClose, component }) => {
   return (
     <Modal
-      className="Details_Modal"
+      className='Details_Modal'
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby='modal-modal-title'
+      aria-describedby='modal-modal-description'
       sx={{
         backgroundColor: "rgba(0, 0, 0, 5%)",
       }}
     >
       <div
         style={style}
-        className="Detail_Show_Model container bg-white mx-1 my-2 m-md-0 pt-2 pt-md-4 pb-3 pb-md-5 px-md-5 border-0 rounded-4"
+        className='Detail_Show_Model container bg-white mx-1 my-2 m-md-0 pt-2 pt-md-4 pb-3 pb-md-5 px-md-5 border-0 rounded-4'
       >
         {component}
       </div>

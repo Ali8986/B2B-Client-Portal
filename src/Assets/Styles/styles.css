@@ -721,7 +721,7 @@ body {
 
 .react-tagsinput-input {
     padding: 13px 14px !important;
-    width: 18% !important;
+    width: 25% !important;
 }
 
 .react-tagsinput>span {
@@ -796,7 +796,32 @@ body {
     color: rgba(0, 0, 0, 0.6) !important;
 }
 
+.Phone_Input_Profile {
+    border-radius: 0px !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.51) !important;
+}
 
+.Phone_Input_Profile:focus-within {
+    outline: none !important;
+    border-bottom: 2px solid rgba(25, 118, 210, 1) !important;
+}
+
+.phone .phone-input-image {
+    top: 66% !important;
+    padding: 0px 0px !important;
+}
+
+.phone .phone-input-container #myInput {
+    padding-bottom: 3px !important;
+}
+
+.phone .placeholder-text {
+    top: 62% !important;
+}
 
 /* input:disabled+fieldset {
     border: 2px solid #7c97c1 !important;
@@ -805,3 +830,10 @@ body {
 input:disabled {
     -webkit-text-fill-color: black !important;
 } */
+.Phone_Input_Profile_Company {
+    background-color: transparent !important;
+}
+
+.date_Picker_Profile {
+    background-color: transparent !important;
+}

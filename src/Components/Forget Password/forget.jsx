@@ -18,9 +18,10 @@ const ForgetForm = ({ Default, handleOtp }) => {
     if (e.target.checkValidity()) {
       const formData = {
         email,
-        user_type: "admin",
+        user_type: "company",
       };
       setLoading(true);
+      localStorage.setItem("email", email)
       const response = await changePasswordApi(formData);
       if (response.code === 200) {
         handleOtp();

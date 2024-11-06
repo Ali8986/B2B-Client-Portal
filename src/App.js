@@ -5,6 +5,8 @@ import { ProfileImageProvider } from "./Hooks/createContext";
 import { Slide } from "@mui/material";
 import styled from "@emotion/styled/macro";
 import { MaterialDesignContent } from "notistack";
+import { store } from "./store/store";
+import { Provider } from "react-redux";
 // import CloseIcon from "@mui/icons-material/Close";
 import { UserProvider } from "./Hooks/adminUser";
 // import WarningIcon from "@mui/icons-material/Warning";
@@ -34,27 +36,29 @@ function App() {
   // };
 
   return (
-    <ProfileImageProvider>
-      <SnackbarProvider
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        TransitionComponent={Slide}
-        maxSnack={3}
-        // action={(snackbarKey) => <CloseButton snackbarKey={snackbarKey} />}
-        Components={{
-          success: StyledMaterialDesignContent,
-          error: StyledMaterialDesignContent,
-        }}
-      >
-        <UserProvider>
-          <div className='App'>
-            <Router />
-          </div>
-        </UserProvider>
-      </SnackbarProvider>
-    </ProfileImageProvider>
+    <Provider store={store}>
+      <ProfileImageProvider>
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          TransitionComponent={Slide}
+          maxSnack={3}
+          // action={(snackbarKey) => <CloseButton snackbarKey={snackbarKey} />}
+          Components={{
+            success: StyledMaterialDesignContent,
+            error: StyledMaterialDesignContent,
+          }}
+        >
+          <UserProvider>
+            <div className='App'>
+              <Router />
+            </div>
+          </UserProvider>
+        </SnackbarProvider>
+      </ProfileImageProvider>
+    </Provider>
   );
 }
 

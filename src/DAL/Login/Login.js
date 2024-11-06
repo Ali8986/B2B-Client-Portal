@@ -26,7 +26,7 @@ export const login = async (data) => {
     path: `api/app_api/login`,
     method: "POST",
     headers: {
-      "x-sh-auth": localStorage.getItem("token"),
+      "x-sh-auth": localStorage.getItem("token") || "",
     },
     postData: data,
   };
@@ -104,9 +104,9 @@ export const updatePassword = async (data) => {
   return invokeApi(requestObj);
 };
 
-export const profileDetail = async (data) => {
+export const Company_Profile_Detail = async (data) => {
   const requestObj = {
-    path: `api/admin/edit_admin`,
+    path: `api/company/update_company_profile`,
     method: "PUT",
     headers: {
       "x-sh-auth": localStorage.getItem("token"),
@@ -128,17 +128,17 @@ export const updateAdminPassword = async (data) => {
   return invokeApi(requestObj);
 };
 
-export const updateProfile = async (data) => {
-  const requestObj = {
-    path: `api/admin/detail_admin`,
-    method: "GET",
-    headers: {
-      "x-sh-auth": localStorage.getItem("token"),
-    },
-    postData: data,
-  };
-  return invokeApi(requestObj);
-};
+// export const updateProfile = async (data) => {
+//   const requestObj = {
+//     path: `api/admin/detail_admin`,
+//     method: "GET",
+//     headers: {
+//       "x-sh-auth": localStorage.getItem("token"),
+//     },
+//     postData: data,
+//   };
+//   return invokeApi(requestObj);
+// };
 
 export const SpeakersList = async (page, limit, data) => {
   const requestObj = {

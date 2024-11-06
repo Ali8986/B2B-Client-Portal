@@ -113,10 +113,10 @@ function Speaker() {
       label: "Profile",
       renderData: (row, index) => {
         return (
-          <div key={index} className="d-flex align-items-center">
-            <div className="me-2">
+          <div key={index} className='d-flex align-items-center'>
+            <div className='me-2'>
               <Avatar
-                className="img-fluid"
+                className='img-fluid'
                 src={
                   row.image && row.image.thumbnail_1
                     ? s3baseUrl + row.image.thumbnail_1
@@ -142,7 +142,7 @@ function Speaker() {
       className: "cursor-pointer",
       renderData: (row, index) => {
         return (
-          <ToolTip key={index} title="View Details" arrow>
+          <ToolTip key={index} title='View Details' arrow>
             <span onClick={() => handleDetails(row)}>{row.name}</span>
           </ToolTip>
         );
@@ -181,7 +181,7 @@ function Speaker() {
     },
     {
       label: "Delete",
-      icon: <DeleteForeverIcon className="Delete-Icon" />,
+      icon: <DeleteForeverIcon className='Delete-Icon' />,
       handleClick: handleDelete,
     },
     {
@@ -220,42 +220,42 @@ function Speaker() {
   }, [page, rowsPerPage]);
 
   return (
-    <div className="row my-4 mx-3">
-      <div className="d-flex justify-content-between align-items-center my-4 ">
-        <HeaderWithBackButton className="Layout-heading" title="Speakers" />
+    <div className='row my-4 mx-3'>
+      <div className='d-flex justify-content-between align-items-center my-4 '>
+        <HeaderWithBackButton className='Layout-heading' title='Speakers' />
         <Button
-          variant="contained"
-          size="medium"
+          variant='contained'
+          size='medium'
           onClick={handleAddingMember}
-          className="Data-Adding-Btn"
+          className='Data-Adding-Btn'
         >
           ADD Speaker
         </Button>
       </div>
-      <div className="Speakers_Table">
+      <div className='Speakers_Table'>
         {loading ? (
-          <div className="d-flex justify-content-center align-items-center circular_progress_bar ">
+          <div className='d-flex justify-content-center align-items-center circular_progress_bar '>
             <CircularProgress />
           </div>
         ) : (
           <ReactDataTable
-          data={users}
-          header={TABLE_HEAD}
-          Menu={Menu_Options}
-          pagination={{
-            total_count: totalCount,
-            rows_per_page: rowsPerPage,
-            page: page,
-            total_pages: totalPages,
-            handleChangePage: handleChangePage,
-            handleRowsPerPageChange: handleRowsPerPageChange,
-          }}
-          search={{
-            searchText: searchText,
-            setSearchText: setSearchText,
-            handleSubmit: searchFunction,
-          }}
-        />
+            data={users}
+            header={TABLE_HEAD}
+            Menu={Menu_Options}
+            pagination={{
+              total_count: totalCount,
+              rows_per_page: rowsPerPage,
+              page: page,
+              total_pages: totalPages,
+              handleChangePage: handleChangePage,
+              handleRowsPerPageChange: handleRowsPerPageChange,
+            }}
+            search={{
+              searchText: searchText,
+              setSearchText: setSearchText,
+              handleSubmit: searchFunction,
+            }}
+          />
         )}
       </div>
       <DetailsModal
@@ -270,7 +270,7 @@ function Speaker() {
         }
       />
       <DeletingModal
-        className="Deleting-modal"
+        className='Deleting-modal'
         open={modelOpen}
         handleClose={() => setModelOpen(false)}
         component={
